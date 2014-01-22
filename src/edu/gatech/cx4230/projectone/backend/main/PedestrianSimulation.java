@@ -1,4 +1,9 @@
+package edu.gatech.cx4230.projectone.backend.main;
+
 import java.util.ArrayList;
+
+import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
+import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 
 
 public class PedestrianSimulation {
