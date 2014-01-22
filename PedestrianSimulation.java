@@ -38,7 +38,9 @@ public class PedestrianSimulation {
 	}
 	
 	public Person spawnPerson() {
-		return new Person();
+		countPeopleSpawned++;
+		countPeopleInBuilding++;
+		return new Person(); // right now this uses the default constructor, but it should take in start values for the new Person
 	}
 	
 	public void movePeople() {
