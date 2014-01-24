@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
+import edu.gatech.cx4230.projectone.backend.map.MapGridData;
 
 
 public class PedestrianSimulation {
@@ -20,20 +21,16 @@ public class PedestrianSimulation {
 	public ArrayList<Person> people;
 	
 	// 2-D grid of cells in the simulation
-	public ArrayList< ArrayList<Cell> > cells;
+	public Cell[][] cells;
 	
 	public void initializeSimulation() {
 		countPeopleInBuilding = BUILDING_CAPACITY;
 		countPeopleSpawned = 0;
 		currTimeStep = 0;
 		people = new ArrayList<Person>();
-		cells = new ArrayList< ArrayList<Cell> >();
-		for(int i = 0; i < CELL_COUNT_HEIGHT; i++) {
-			ArrayList<Cell> list = cells.get(i);
-			for(int j = 0; j < CELL_COUNT_WIDTH; j++) {
-				list.add(new Cell());
-			}
-		}
+		MapGridData mgd = new MapGridData();
+		cells = mgd.getCells();
+		
 	}
 	
 	public void timeStep() {
