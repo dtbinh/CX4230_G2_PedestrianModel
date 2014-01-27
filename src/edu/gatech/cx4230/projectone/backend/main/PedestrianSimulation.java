@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
+import edu.gatech.cx4230.projectone.backend.map.VisualizationMain;
 
 
 public class PedestrianSimulation {
 
-	public final int CELL_COUNT_WIDTH = 500;
-	public final int CELL_COUNT_HEIGHT = 500;
 	public final int BUILDING_CAPACITY = 1500;
 	
 	public int countPeopleInBuilding;
@@ -21,22 +20,34 @@ public class PedestrianSimulation {
 	public ArrayList<Person> people;
 	
 	// 2-D grid of cells in the simulation
-	public Cell[][] cells;
+	private Cell[][] cells;
+	
+	// Visualization of the simulation
+	private VisualizationMain vis;
 	
 	public void initializeSimulation() {
 		countPeopleInBuilding = BUILDING_CAPACITY;
 		countPeopleSpawned = 0;
 		currTimeStep = 0;
 		people = new ArrayList<Person>();
-		MapGridData mgd = new MapGridData();
-		cells = mgd.getCells();
 		
+		// Read in and create the map grid
+		MapGridData mgd = new MapGridData();
+		setCells(mgd.getCells());
+		
+	}
+	
+	public void initializeSimulation(VisualizationMain vis) {
+		this.vis = vis;
+		initializeSimulation();
 	}
 	
 	public void timeStep() {
 		// TODO traffic light maintenance
 		// TODO spawn people
 		// TODO move people
+		
+		vis.redraw();
 	}
 	
 	public Person spawnPerson() {
@@ -60,19 +71,27 @@ public class PedestrianSimulation {
 		}
 	}
 	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	public void mainLoop(VisualizationMain vis) {
+		initializeSimulation(vis);
 		
-		PedestrianSimulation simulation = new PedestrianSimulation();
-		
-		simulation.initializeSimulation();
-		
-		while(simulation.countPeopleInBuilding > 0 || simulation.countPeopleSpawned < simulation.BUILDING_CAPACITY) {
+		//while(countPeopleInBuilding > 0 || countPeopleSpawned < BUILDING_CAPACITY) {
 			// TODO wait specified amount of time for each time step, then call timeStep()
-			simulation.timeStep();
-		}
+			timeStep();
+		//}
+	}
+
+	/**
+	 * @return the cells
+	 */
+	public Cell[][] getCells() {
+		return cells;
+	}
+
+	/**
+	 * @param cells the cells to set
+	 */
+	public void setCells(Cell[][] cells) {
+		this.cells = cells;
 	}
 
 }
