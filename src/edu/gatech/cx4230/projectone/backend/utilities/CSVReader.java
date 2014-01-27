@@ -45,24 +45,26 @@ public class CSVReader {
 							String swidIn = lineSplit[8];
 							String sHgtIn = lineSplit[9];
 							
-							// Convert data types
-							double dtlxFt = Double.parseDouble(stlxFt);
-							double dtlyFt = Double.parseDouble(stlyFt);
-							double dWidFt = Double.parseDouble(swidFt);
-							double dHgtFt = Double.parseDouble(sHgtFt);
-							int itlxIn = Integer.parseInt(stlxIn);
-							int itlyIn = Integer.parseInt(stlyIn);
-							int iwidIn = Integer.parseInt(swidIn);
-							int iHgtIn = Integer.parseInt(sHgtIn);
-							
-							CSVRow r = new CSVRow(dtlxFt, dtlyFt, dWidFt, dHgtFt, name, type, itlxIn, itlyIn, iwidIn, iHgtIn);
-							rows.add(r);
+							if(!stlxFt.isEmpty()) {
+								// Convert data types
+								double dtlxFt = Double.parseDouble(stlxFt);
+								double dtlyFt = Double.parseDouble(stlyFt);
+								double dWidFt = Double.parseDouble(swidFt);
+								double dHgtFt = Double.parseDouble(sHgtFt);
+								int itlxIn = Integer.parseInt(stlxIn);
+								int itlyIn = Integer.parseInt(stlyIn);
+								int iwidIn = Integer.parseInt(swidIn);
+								int iHgtIn = Integer.parseInt(sHgtIn);
+								
+								CSVRow r = new CSVRow(dtlxFt, dtlyFt, dWidFt, dHgtFt, name, type, itlxIn, itlyIn, iwidIn, iHgtIn, lineCount);
+								rows.add(r);
+							}
 							
 						}
 					}
 					lineCount++;
 		 
-				}
+				} // close while
 		 
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

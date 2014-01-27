@@ -1,17 +1,16 @@
 package edu.gatech.cx4230.projectone.backend.utilities;
 
+import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
+
 public class CSVRow {
 	private double topLeftXFt, topLeftYFt, widthFt, heightFt;
 	private int topLeftXInd, topLeftYInd, widthInd, heightInd;
+	private int csvRow;
 	private String name;
 	private char cellType;
-	public static final char BUILDING = 'B';
-	public static final char SIDEWALK = 'S';
-	public static final char STREET = 'T';
-	public static final char CROSSWALK = 'C';
-	public static final char ERROR = 'E';
 	
-	public CSVRow(double tlxft, double tlyft, double wft, double hft, String name, String type, int topLeftXInd, int topLeftYInd, int wInd, int hInd) {
+	
+	public CSVRow(double tlxft, double tlyft, double wft, double hft, String name, String type, int topLeftXInd, int topLeftYInd, int wInd, int hInd, int row) {
 		this.topLeftXFt = tlxft;
 		this.topLeftYFt = tlyft;
 		this.widthFt = wft;
@@ -22,19 +21,20 @@ public class CSVRow {
 		this.topLeftYInd = topLeftYInd;
 		this.widthInd = wInd;
 		this.heightInd = hInd;
+		this.csvRow = row;
 	}
 	
 	private char findCellType(String in) {
-		char out = ERROR;
+		char out = Cell.ERROR;
 		if(in != null && !in.isEmpty()) {
 			if(in.equals("BUILDING")) {
-				out = BUILDING;
+				out = Cell.BUILDING;
 			} else if(in.equals("SIDEWALK")) {
-				out = SIDEWALK;
+				out = Cell.SIDEWALK;
 			} else if(in.equals("STREET")) {
-				out = STREET;
+				out = Cell.STREET;
 			} else if(in.equals("CROSSWALK")) {
-				out = CROSSWALK;
+				out = Cell.CROSSWALK;
 			}
 		}
 		return out;
@@ -178,6 +178,24 @@ public class CSVRow {
 	 */
 	public void setHeightFt(double heightFt) {
 		this.heightFt = heightFt;
+	}
+	
+	public String toString() {
+		return name + " x: " + topLeftXInd + " y: " + topLeftYInd + " widthInd: " + widthInd + " heightInd: " + heightInd;
+	}
+
+	/**
+	 * @return the csvRow
+	 */
+	public int getCsvRow() {
+		return csvRow;
+	}
+
+	/**
+	 * @param csvRow the csvRow to set
+	 */
+	public void setCsvRow(int csvRow) {
+		this.csvRow = csvRow;
 	}
 
 }

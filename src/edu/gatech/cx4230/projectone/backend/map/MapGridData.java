@@ -31,6 +31,7 @@ public class MapGridData {
 		
 		create2DArray(width,height);
 		
+		int cellModCount = 0;
 		// Go through each of the mapObjects and modify cells in cells
 		for(int k = 1; k < mapObjects.size(); k++) {
 			CSVRow mapObject = mapObjects.get(k);
@@ -38,20 +39,23 @@ public class MapGridData {
 			int y = mapObject.getTopLeftYInd();
 			int w = mapObject.getWidthInd();
 			int h = mapObject.getHeightInd();
-			
-			for(int j = y; j < (y+h); j++) {
-				for(int i = x; i < (x+w); i++) {
-					cells[j][i].setProperties(i, j, mapObject.getName(), mapObject.getCellType());
+
+			for(int j = y; j < (y+h - 1); j++) {
+				for(int i = x; i < (x+w - 1); i++) {
+					cells[j][i].setProperties(i, j, mapObject.getName(), mapObject.getCellType(), mapObject.getCsvRow());
+					cellModCount++;
 				}
 			}
+
 			
 		}
+		System.out.println("Cells updated: " + cellModCount);
 	}
 	
 	private void create2DArray(int width, int height) {
 		cells = new Cell[height][];
 		
-		for(int j = 1; j < height + 1; j++) {
+		for(int j = 0; j < height; j++) {
 			cells[j] = new Cell[width];
 			
 			for(int i = 0; i < width; i++) {
@@ -62,6 +66,11 @@ public class MapGridData {
 	
 	public Cell[][] getCells() {
 		return cells;
+	}
+	
+	public static void main(String[] args) {
+		MapGridData mgd = new MapGridData();
+		System.out.println("Rows: " + mgd.getCells().length);
 	}
 
 }
