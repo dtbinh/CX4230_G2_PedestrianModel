@@ -1,5 +1,8 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
+import edu.gatech.cx4230.projectone.backend.map.VisualizationMain;
+import processing.core.PApplet;
+
 public class Person {
 
 	private static int idNextPerson;
@@ -64,6 +67,18 @@ public class Person {
 	public void move(int time) {
 		setTimeLastMove(time);
 		canMove = false;
+	}
+	
+	/**
+	 * Draws the Person
+	 * @param p
+	 * @param x The current x-location of the person
+	 * @param y The current y-location of the person
+	 */
+	public void draw(PApplet p, int x, int y) {
+		// TODO set color based on Stress level
+		p.color(0, 0, 0);
+		p.ellipse(y, y, VisualizationMain.CELL_SIZE, VisualizationMain.CELL_SIZE);
 	}
 	
 }
