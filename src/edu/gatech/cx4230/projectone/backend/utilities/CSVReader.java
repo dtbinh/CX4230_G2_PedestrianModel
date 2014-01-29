@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 public class CSVReader {
 	private ArrayList<CSVRow> rows;
+	private int ROW_LIMIT = 1000;
 	
 	public CSVReader(String filename) {
 		rows = new ArrayList<CSVRow>();
@@ -32,7 +33,7 @@ public class CSVReader {
 					String[] lineSplit = line.split(csvSplitBy);
 		 
 					// Get values from lineSplit array
-					if(lineCount != 0) { // Ignore the Header row
+					if(lineCount != 0 && lineCount < ROW_LIMIT) { // Ignore the Header row
 						if(lineSplit.length == 10) {
 							String stlxFt = lineSplit[0];
 							String stlyFt = lineSplit[1];
