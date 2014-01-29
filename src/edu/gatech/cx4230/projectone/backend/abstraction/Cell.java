@@ -1,7 +1,5 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
-import edu.gatech.cx4230.projectone.backend.map.VisualizationMain;
-import processing.core.PApplet;
 
 public class Cell {
 
@@ -43,26 +41,6 @@ public class Cell {
 		// x, y, type, name
 	}
 	
-	public void draw(PApplet p) {
-		p.color(50);
-		if(cellType == BUILDING) {
-			p.fill(0,0,100);
-		} else if(cellType == CROSSWALK) {
-			p.fill(200, 200, 200);
-		} else if(cellType == ERROR) {
-			p.fill(255, 0, 0);
-		} else if(cellType == SIDEWALK) {
-			p.fill(255,255,0);
-		} else if(cellType == STREET) {
-			p.fill(40, 40, 40);
-		}
-		
-		p.rect(x * VisualizationMain.CELL_SIZE, y * VisualizationMain.CELL_SIZE, VisualizationMain.CELL_SIZE, VisualizationMain.CELL_SIZE);
-		if(person != null) {
-			person.draw(p, x, y);
-		}
-	}
-	
 	public char getType() {
 		return cellType;
 	}
@@ -84,7 +62,7 @@ public class Cell {
 	}
 	
 	public String toString() {
-		return "(" + x + ", " + y + ")\t" + "ID: " + id + "\t" + name;
+		return "[(" + x + ", " + y + ")\t" + "ID: " + id + "\t" + cellType + ": " + name + "]";
 	}
 
 	/**

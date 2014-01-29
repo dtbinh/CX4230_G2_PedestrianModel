@@ -1,7 +1,9 @@
 package edu.gatech.cx4230.projectone.backend.main;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import de.fhpotsdam.unfolding.marker.Marker;
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
@@ -22,6 +24,9 @@ public class PedestrianSimulation {
 	// 2-D grid of cells in the simulation
 	private Cell[][] cells;
 	
+	// Loads the map
+	private MapGridData mgd;
+	
 	// Visualization of the simulation
 	private VisualizationMain vis;
 	
@@ -32,7 +37,7 @@ public class PedestrianSimulation {
 		people = new ArrayList<Person>();
 		
 		// Read in and create the map grid
-		MapGridData mgd = new MapGridData();
+		mgd = new MapGridData();
 		setCells(mgd.getCells());
 		
 	}
@@ -92,6 +97,10 @@ public class PedestrianSimulation {
 	 */
 	public void setCells(Cell[][] cells) {
 		this.cells = cells;
+	}
+	
+	public List<Marker> getMapMarkersFromMapGridData() {
+		return mgd.getCellMarkers();
 	}
 
 }
