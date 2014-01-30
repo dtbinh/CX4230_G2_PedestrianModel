@@ -1,10 +1,8 @@
 package edu.gatech.cx4230.projectone.backend.main;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import de.fhpotsdam.unfolding.marker.Marker;
-import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
+import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
 import edu.gatech.cx4230.projectone.backend.map.VisualizationMain;
@@ -21,30 +19,25 @@ public class PedestrianSimulation {
 	// list of people currently in simulation 
 	public ArrayList<Person> people;
 	
-	// 2-D grid of cells in the simulation
-	private Cell[][] cells;
-	
-	// Loads the map
-	private MapGridData mgd;
+	// Manager for the 2-D grid of cells in the simulation
+	private CellManager cm;
 	
 	// Visualization of the simulation
 	private VisualizationMain vis;
 	
-	public void initializeSimulation() {
+	
+	public void initializeSimulation(VisualizationMain vis) {
+		this.vis = vis;
+		
 		countPeopleInBuilding = BUILDING_CAPACITY;
 		countPeopleSpawned = 0;
 		currTimeStep = 0;
 		people = new ArrayList<Person>();
 		
 		// Read in and create the map grid
-		mgd = new MapGridData();
-		setCells(mgd.getCells());
-		
-	}
-	
-	public void initializeSimulation(VisualizationMain vis) {
-		this.vis = vis;
-		initializeSimulation();
+		MapGridData mgd = new MapGridData();
+		vis.setMarkers(mgd.getCellMarkers());
+		cm = mgd.getCellManager();
 	}
 	
 	public void timeStep() {
@@ -86,21 +79,17 @@ public class PedestrianSimulation {
 	}
 
 	/**
-	 * @return the cells
+	 * @return the cm
 	 */
-	public Cell[][] getCells() {
-		return cells;
+	public CellManager getCm() {
+		return cm;
 	}
 
 	/**
-	 * @param cells the cells to set
+	 * @param cm the cm to set
 	 */
-	public void setCells(Cell[][] cells) {
-		this.cells = cells;
-	}
-	
-	public List<Marker> getMapMarkersFromMapGridData() {
-		return mgd.getCellMarkers();
+	public void setCm(CellManager cm) {
+		this.cm = cm;
 	}
 
 }

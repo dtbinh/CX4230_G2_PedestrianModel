@@ -10,6 +10,7 @@ import de.fhpotsdam.unfolding.data.ShapeFeature;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
+import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.utilities.CSVReader;
 import edu.gatech.cx4230.projectone.backend.utilities.CSVRow;
 import edu.gatech.cx4230.projectone.visualization.abstraction.CellMarker;
@@ -24,7 +25,7 @@ public class MapGridData {
 	public static final String NAME = "name";
 	public static final String TYPE = "type";
 	private int width, height;
-	private Cell[][] cells;
+	private CellManager cm;
 	private List<Marker> cellMarkers;
 
 	public MapGridData() {
@@ -39,7 +40,8 @@ public class MapGridData {
 		width = overall.getWidthInd();
 		height = overall.getHeightInd();
 		
-		create2DArray(width + 1, height + 1);
+		Cell[][] cells = create2DArray(width + 1, height + 1);
+		CellManager cm = new CellManager();
 		
 		int cellModCount = 0;
 		List<Feature> cellsMap = new ArrayList<Feature>();
@@ -59,6 +61,7 @@ public class MapGridData {
 			for(int j = y; j < (y+h); j++) {
 				for(int i = x; i < (x+w); i++) {
 					cells[j][i].setProperties(i, j, name, cellType, csvLine);
+					cells[j][i].setCm(cm);
 					cellModCount++;
 
 				}
@@ -94,10 +97,12 @@ public class MapGridData {
 		
 		cellMarkers = new ArrayList<Marker>();
 		cellMarkers = mf.createMarkers(cellsMap);
+		
+		cm.setCells(cells);
 	}
 	
-	private void create2DArray(int width, int height) {
-		cells = new Cell[height][];
+	private Cell[][] create2DArray(int width, int height) {
+		Cell[][] cells = new Cell[height][];
 		
 		for(int j = 0; j < height; j++) {
 			cells[j] = new Cell[width];
@@ -106,9 +111,7 @@ public class MapGridData {
 				cells[j][i] = new Cell();
 			}
 		}
-	}
-	
-	public Cell[][] getCells() {
+		
 		return cells;
 	}
 	
@@ -128,7 +131,11 @@ public class MapGridData {
 
 	public static void main(String[] args) {
 		MapGridData mgd = new MapGridData();
-		System.out.println("Rows: " + mgd.getCells().length);
+		System.out.println("Rows: " + mgd.getCellManager().getCells().length);
+	}
+	
+	public CellManager getCellManager() {
+		return cm;
 	}
 
 }

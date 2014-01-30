@@ -4,6 +4,7 @@ package edu.gatech.cx4230.projectone.backend.abstraction;
 public class Cell {
 
 	private static int idNextCell;
+	private CellManager cm;
 	public static final char BUILDING = 'B';
 	public static final char SIDEWALK = 'S';
 	public static final char STREET = 'T';
@@ -77,5 +78,75 @@ public class Cell {
 	 */
 	public void setCsvRow(int csvRow) {
 		this.csvRow = csvRow;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the x
+	 */
+	public int getX() {
+		return x;
+	}
+
+	/**
+	 * @param x the x to set
+	 */
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	/**
+	 * @return the y
+	 */
+	public int getY() {
+		return y;
+	}
+
+	/**
+	 * @param y the y to set
+	 */
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the cm
+	 */
+	public CellManager getCm() {
+		return cm;
+	}
+
+	/**
+	 * @param cm the cm to set
+	 */
+	public void setCm(CellManager cm) {
+		this.cm = cm;
 	}
 }

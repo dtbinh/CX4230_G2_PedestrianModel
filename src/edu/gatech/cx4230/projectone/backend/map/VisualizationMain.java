@@ -42,7 +42,6 @@ public class VisualizationMain extends PApplet {
 		
 		ps = new PedestrianSimulation();
 		ps.mainLoop(this);
-		markers = ps.getMapMarkersFromMapGridData();
 		
 		redraw();
 		
@@ -55,10 +54,26 @@ public class VisualizationMain extends PApplet {
 		background(175);
 		map.updateMap();
 		
-		for(Marker m: markers) {
-			m.draw(map);
+		if(markers != null && !markers.isEmpty()) {
+			for(Marker m: markers) {
+				m.draw(map);
+			}
 		}
 		//map.draw();
+	}
+
+	/**
+	 * @return the markers
+	 */
+	public List<Marker> getMarkers() {
+		return markers;
+	}
+
+	/**
+	 * @param markers the markers to set
+	 */
+	public void setMarkers(List<Marker> markers) {
+		this.markers = markers;
 	}
 
 
