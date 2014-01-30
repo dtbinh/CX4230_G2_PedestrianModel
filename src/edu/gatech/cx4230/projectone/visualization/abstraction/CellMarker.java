@@ -63,8 +63,8 @@ public class CellMarker extends SimplePolygonMarker {
 				pg.fill(255,255,0);
 				pg.stroke(255,255,0);
 			} else if(type == Cell.STREET) {
-				pg.fill(40, 40, 40);
-				pg.stroke(40, 40, 40);
+				pg.fill(10, 10, 10);
+				pg.stroke(10, 10, 10);
 			}
 		}
 

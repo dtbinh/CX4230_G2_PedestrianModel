@@ -39,7 +39,7 @@ public class MapGridData {
 		width = overall.getWidthInd();
 		height = overall.getHeightInd();
 		
-		create2DArray(width + 1,height + 1);
+		create2DArray(width + 1, height + 1);
 		
 		int cellModCount = 0;
 		List<Feature> cellsMap = new ArrayList<Feature>();

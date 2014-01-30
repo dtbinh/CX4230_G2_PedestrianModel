@@ -52,7 +52,7 @@ public class VisualizationMain extends PApplet {
 	 * Draw operation called by the PApplet
 	 */
 	public void draw() {
-		background(0);
+		background(175);
 		map.updateMap();
 		
 		for(Marker m: markers) {

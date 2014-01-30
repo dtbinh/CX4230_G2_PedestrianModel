@@ -31,7 +31,7 @@ public class CSVRow {
 				out = Cell.BUILDING;
 			} else if(in.equals("SIDEWALK")) {
 				out = Cell.SIDEWALK;
-			} else if(in.equals("STREET")) {
+			} else if(in.equals("ROAD")) {
 				out = Cell.STREET;
 			} else if(in.equals("CROSSWALK")) {
 				out = Cell.CROSSWALK;
