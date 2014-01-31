@@ -42,16 +42,42 @@ public class PedestrianSimulation {
 	
 	public void timeStep() {
 		// TODO traffic light maintenance
+		
 		// TODO spawn people
+		int numPeople = 10; // use random here to decide how many ppl to spawn at each time step?
+		spawnPeople(numPeople);
+		
 		// TODO move people
+		movePeople();
 		
 		vis.redraw();
 	}
 	
+	/**
+	 * spawnPerson
+	 * 
+	 * spawns a new Person
+	 * 
+	 * @return a new Person object
+	 */
 	public Person spawnPerson() {
 		countPeopleSpawned++;
 		countPeopleInBuilding++;
 		return new Person(); // right now this uses the default constructor, but it should take in start values for the new Person
+	}
+	
+	/**
+	 * spawnPeople
+	 * 
+	 * spawns new Person objects and adds them to the people ArrayList
+	 * 
+	 * @param numPeople the number of new Person objects to spawn
+	 */
+	public void spawnPeople(int numPeople) {
+		for(int i = 0; i < numPeople; i++) {
+			Person p = spawnPerson();
+			people.add(p);
+		}
 	}
 	
 	public void movePeople() {
