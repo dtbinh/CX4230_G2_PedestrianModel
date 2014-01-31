@@ -41,6 +41,8 @@ public class PedestrianSimulation {
 	}
 	
 	public void timeStep() {
+		currTimeStep++;
+		
 		// TODO traffic light maintenance
 		
 		// TODO spawn people
@@ -57,6 +59,7 @@ public class PedestrianSimulation {
 	 * spawnPerson
 	 * 
 	 * spawns a new Person
+	 * uses random number generation to determine start location, start speed
 	 * 
 	 * @return a new Person object
 	 */
