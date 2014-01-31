@@ -149,4 +149,21 @@ public class Cell {
 	public void setCm(CellManager cm) {
 		this.cm = cm;
 	}
+	
+	/**
+	 * compares two Cell objects to determine if they are the same instance of Cell
+	 * 
+	 * @return true if they are the same Cell, false otherwise
+	 */
+	public boolean equals(Object o) {
+		if(o == null) {
+			return false;
+		}
+		else if(!(o instanceof Cell)) {
+			return false;
+		}
+		else {
+			return (this.id == o.getId());
+		}
+	}
 }
