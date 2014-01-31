@@ -12,7 +12,6 @@ public class Person {
 	private double maxSpeed;
 	private int stressLevel;
 	private int timeLastMove;
-	private boolean canMove;	
 	
 	/**
 	 * Person()
@@ -32,6 +31,14 @@ public class Person {
 		stressLevel = startStress;
 		timeLastMove = startTime;
 		canMove = false;
+	}
+	
+	public Cell getLocation() {
+		return location;
+	}
+	
+	private Cell setLocation(Cell newLocation) {
+		location = newLocation;
 	}
 	
 	public double getCurrSpeed() {
@@ -58,12 +65,12 @@ public class Person {
 		timeLastMove = newTime;
 	}
 	
-	public boolean isMoveable() {
-		return canMove;
+	public boolean isMoveable(int time) {
+		return (time - timeLastMove) >= currSpeed;
 	}
 	
-	public void move(int time) {
+	public void move(int time, Cell newLocation) {
 		setTimeLastMove(time);
-		canMove = false;
+		setLocation(newLocation);
 	}
 }

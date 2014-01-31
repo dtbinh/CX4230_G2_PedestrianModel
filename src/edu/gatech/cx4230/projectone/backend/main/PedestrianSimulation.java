@@ -83,14 +83,14 @@ public class PedestrianSimulation {
 	public void movePeople() {
 		// iterate over all people currently in the simulation
 		for(Person p : people) {
-			if(p.isMoveable()) {
+			if(p.isMoveable(currTimeStep)) {
 				// TODO calculate probabilities of movement into neighbor cells
 			}
 		}
 		for(Person p : people) {
-			if(p.isMoveable()) {
+			if(p.isMoveable(currTimeStep)) {
 				// TODO handle movement of people, potential collisions with other people, etc
-				// if a person is moved, call p.move(currTime); to reset their ability to move
+				// if a person is moved, call p.move(currTimeStep, newCell);
 			}
 		}
 	}
