@@ -96,6 +96,8 @@ public class PedestrianSimulation {
 				// if a person is moved, call p.move(currTimeStep, newCell);
 			}
 		}
+		
+		vis.updatePeopleMarkers(people);
 	}
 	
 	public void mainLoop(VisualizationMain vis) {

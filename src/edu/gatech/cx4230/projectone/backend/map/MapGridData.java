@@ -69,10 +69,10 @@ public class MapGridData {
 
 			
 			// Adds Feature to list for map
-			double lon = VisualizationMain.TOP_LEFT_LON + x * VisualizationMain.CELL_FACTOR;
-			double lat = VisualizationMain.TOP_LEFT_LAT - y * VisualizationMain.CELL_FACTOR;
-			double width = w * VisualizationMain.CELL_FACTOR;
-			double height = h * VisualizationMain.CELL_FACTOR;
+			double lon = VisualizationMain.TOP_LEFT_LON + x * VisualizationMain.CELL_FACTOR_X;
+			double lat = VisualizationMain.TOP_LEFT_LAT - y * VisualizationMain.CELL_FACTOR_Y;
+			double width = w * VisualizationMain.CELL_FACTOR_X;
+			double height = h * VisualizationMain.CELL_FACTOR_Y;
 			
 			Location tl = new Location(lat, lon);
 			Location tr = new Location(lat, lon + width);
