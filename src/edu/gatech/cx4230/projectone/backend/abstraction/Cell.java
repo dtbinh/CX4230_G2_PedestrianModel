@@ -163,7 +163,7 @@ public class Cell {
 			return false;
 		}
 		else {
-			return (this.id == o.getId());
+			return (this.id == ((Cell) o).getId());
 		}
 	}
 }

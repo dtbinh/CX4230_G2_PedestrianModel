@@ -30,14 +30,13 @@ public class Person {
 		maxSpeed = maxS;
 		stressLevel = startStress;
 		timeLastMove = startTime;
-		canMove = false;
 	}
 	
 	public Cell getLocation() {
 		return location;
 	}
 	
-	private Cell setLocation(Cell newLocation) {
+	private void setLocation(Cell newLocation) {
 		location = newLocation;
 	}
 	
