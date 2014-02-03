@@ -83,4 +83,8 @@ public class Person {
 		setTimeLastMove(time);
 		setLocation(newLocation);
 	}
+	
+	public String toString() {
+		return "(" + id + "\tSpeed: " + currSpeed + ")";
+	}
 }
