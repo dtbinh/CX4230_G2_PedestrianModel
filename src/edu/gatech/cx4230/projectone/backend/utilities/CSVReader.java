@@ -81,7 +81,7 @@ public class CSVReader {
 				}
 			}
 		}
-	}
+	} // close constructor
 	
 	public ArrayList<CSVRow> getRows() {
 		return rows;
