@@ -1,5 +1,7 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
+import java.util.ArrayList;
+
 /**
  * Object that will hold the 2D-array of cells.  Each cell will have a reference to this object.  Contains
  * methods for cells to communicate with other neighboring cells.
@@ -89,18 +91,33 @@ public class CellManager {
 		return getNeighborCell(here, -1, -1);
 	}
 	
-	public Cell[] getNeighborAll(Cell here) {
-		Cell[] neighbors = new Cell[8];
-		neighbors[0] = getNeighborTop(here);
-		neighbors[1] = getNeighborTopRight(here);
-		neighbors[2] = getNeighborRight(here);
-		neighbors[3] = getNeighborBottomRight(here);
-		neighbors[4] = getNeighborBottom(here);
-		neighbors[5] = getNeighborBottomLeft(here);
-		neighbors[6] = getNeighborLeft(here);
-		neighbors[7] = getNeighborTopLeft(here);
+	public ArrayList<Cell> getNeighborAll(Cell here) {
+		ArrayList<Cell> out = new ArrayList<Cell>();
+		Cell t0 = getNeighborTop(here);
+		if(t0 != null) out.add(t0);
 		
-		return neighbors;
+		Cell tr = getNeighborTopRight(here);
+		if(tr != null) out.add(tr);
+		
+		Cell r0 = getNeighborRight(here);
+		if(r0 != null) out.add(r0);
+		
+		Cell br = getNeighborBottomRight(here);
+		if(br != null) out.add(br);
+		
+		Cell b0 = getNeighborBottom(here);
+		if(b0 != null) out.add(b0);
+		
+		Cell bl = getNeighborBottomLeft(here);
+		if(bl != null) out.add(bl);
+		
+		Cell l0 = getNeighborLeft(here);
+		if(l0 != null) out.add(l0);
+		
+		Cell tl = getNeighborTopLeft(here);
+		if(tl != null) out.add(tl);
+		
+		return out;
 	}
 	
 	/**
@@ -109,7 +126,7 @@ public class CellManager {
 	 * @param here
 	 * @param tb the top/bottom distance to the desired cell
 	 * @param lr the left/right distance to the desired cell
-	 * @return
+	 * @return The given cell or null otherwise
 	 */
 	private Cell getNeighborCell(Cell here, int tb, int lr) {
 		int hereX = here.getX();

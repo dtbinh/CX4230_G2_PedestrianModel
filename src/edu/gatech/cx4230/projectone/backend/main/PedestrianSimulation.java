@@ -17,23 +17,23 @@ import edu.gatech.cx4230.projectone.backend.map.VisualizationMain;
 public class PedestrianSimulation {
 
 	public final int BUILDING_CAPACITY = 1500;
-	
+
 	public int totalPeople;
 	public int countPeopleInBuilding;
 	public int currTimeStep;
-	
+
 	// list of people currently in simulation 
 	public ArrayList<Person> people;
-	
+
 	// list of people to move at each time step
 	public List<Person> peopleToMove;
-	
+
 	// Manager for the 2-D grid of cells in the simulation
 	private CellManager cm;
-	
+
 	// Visualization of the simulation
 	private VisualizationMain vis;
-	
+
 	/**
 	 * initializes simulation variables
 	 * 
@@ -41,37 +41,38 @@ public class PedestrianSimulation {
 	 */
 	public void initializeSimulation(VisualizationMain vis) {
 		this.vis = vis;
-		
+
 		totalPeople = BUILDING_CAPACITY; // this may be variable for each simulation, with BUILDING_CAPACITY as the max
 		countPeopleInBuilding = totalPeople;
 		currTimeStep = 0;
 		people = new ArrayList<Person>();
-		
+		peopleToMove = new ArrayList<Person>();
+
 		// Read in and create the map grid
 		MapGridData mgd = new MapGridData();
 		vis.setMarkers(mgd.getCellMarkers());
 		cm = mgd.getCellManager();
 	}
-	
+
 	/**
 	 * handles tasks that need to be done at each time step
 	 * maintains crosswalk timing, spawns new people into simulation, moves active people in simulation
 	 */
 	public void timeStep() {
 		currTimeStep++;
-		
+
 		// TODO traffic light maintenance
-		
+
 		// TODO spawn people
 		int numPeople = 10; // use random here to decide how many ppl to spawn at each time step?
 		spawnPeople(numPeople);
-		
+
 		// TODO move people
 		movePeople();
-		
+
 		vis.redraw();
 	}
-	
+
 	/**
 	 * spawnPerson
 	 * 
@@ -83,7 +84,7 @@ public class PedestrianSimulation {
 	public Person spawnPerson() {
 		return new Person(); // right now this uses the default constructor, but it should take in start values for the new Person
 	}
-	
+
 	/**
 	 * spawnPeople
 	 * 
@@ -97,7 +98,7 @@ public class PedestrianSimulation {
 			people.add(p);
 		}
 	}
-	
+
 	/**
 	 * movePeople
 	 * 
@@ -113,9 +114,12 @@ public class PedestrianSimulation {
 			}
 		}
 		//while(!peopleToMove.isEmpty()) {	// implement this if person must find alternate move instead of waiting until next time step
-			for(Person p : peopleToMove) {
-				// handle movement of people, potential collisions with other people, etc
-				Cell nextCell = p.getNextLocation();
+		for(Person p : peopleToMove) {
+			// handle movement of people, potential collisions with other people, etc
+			Cell nextCell = p.getNextLocation();
+			if(nextCell == null) {
+				// TODO
+			} else {
 				if(nextCell.getTargeted().size() == 1) {
 					p.move(currTimeStep, nextCell);
 					nextCell.setPerson(p);
@@ -134,24 +138,30 @@ public class PedestrianSimulation {
 				}
 				nextCell.clearTargeted();
 			}
+		}
 		//}
-	
+
 		vis.updatePeopleMarkers(people);
 	}
-	
+
 	public void calculateNextMove(Person p) {
 		// determine Person's most desirable next move
 		Cell currCell = p.getLocation();
-		Cell[] neighbors = currCell.getCm().getNeighborAll(currCell);
-		Cell nextCell = neighbors[0];
-		for(Cell c: neighbors) {
-			if(c.getScore() > nextCell.getScore())
-				nextCell = c;
-		}
-		p.setNextLocation(nextCell);
-		nextCell.addToTargeted(p);
-	}
-	
+		if(currCell != null) {
+			ArrayList<Cell> neighbors = currCell.getCm().getNeighborAll(currCell);
+			if(neighbors.size() > 0) {
+				Cell nextCell = neighbors.get(0);
+				for(Cell c: neighbors) {
+					if(c.getScore() > nextCell.getScore())
+						nextCell = c;
+				} // close for
+
+				p.setNextLocation(nextCell);
+				nextCell.addToTargeted(p);
+			} // close if
+		} // close null if
+	} // close calculateNextMove()
+
 	/**
 	 * initializes the simulation variables, starts the timer, and checks for stopping conditions
 	 * 
@@ -161,21 +171,23 @@ public class PedestrianSimulation {
 		initializeSimulation(vis);
 
 		int delay = 50; // 50 milliseconds = 0.05 seconds per time step
-				
+
 		ActionListener timeStepper = new ActionListener() {
-			
+
 			public void actionPerformed(ActionEvent e) {
-					timeStep();
+				timeStep();
 			}
 		};
-		
+
 		Timer timer = new Timer(delay, timeStepper);
 		timer.start();
 		// check for stop conditions here
-		while(countPeopleInBuilding > 0 || people.size() < totalPeople);
+		while(countPeopleInBuilding > 0 || people.size() < totalPeople) {
+			vis.redraw();
+		}
 		timer.stop();
 
-}
+	}
 
 	/**
 	 * @return the cm
