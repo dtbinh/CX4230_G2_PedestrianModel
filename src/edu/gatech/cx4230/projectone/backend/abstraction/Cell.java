@@ -214,4 +214,12 @@ public class Cell {
 		
 		return Math.sqrt(dx*dx + dy*dy);
 	}
+	
+	public boolean isTraversable() {
+		boolean out = false;
+		if(cellType == CROSSWALK || cellType == DOOR || cellType == SIDEWALK) {
+			out = true;
+		}
+		return out;
+	}
 }
