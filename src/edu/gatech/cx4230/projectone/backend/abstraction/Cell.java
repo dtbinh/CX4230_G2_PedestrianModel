@@ -29,7 +29,7 @@ public class Cell {
 	private char cellType;
 	private String name;
 	private Person person;
-	private int score;
+	private double score;
 	private List<Person> targeted; // list of people who want to move to this cell
 	
 	/**
@@ -167,7 +167,7 @@ public class Cell {
 	 * 
 	 * @return the cell's score
 	 */
-	public int getScore() {
+	public double getScore() {
 		return score;		
 	}
 	
@@ -175,7 +175,7 @@ public class Cell {
 	 * 
 	 * @param score the score to set
 	 */
-	public void setScore(int score) {
+	public void setScore(double score) {
 		this.score = score;
 	}
 	
@@ -206,5 +206,12 @@ public class Cell {
 		else {
 			return (this.id == ((Cell) o).getID());
 		}
+	}
+	
+	public double getDistanceToCell(Cell c) {
+		double dx = this.x - c.getX();
+		double dy = this.y - c.getY();
+		
+		return Math.sqrt(dx*dx + dy*dy);
 	}
 }
