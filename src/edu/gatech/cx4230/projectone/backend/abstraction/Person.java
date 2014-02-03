@@ -7,6 +7,7 @@ public class Person {
 	
 	private int id;
 	private Cell location;
+	private Cell nextLocation;
 	private double currSpeed;
 	private double minSpeed;
 	private double maxSpeed;
@@ -38,6 +39,14 @@ public class Person {
 	
 	private void setLocation(Cell newLocation) {
 		location = newLocation;
+	}
+	
+	public Cell getNextLocation() {
+		return nextLocation;
+	}
+	
+	public void setNextLocation(Cell nextLocation) {
+		this.nextLocation = nextLocation;
 	}
 	
 	public double getCurrSpeed() {
