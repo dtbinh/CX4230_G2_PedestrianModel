@@ -27,14 +27,18 @@ public class CSVRow {
 	private char findCellType(String in) {
 		char out = Cell.ERROR;
 		if(in != null && !in.isEmpty()) {
-			if(in.equals("BUILDING")) {
+			if(in.equals(Cell.BUILDING_NAME)) {
 				out = Cell.BUILDING;
-			} else if(in.equals("SIDEWALK")) {
+			} else if(in.equals(Cell.MODEL_BUILDING_NAME)) {
+				out = Cell.MODEL_BUILDING;
+			} else if(in.equals(Cell.SIDEWALK_NAME)) {
 				out = Cell.SIDEWALK;
-			} else if(in.equals("ROAD")) {
+			} else if(in.equals(Cell.STREET_NAME)) {
 				out = Cell.STREET;
-			} else if(in.equals("CROSSWALK")) {
+			} else if(in.equals(Cell.CROSSWALK_NAME)) {
 				out = Cell.CROSSWALK;
+			} else if(in.equals(Cell.DOOR_NAME)) {
+				out = Cell.DOOR;
 			}
 		}
 		return out;

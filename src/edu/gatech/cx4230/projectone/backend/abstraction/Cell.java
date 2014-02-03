@@ -9,10 +9,19 @@ public class Cell {
 	private static int idNextCell; // current value of idNextCell is the number of cells that have been instantiated
 	private CellManager cm;
 	public static final char BUILDING = 'B';
+	public static final String BUILDING_NAME = "BUILDING";
+	public static final char MODEL_BUILDING = 'M';
+	public static final String MODEL_BUILDING_NAME = "MODEL BUILDING";
 	public static final char SIDEWALK = 'S';
+	public static final String SIDEWALK_NAME = "SIDEWALK";
 	public static final char STREET = 'T';
+	public static final String STREET_NAME = "ROAD";
 	public static final char CROSSWALK = 'C';
+	public static final String CROSSWALK_NAME = "CROSSWALK";
 	public static final char ERROR = 'E';
+	public static final String ERROR_NAME = "ERROR";
+	public static final char DOOR = 'D';
+	public static final String DOOR_NAME = "DOOR";
 	
 	private int id; // unique
 	private int csvRow;
