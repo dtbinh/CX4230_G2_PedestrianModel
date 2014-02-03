@@ -3,6 +3,7 @@ package edu.gatech.cx4230.projectone.backend.main;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Timer;
 
@@ -23,6 +24,9 @@ public class PedestrianSimulation {
 	
 	// list of people currently in simulation 
 	public ArrayList<Person> people;
+	
+	// list of people to move at each time step
+	public List<Person> peopleToMove;
 	
 	// Manager for the 2-D grid of cells in the simulation
 	private CellManager cm;
@@ -104,26 +108,48 @@ public class PedestrianSimulation {
 		// iterate over all people currently in the simulation
 		for(Person p : people) {
 			if(p.isMoveable(currTimeStep)) {
-				// determine Person's most desirable next move
-				Cell currCell = p.getLocation();
-				Cell[] neighbors = currCell.getCm().getNeighborAll(currCell);
-				Cell nextCell = neighbors[0];
-				for(Cell c: neighbors) {
-					if(c.getScore() > nextCell.getScore())
-						nextCell = c;
+				calculateNextMove(p);
+				peopleToMove.add(p);
+			}
+		}
+		//while(!peopleToMove.isEmpty()) {	// implement this if person must find alternate move instead of waiting until next time step
+			for(Person p : peopleToMove) {
+				// handle movement of people, potential collisions with other people, etc
+				Cell nextCell = p.getNextLocation();
+				if(nextCell.getTargeted().size() == 1) {
+					p.move(currTimeStep, nextCell);
+					nextCell.setPerson(p);
+					peopleToMove.remove(p);
 				}
-				p.setNextLocation(nextCell);
+				else {
+					List<Person> targeted = nextCell.getTargeted();
+					Person winner = targeted.get(0);
+					for(Person t : targeted) {
+						if(t.getCurrSpeed() > winner.getCurrSpeed())
+							winner = t;
+					}
+					winner.move(currTimeStep, nextCell);
+					nextCell.setPerson(winner);
+					peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
+				}
+				nextCell.clearTargeted();
 			}
-		}
-		for(Person p : people) {
-			if(p.isMoveable(currTimeStep)) {
-				// TODO handle movement of people, potential collisions with other people, etc
-				// if a person is moved, call p.move(currTimeStep, newCell);
-				
-			}
-		}
-		
+		//}
+	
 		vis.updatePeopleMarkers(people);
+	}
+	
+	public void calculateNextMove(Person p) {
+		// determine Person's most desirable next move
+		Cell currCell = p.getLocation();
+		Cell[] neighbors = currCell.getCm().getNeighborAll(currCell);
+		Cell nextCell = neighbors[0];
+		for(Cell c: neighbors) {
+			if(c.getScore() > nextCell.getScore())
+				nextCell = c;
+		}
+		p.setNextLocation(nextCell);
+		nextCell.addToTargeted(p);
 	}
 	
 	/**

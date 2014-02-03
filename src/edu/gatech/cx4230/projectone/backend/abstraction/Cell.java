@@ -1,5 +1,8 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
+import java.util.List;
+
+
 
 public class Cell {
 
@@ -18,6 +21,7 @@ public class Cell {
 	private String name;
 	private Person person;
 	private int score;
+	private List<Person> targeted; // list of people who want to move to this cell
 	
 	/**
 	 * Cell()
@@ -32,6 +36,7 @@ public class Cell {
 	public Cell(int x, int y, String name, char type, int csvRow, int score) {
 		id = idNextCell++;
 		person = null; // initially, the cell is unoccupied
+		//targeted = new List<Person>();
 		
 		this.x = x;
 		this.y = y;
@@ -163,6 +168,18 @@ public class Cell {
 	 */
 	public void setScore(int score) {
 		this.score = score;
+	}
+	
+	public List<Person> getTargeted() {
+		return targeted;
+	}
+	
+	public void addToTargeted(Person p) {
+		targeted.add(p);
+	}
+	
+	public void clearTargeted() {
+		targeted.clear();
 	}
 	
 	/**
