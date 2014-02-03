@@ -89,6 +89,20 @@ public class CellManager {
 		return getNeighborCell(here, -1, -1);
 	}
 	
+	public Cell[] getNeighborAll(Cell here) {
+		Cell[] neighbors = new Cell[8];
+		neighbors[0] = getNeighborTop(here);
+		neighbors[1] = getNeighborTopRight(here);
+		neighbors[2] = getNeighborRight(here);
+		neighbors[3] = getNeighborBottomRight(here);
+		neighbors[4] = getNeighborBottom(here);
+		neighbors[5] = getNeighborBottomLeft(here);
+		neighbors[6] = getNeighborLeft(here);
+		neighbors[7] = getNeighborTopLeft(here);
+		
+		return neighbors;
+	}
+	
 	/**
 	 * Returns the cell located a given distance from a given cell.  Ex - if the given cell is located 
 	 * at (50,24) and tb=-1 and lf = 1, then the cell at (51,23) is returned.
