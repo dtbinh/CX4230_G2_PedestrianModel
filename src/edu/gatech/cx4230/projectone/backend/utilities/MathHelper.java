@@ -22,7 +22,7 @@ public class MathHelper {
 	 * @param y2
 	 * @return f(x) where f is the function described by the given coordinates
 	 */
-	public double linearInterp(double x, double x1, double y1, double x2, double y2) {
+	public static double linearInterp(double x, double x1, double y1, double x2, double y2) {
 		return y1 + (y2 - y1) / (x2 - x1) * (x - x1);
 	}
 

@@ -181,8 +181,7 @@ public class CellManager {
 		double dist = here.getDistanceToCell(target);
 	
 		// TODO only for Sidewalk and Crosswalk
-		MathHelper mh = new MathHelper();
-		double score = mh.linearInterp(dist, minDist, maxScore, maxDist, minScore);
+		double score = MathHelper.linearInterp(dist, minDist, maxScore, maxDist, minScore);
 		return score;
 	}
 	
