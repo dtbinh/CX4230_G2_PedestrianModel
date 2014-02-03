@@ -3,7 +3,7 @@ package edu.gatech.cx4230.projectone.backend.abstraction;
 
 public class Cell {
 
-	private static int idNextCell;
+	private static int idNextCell; // current value of idNextCell is the number of cells that have been instantiated
 	private CellManager cm;
 	public static final char BUILDING = 'B';
 	public static final char SIDEWALK = 'S';
@@ -11,12 +11,13 @@ public class Cell {
 	public static final char CROSSWALK = 'C';
 	public static final char ERROR = 'E';
 	
-	private int id;
+	private int id; // unique
 	private int csvRow;
 	private int x, y;
 	private char cellType;
 	private String name;
 	private Person person;
+	private int score;
 	
 	/**
 	 * Cell()
@@ -24,13 +25,21 @@ public class Cell {
 	 * default constructor. will use default values for new Cell.
 	 */
 	public Cell() {
-		this(ERROR);
+		
+		this(0, 0, "default", ERROR, 0, 0);
 	}
 	
-	public Cell(char type) {
+	public Cell(int x, int y, String name, char type, int csvRow, int score) {
 		id = idNextCell++;
-		cellType = type; // cellType must be from a defined set of types (w-wall, s-sidewalk, etc)
 		person = null; // initially, the cell is unoccupied
+		
+		this.x = x;
+		this.y = y;
+		this.name = name;
+		this.cellType = type; // cellType must be from a defined set of types (w-wall, s-sidewalk, etc)
+		this.csvRow = csvRow;
+		this.score = score;
+
 	}
 	
 	public void setProperties(int x, int y, String name, char type, int csvRow) {
@@ -40,6 +49,10 @@ public class Cell {
 		this.cellType = type;
 		this.csvRow = csvRow;
 		// x, y, type, name
+	}
+	
+	public int getID() {
+		return id;
 	}
 	
 	public char getType() {
@@ -78,20 +91,6 @@ public class Cell {
 	 */
 	public void setCsvRow(int csvRow) {
 		this.csvRow = csvRow;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	/**
@@ -151,6 +150,22 @@ public class Cell {
 	}
 	
 	/**
+	 * 
+	 * @return the cell's score
+	 */
+	public int getScore() {
+		return score;		
+	}
+	
+	/**
+	 * 
+	 * @param score the score to set
+	 */
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
+	/**
 	 * compares two Cell objects to determine if they are the same instance of Cell
 	 * 
 	 * @return true if they are the same Cell, false otherwise
@@ -163,7 +178,7 @@ public class Cell {
 			return false;
 		}
 		else {
-			return (this.id == ((Cell) o).getId());
+			return (this.id == ((Cell) o).getID());
 		}
 	}
 }

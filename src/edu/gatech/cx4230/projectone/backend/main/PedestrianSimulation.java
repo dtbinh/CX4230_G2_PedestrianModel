@@ -118,6 +118,7 @@ public class PedestrianSimulation {
 		
 		Timer timer = new Timer(delay, timeStepper);
 		timer.start();
+		// check for stop conditions here
 		while(countPeopleInBuilding > 0 || countPeopleSpawned < BUILDING_CAPACITY);
 		timer.stop();
 
