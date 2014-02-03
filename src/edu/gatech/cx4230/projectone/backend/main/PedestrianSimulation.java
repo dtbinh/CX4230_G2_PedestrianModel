@@ -1,6 +1,10 @@
 package edu.gatech.cx4230.projectone.backend.main;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import javax.swing.Timer;
 
 import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
@@ -102,12 +106,22 @@ public class PedestrianSimulation {
 	
 	public void mainLoop(VisualizationMain vis) {
 		initializeSimulation(vis);
+
+		int delay = 50; // 50 milliseconds = 0.05 seconds per time step
+				
+		ActionListener timeStepper = new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+					timeStep();
+			}
+		};
 		
-		//while(countPeopleInBuilding > 0 || countPeopleSpawned < BUILDING_CAPACITY) {
-			// TODO wait specified amount of time for each time step, then call timeStep()
-			timeStep();
-		//}
-	}
+		Timer timer = new Timer(delay, timeStepper);
+		timer.start();
+		while(countPeopleInBuilding > 0 || countPeopleSpawned < BUILDING_CAPACITY);
+		timer.stop();
+
+}
 
 	/**
 	 * @return the cm
