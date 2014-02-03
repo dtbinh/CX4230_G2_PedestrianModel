@@ -4,6 +4,8 @@ package edu.gatech.cx4230.projectone.backend.abstraction;
 public class Person {
 
 	private static int idNextPerson;
+	public static final int MAX_STRESS = 1000;
+	public static final int MIN_STRESS = 0;
 	
 	private int id;
 	private Cell location;
