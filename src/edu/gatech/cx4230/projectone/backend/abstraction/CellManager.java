@@ -1,6 +1,9 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import edu.gatech.cx4230.projectone.backend.utilities.MathHelper;
 
 /**
  * Object that will hold the 2D-array of cells.  Each cell will have a reference to this object.  Contains
@@ -142,6 +145,45 @@ public class CellManager {
 		}
 		
 		return out;
+	}
+	
+	/**
+	 * Iterates over all the cells in Cell[][] and sets the score for each cell.  
+	 * @param targets
+	 */
+	public void setTargetCells(List<Cell> targets) {
+		for(int j = 0; j < cells.length; j++) {
+			for(int i = 0; i < cells[j].length; i++) {
+				double score = Double.MIN_VALUE;
+				//Cell targetCell = null;
+				for(Cell c: targets) {
+					
+					// Higher score means closer to cell
+					double curScore = calculateScore(cells[j][i], c);
+					if(curScore > score) {
+						score = curScore;
+						//targetCell = c;
+					}
+				} // close target for
+				
+				// set the score for the cell
+				cells[j][i].setScore(score);
+				
+			} // close width for
+		} // close height for
+	} // close method
+	
+	public double calculateScore(Cell here, Cell target) {
+		double maxScore = 1000000;
+		double minScore = 0;
+		double maxDist = 1500;
+		double minDist = 0;
+		double dist = here.getDistanceToCell(target);
+	
+		// TODO only for Sidewalk and Crosswalk
+		MathHelper mh = new MathHelper();
+		double score = mh.linearInterp(dist, minDist, maxScore, maxDist, minScore);
+		return score;
 	}
 	
 	public void setCells(Cell[][] c) {
