@@ -53,6 +53,9 @@ public class CellMarker extends SimplePolygonMarker {
 			if(type == Cell.BUILDING) {
 				pg.fill(0,0,100);
 				pg.stroke(0,0,100);
+			} else if(type == Cell.MODEL_BUILDING) {
+				pg.fill(0, 75, 75);
+				pg.stroke(0, 75, 75);
 			} else if(type == Cell.CROSSWALK) {
 				pg.fill(200, 200, 200);
 				pg.stroke(200, 200, 200);
