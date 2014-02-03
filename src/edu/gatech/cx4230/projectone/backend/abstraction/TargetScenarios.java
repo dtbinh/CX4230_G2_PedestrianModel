@@ -42,7 +42,7 @@ public class TargetScenarios {
 		}
 		
 		for(int i = 179; i < 212; i++) { // 5th Street going East
-			out.add(cells[i][cells[i].length]);
+			out.add(cells[i][cells[i].length - 1]);
 		}
 		
 		
