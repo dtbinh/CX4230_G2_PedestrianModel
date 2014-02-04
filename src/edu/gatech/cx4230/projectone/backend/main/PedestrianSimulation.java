@@ -181,6 +181,10 @@ public class PedestrianSimulation {
 	public boolean timeChanged() {
 		return timeChanged;
 	}
+	
+	public void triggerThread() {
+		simThread.setRunning(!simThread.isRunning());
+	}
 
 
 	/**

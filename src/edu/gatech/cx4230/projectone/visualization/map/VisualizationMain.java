@@ -136,6 +136,14 @@ public class VisualizationMain extends PApplet {
 				ps.infoForCell(cellX, cellY);
 			}
 		}
+	} // close mouseClicked()
+	
+	public void keyPressed() {
+		switch(key) {
+		case ' ':
+			ps.triggerThread();
+			break;
+		}
 	}
 
 	/**
