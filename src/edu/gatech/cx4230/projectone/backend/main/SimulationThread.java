@@ -16,34 +16,6 @@ public class SimulationThread extends Thread {
 
 	}
 
-
-	/**
-	 * handles tasks that need to be done at each time step
-	 * maintains crosswalk timing, spawns new people into simulation, moves active people in simulation
-	 */
-	public void run() {
-		if(running) {
-			currTimeStep++;
-
-			// TODO traffic light maintenance
-
-			// TODO spawn people
-			int numPeople = 10; // use random here to decide how many ppl to spawn at each time step?
-			ps.spawnPeople(numPeople);
-
-			ps.movePeople();
-
-			try {
-				sleep((long) wait);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			if(!ps.continueSim()) {
-				quit();
-			}
-		}
-	}
-
 	@Override
 	public synchronized void start() {
 		currTimeStep = 0;
@@ -51,6 +23,38 @@ public class SimulationThread extends Thread {
 		running = true;
 		super.start();
 	}
+
+
+	/**
+	 * handles tasks that need to be done at each time step
+	 * maintains crosswalk timing, spawns new people into simulation, moves active people in simulation
+	 */
+	public void run() {
+		while(ps.continueSim()) {
+			if(running) {
+				currTimeStep++;
+				ps.setTimeChanged(true);
+
+				// TODO traffic light maintenance
+
+				// TODO spawn people
+				int numPeople = 10; // use random here to decide how many ppl to spawn at each time step?
+				ps.spawnPeople(numPeople);
+
+				ps.movePeople();
+
+				try {
+					sleep((long) wait);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+				if(!ps.continueSim()) {
+					quit();
+				}
+			}
+		}
+	}
+
 
 	public void quit() {
 		System.out.println("Quitting Thread...");
