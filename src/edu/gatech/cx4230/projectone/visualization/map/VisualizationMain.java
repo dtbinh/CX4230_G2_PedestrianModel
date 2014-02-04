@@ -12,6 +12,7 @@ import de.fhpotsdam.unfolding.utils.MapUtils;
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.main.PedestrianSimulation;
+import edu.gatech.cx4230.projectone.visualization.abstraction.CustomTooltip;
 import edu.gatech.cx4230.projectone.visualization.abstraction.PersonMarker;
 
 /**
@@ -28,7 +29,9 @@ public class VisualizationMain extends PApplet {
 
 	public static final double CELL_FACTOR_X = 0.05, CELL_FACTOR_Y = 0.04;
 	private UnfoldingMap map;
+	private CustomTooltip cTooltip;
 	private static final int WIDTH = 1000, HEIGHT = 800;
+	private int cellsWidth, cellsHeight;
 	public static final double TOP_LEFT_LAT = 50;
 	public static final double TOP_LEFT_LON = -35;
 	private PedestrianSimulation ps;
@@ -48,6 +51,7 @@ public class VisualizationMain extends PApplet {
 		peopleMarkers = new ArrayList<Marker>();
 		
 		f = createFont("Arial", 40, true);
+		cTooltip = new CustomTooltip("Cell: ()", 20, 20, 200, 120);
 
 		timeStep = 0;
 		ps = new PedestrianSimulation(this);
@@ -78,6 +82,7 @@ public class VisualizationMain extends PApplet {
 		textFont(f);
 		updateTimeStep();
 		text(timeStep, WIDTH - 100, 75);
+		cTooltip.draw(this);
 	} // close draw
 	
 	private void updateTimeStep() {
@@ -118,6 +123,20 @@ public class VisualizationMain extends PApplet {
 		double lat = TOP_LEFT_LAT - y * CELL_FACTOR_Y;
 		return new Location(lat, lon);
 	}
+	
+	public void mouseClicked() {
+		Location location = map.getLocation(mouseX, mouseY);
+		double lon = location.getLon();
+		double lat = location.getLat();
+		int cellX = (int) ((lon - TOP_LEFT_LON) / CELL_FACTOR_X);
+		int cellY = (int) ((-lat + TOP_LEFT_LAT) / CELL_FACTOR_Y);
+		
+		if(0 <= cellX && cellX < cellsWidth) {
+			if(0 <= cellY && cellY < cellsHeight) {
+				ps.infoForCell(cellX, cellY);
+			}
+		}
+	}
 
 	/**
 	 * @return the markers
@@ -146,6 +165,44 @@ public class VisualizationMain extends PApplet {
 	public void setPeopleMarkers(List<Marker> peopleMarkers) {
 		this.peopleMarkers = peopleMarkers;
 	}
+
+	/**
+	 * @return the cellsWidth
+	 */
+	public int getCellsWidth() {
+		return cellsWidth;
+	}
+
+
+	/**
+	 * @param cellsWidth the cellsWidth to set
+	 */
+	public void setCellsWidth(int cellsWidth) {
+		this.cellsWidth = cellsWidth;
+	}
+
+
+	/**
+	 * @return the cellsHeight
+	 */
+	public int getCellsHeight() {
+		return cellsHeight;
+	}
+
+
+	/**
+	 * @param cellsHeight the cellsHeight to set
+	 */
+	public void setCellsHeight(int cellsHeight) {
+		this.cellsHeight = cellsHeight;
+	}
+	
+	public void setTooltipText(String in) {
+		if(in != null && !in.isEmpty()) {
+			cTooltip.setText(in);
+		}
+	}
+
 
 	public static void main(String[] args) {
 		PApplet.main(new String[] {"edu.gatech.cx4230.projectone.backend.map.VisualizationMain"});

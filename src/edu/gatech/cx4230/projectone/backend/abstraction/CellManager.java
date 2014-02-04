@@ -195,5 +195,23 @@ public class CellManager {
 	public Cell[][] getCells() {
 		return cells;
 	}
+	
+	public int getCellsHeight() {
+		return cells.length;
+	}
+	
+	public int getCellsWidth() {
+		return cells[0].length;
+	}
+	
+	public Cell getCell(int x, int y) {
+		Cell out = null;
+		if(0 <= y && y < cells.length) {
+			if(0 <= x && x < cells[y].length) {
+				out = cells[y][x];
+			}
+		}
+		return out;
+	}
 
 }

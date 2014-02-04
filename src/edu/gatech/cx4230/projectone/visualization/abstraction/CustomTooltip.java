@@ -1,13 +1,15 @@
 package edu.gatech.cx4230.projectone.visualization.abstraction;
 
 import processing.core.PApplet;
+import processing.core.PFont;
 
-public class TextBox {
+public class CustomTooltip {
 	private int x, y;
 	private int width, height;
 	private String text;
 	
-	public TextBox(String text, int x, int y, int width, int height) {
+	public CustomTooltip(String text, int x, int y, int width, int height) {
+		this.text = text;
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -15,10 +17,13 @@ public class TextBox {
 	}
 	
 	public void draw(PApplet p) {
+		PFont f = p.createFont("Arial", 14, true);
+		p.textFont(f);
 		p.color(0, 0, 0);
 		p.fill(125);
 		p.rect(x, y, width, height);
-		p.text(text, x + 5, y + 5);
+		p.fill(0);
+		p.text(text, x + 15, y + 15);
 	}
 	
 	public void setLocation(int x, int y) {

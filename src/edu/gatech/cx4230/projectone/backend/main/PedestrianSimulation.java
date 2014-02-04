@@ -32,14 +32,14 @@ public class PedestrianSimulation {
 
 	// Simulation scenario
 	public static final int SCENARIO = 1;
-	
+
 	private SimulationThread simThread;
 	private boolean peopleAvailable = false;
 	private boolean timeChanged = false;
-	
+
 	public PedestrianSimulation(VisualizationMain vis) {
 		this.vis = vis;
-		
+
 		totalPeople = BUILDING_CAPACITY; // this may be variable for each simulation, with BUILDING_CAPACITY as the max
 		countPeopleInBuilding = totalPeople;
 		people = new ArrayList<Person>();
@@ -49,7 +49,9 @@ public class PedestrianSimulation {
 		MapGridData mgd = new MapGridData();
 		vis.setMarkers(mgd.getCellMarkers());
 		cm = mgd.getCellManager();
-		
+		vis.setCellsHeight(cm.getCellsHeight());
+		vis.setCellsWidth(cm.getCellsWidth());
+
 		// Load and Set target cells
 		TargetScenarios ts = new TargetScenarios(cm.getCells());
 		List<Cell> targets = null;
@@ -60,10 +62,10 @@ public class PedestrianSimulation {
 			targets = ts.specificTargetPoints1();
 		}
 		cm.setCellsScores(targets);
-		
+
 		// TODO Load and Set Door locations on Model Building
-		
-		
+
+
 		peopleAvailable = false;
 		simThread = new SimulationThread(PedestrianSimulation.this, 50, "Ped Sim Thread");
 		simThread.start();
@@ -136,7 +138,7 @@ public class PedestrianSimulation {
 				nextCell.clearTargeted();
 			}
 		} // close Person for
-		
+
 		peopleAvailable = true;
 	} // close movePeople()
 
@@ -157,12 +159,25 @@ public class PedestrianSimulation {
 			} // close if
 		} // close null if
 	} // close calculateNextMove()
-	
+
+	public void infoForCell(int cellX, int cellY) {
+		Cell c = cm.getCell(cellX, cellY);
+		if(c != null) {
+			String line0 = "(" + cellX + ", " + cellY + ")\n";
+			String line1 = "Type: " + c.getTypeName() + "\n";
+			String line2 = "Name: " + c.getName() + "\n";
+			String line3 = "Score: " + c.getScore() + "\n";
+			String line4 = "Person id: "; // TODO get information
+			String text = line0 + line1 + line2 + line3 + line4;
+			vis.setTooltipText(text);
+		}
+	}
+
 	public int getTimeStep() {
 		timeChanged = false;
 		return simThread.getCurrTimeStep();
 	}
-	
+
 	public boolean timeChanged() {
 		return timeChanged;
 	}
@@ -205,11 +220,11 @@ public class PedestrianSimulation {
 		this.people = people;
 		peopleAvailable = true;
 	}
-	
+
 	public boolean peopleAvailable() {
 		return peopleAvailable;
 	}
-	
+
 	public void setTimeChanged(boolean in) {
 		this.timeChanged = in;
 	}

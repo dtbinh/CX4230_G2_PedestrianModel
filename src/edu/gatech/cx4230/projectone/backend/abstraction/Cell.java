@@ -222,4 +222,32 @@ public class Cell {
 		}
 		return out;
 	}
+	
+	public String getTypeName() {
+		String out = "";
+		switch(cellType) {
+		case BUILDING:
+			out = BUILDING_NAME;
+			break;
+		case CROSSWALK:
+			out = CROSSWALK_NAME;
+			break;
+		case DOOR:
+			out = DOOR_NAME;
+			break;
+		case ERROR:
+			out = ERROR_NAME;
+			break;
+		case MODEL_BUILDING:
+			out = MODEL_BUILDING_NAME;
+			break;
+		case SIDEWALK:
+			out = SIDEWALK_NAME;
+			break;
+		case STREET:
+			out = STREET_NAME;
+			break;
+		}
+		return out;
+	}
 }
