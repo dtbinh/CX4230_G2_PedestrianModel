@@ -1,4 +1,4 @@
-package edu.gatech.cx4230.projectone.backend.map;
+package edu.gatech.cx4230.projectone.visualization.map;
 
 import java.util.ArrayList;
 import java.util.List;

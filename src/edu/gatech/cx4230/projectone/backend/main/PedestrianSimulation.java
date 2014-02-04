@@ -8,7 +8,7 @@ import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.abstraction.TargetScenarios;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
-import edu.gatech.cx4230.projectone.backend.map.VisualizationMain;
+import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 
 public class PedestrianSimulation {

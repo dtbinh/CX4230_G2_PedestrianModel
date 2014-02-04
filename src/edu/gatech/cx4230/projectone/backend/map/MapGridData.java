@@ -14,6 +14,7 @@ import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.utilities.CSVReader;
 import edu.gatech.cx4230.projectone.backend.utilities.CSVRow;
 import edu.gatech.cx4230.projectone.visualization.abstraction.CellMarker;
+import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 /**
  * Class holds information for the map grid (buildings, sidewalks, cross walks, streets, etc.)
