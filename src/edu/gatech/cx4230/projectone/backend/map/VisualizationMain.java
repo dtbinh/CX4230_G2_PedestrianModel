@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PApplet;
+import processing.core.PFont;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
@@ -33,6 +34,8 @@ public class VisualizationMain extends PApplet {
 	private PedestrianSimulation ps;
 	private List<Marker> markers;
 	private List<Marker> peopleMarkers;
+	private int timeStep = 0;
+	private PFont f;
 
 
 	public void setup() {
@@ -43,7 +46,10 @@ public class VisualizationMain extends PApplet {
 		MapUtils.createDefaultEventDispatcher(this, map);
 		map.zoomAndPanTo(new Location(TOP_LEFT_LAT, TOP_LEFT_LON), 5);
 		peopleMarkers = new ArrayList<Marker>();
+		
+		f = createFont("Arial", 40, true);
 
+		timeStep = 0;
 		ps = new PedestrianSimulation(this);
 	}
 
@@ -66,14 +72,24 @@ public class VisualizationMain extends PApplet {
 			for(Marker m: peopleMarkers) {
 				m.draw(map);
 			}
-		}
+		} // close peopleMarkers if
+		
+		fill(207, 14, 14);
+		textFont(f);
+		updateTimeStep();
+		text(timeStep, WIDTH - 100, 75);
 	} // close draw
+	
+	private void updateTimeStep() {
+		if(ps.timeChanged()) {
+			timeStep = ps.getTimeStep();
+		}
+	}
 
 	private void updatePeopleMarkers() {
 		if(ps.peopleAvailable()) {
 			List<Person> people = ps.getPeople();
 
-			// TODO Update the list of people markers given a list of persons
 			if(people != null && !people.isEmpty()) {
 				peopleMarkers.clear();
 
