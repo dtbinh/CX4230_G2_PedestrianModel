@@ -20,7 +20,6 @@ public class PersonMarker extends SimplePointMarker {
 	 */
 	@Override
 	public void draw(PGraphics pg, float x, float y) {
-		// TODO Auto-generated method stub
 		if (isHidden())
 			return;
 
@@ -34,7 +33,7 @@ public class PersonMarker extends SimplePointMarker {
 			pg.stroke(colorR, colorG, colorB);
 		}
 		pg.ellipseMode(PConstants.CENTER);
-		pg.ellipse((int) x, (int) y, radius, radius); // TODO use radius in km and convert to px
+		pg.ellipse((int) x, (int) y, radius, radius);
 		pg.popStyle();
 	}
 	
