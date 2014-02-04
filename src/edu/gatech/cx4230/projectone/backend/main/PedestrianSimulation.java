@@ -35,6 +35,7 @@ public class PedestrianSimulation {
 	
 	private SimulationThread simThread;
 	private boolean peopleAvailable = false;
+	private boolean timeChanged = false;
 	
 	public PedestrianSimulation(VisualizationMain vis) {
 		this.vis = vis;
@@ -114,7 +115,7 @@ public class PedestrianSimulation {
 			// handle movement of people, potential collisions with other people, etc
 			Cell nextCell = p.getNextLocation();
 			if(nextCell == null) {
-				// TODO
+				// TODO If the next Cell hasn't been specified
 			} else {
 				if(nextCell.getTargeted().size() == 1) {
 					p.move(currStep, nextCell);
@@ -156,6 +157,15 @@ public class PedestrianSimulation {
 			} // close if
 		} // close null if
 	} // close calculateNextMove()
+	
+	public int getTimeStep() {
+		timeChanged = false;
+		return simThread.getCurrTimeStep();
+	}
+	
+	public boolean timeChanged() {
+		return timeChanged;
+	}
 
 
 	/**
@@ -198,6 +208,10 @@ public class PedestrianSimulation {
 	
 	public boolean peopleAvailable() {
 		return peopleAvailable;
+	}
+	
+	public void setTimeChanged(boolean in) {
+		this.timeChanged = in;
 	}
 
 }
