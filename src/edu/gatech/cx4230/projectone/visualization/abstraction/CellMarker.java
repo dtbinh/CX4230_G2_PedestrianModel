@@ -51,8 +51,8 @@ public class CellMarker extends SimplePolygonMarker {
 		pg.color(50);
 		if(cellType != null) {
 			if(type == Cell.BUILDING) {
-				pg.fill(0,0,100);
-				pg.stroke(0,0,100);
+				pg.fill(156, 156, 156);
+				pg.stroke(156, 156, 156);
 			} else if(type == Cell.MODEL_BUILDING) {
 				pg.fill(0, 75, 75);
 				pg.stroke(0, 75, 75);
@@ -68,6 +68,9 @@ public class CellMarker extends SimplePolygonMarker {
 			} else if(type == Cell.STREET) {
 				pg.fill(10, 10, 10);
 				pg.stroke(10, 10, 10);
+			} else if(type == Cell.DOOR) {
+				pg.fill(230, 21, 230);
+				pg.stroke(230, 21, 230);
 			}
 		}
 
