@@ -7,7 +7,9 @@ import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.abstraction.TargetScenarios;
+import edu.gatech.cx4230.projectone.backend.map.DoorScenarios;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
+import edu.gatech.cx4230.projectone.backend.random.RNGInterface;
 import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 
@@ -30,8 +32,12 @@ public class PedestrianSimulation {
 	// Visualization of the simulation
 	private VisualizationMain vis;
 
-	// Simulation scenario
-	public static final int SCENARIO = 1;
+	// Simulation scenarios
+	public static final int TARGET_SCENARIO = 1;
+	public static final int DOOR_SCENARIO = 1;
+	
+	// Random Number Generator
+	private RNGInterface rng;
 
 	private SimulationThread simThread;
 	private boolean peopleAvailable = false;
@@ -55,7 +61,7 @@ public class PedestrianSimulation {
 		// Load and Set target cells
 		TargetScenarios ts = new TargetScenarios(cm.getCells());
 		List<Cell> targets = null;
-		switch(SCENARIO) {
+		switch(TARGET_SCENARIO) {
 		case 1: // Maximize Distance
 			targets = ts.maximizeDistance();
 		case 2: // specificTargetPoints1
@@ -64,7 +70,10 @@ public class PedestrianSimulation {
 		cm.setCellsScores(targets);
 
 		// TODO Load and Set Door locations on Model Building
-
+		DoorScenarios ds = new DoorScenarios(cm.getCells());
+		List<Cell> doors = ds.getScenario(DOOR_SCENARIO);
+		cm.setDoorCells(doors);
+		// TODO Send doors to vis
 
 		peopleAvailable = false;
 		simThread = new SimulationThread(PedestrianSimulation.this, 50, "Ped Sim Thread");
@@ -80,6 +89,7 @@ public class PedestrianSimulation {
 	 * @return a new Person object
 	 */
 	public Person spawnPerson() {
+		// TODO Spawn a person at one of the door locations
 		return new Person(); // right now this uses the default constructor, but it should take in start values for the new Person
 	}
 
