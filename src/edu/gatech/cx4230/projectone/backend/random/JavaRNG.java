@@ -9,7 +9,7 @@ import java.util.Random;
  * @author tbowling3
  *
  */
-public class JavaRNG implements RNGInterface {
+public class JavaRNG extends AbstractRNG {
 	private Random rand;
 	
 	public JavaRNG() {
