@@ -1,6 +1,7 @@
 package edu.gatech.cx4230.projectone.visualization.map;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import processing.core.PApplet;
@@ -98,7 +99,9 @@ public class VisualizationMain extends PApplet {
 			if(people != null && !people.isEmpty()) {
 				peopleMarkers.clear();
 
-				for(Person p: people) {
+				//for(Person p: people) {
+				for(Iterator<Person> it = people.iterator(); it.hasNext();) {
+					Person p = it.next();
 					Cell location = p.getLocation();
 					if(location != null) {
 						double x = location.getX() + 0.5;

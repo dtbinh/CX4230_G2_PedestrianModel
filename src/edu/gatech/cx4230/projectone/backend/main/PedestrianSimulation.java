@@ -1,6 +1,7 @@
 package edu.gatech.cx4230.projectone.backend.main;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
@@ -9,7 +10,8 @@ import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.abstraction.TargetScenarios;
 import edu.gatech.cx4230.projectone.backend.map.DoorScenarios;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
-import edu.gatech.cx4230.projectone.backend.random.RNGInterface;
+import edu.gatech.cx4230.projectone.backend.random.AbstractRNG;
+import edu.gatech.cx4230.projectone.backend.random.JavaRNG;
 import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 
@@ -28,6 +30,9 @@ public class PedestrianSimulation {
 
 	// Manager for the 2-D grid of cells in the simulation
 	private CellManager cm;
+	
+	// list of the door cells
+	private List<Cell> doors;
 
 	// Visualization of the simulation
 	private VisualizationMain vis;
@@ -37,7 +42,7 @@ public class PedestrianSimulation {
 	public static final int DOOR_SCENARIO = 1;
 	
 	// Random Number Generator
-	private RNGInterface rng;
+	private AbstractRNG rng;
 
 	private SimulationThread simThread;
 	private boolean peopleAvailable = false;
@@ -50,6 +55,7 @@ public class PedestrianSimulation {
 		countPeopleInBuilding = totalPeople;
 		people = new ArrayList<Person>();
 		peopleToMove = new ArrayList<Person>();
+		rng = new JavaRNG(); // TODO Change to our RNG
 
 		// Read in and create the map grid
 		MapGridData mgd = new MapGridData();
@@ -69,10 +75,9 @@ public class PedestrianSimulation {
 		}
 		cm.setCellsScores(targets);
 
-		// TODO Load and Set Door locations on Model Building
 		DoorScenarios ds = new DoorScenarios(cm.getCells());
-		List<Cell> doors = ds.getScenario(DOOR_SCENARIO);
-		cm.setDoorCells(doors);
+		doors = ds.getScenario(DOOR_SCENARIO);
+		cm.setCells(doors);
 		// TODO Send doors to vis
 
 		peopleAvailable = false;
@@ -89,8 +94,30 @@ public class PedestrianSimulation {
 	 * @return a new Person object
 	 */
 	public Person spawnPerson() {
-		// TODO Spawn a person at one of the door locations
-		return new Person(); // right now this uses the default constructor, but it should take in start values for the new Person
+		// TODO Improve this method
+		List<Cell> openDoors = getAvailableDoors();
+		int doorI = rng.nextInt(openDoors.size());
+		Cell door = openDoors.get(doorI);
+		double[] speeds = rng.nextDoublesArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
+		int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
+		Person p = new Person(door, speeds[1], speeds[0], speeds[2], stress, simThread.getCurrTimeStep());
+		cm.addPerson(p);
+		
+		return p;
+	}
+	
+	/**
+	 * Returns a subset of the door Cells which are not currently occupied
+	 * @return
+	 */
+	private List<Cell> getAvailableDoors() {
+		List<Cell> out = new ArrayList<Cell>();
+		for(Cell c: doors) {
+			if(!c.isOccupied()) {
+				out.add(c);
+			}
+		}
+		return out;
 	}
 
 	/**
@@ -105,6 +132,7 @@ public class PedestrianSimulation {
 			Person p = spawnPerson();
 			people.add(p);
 		}
+		peopleAvailable = true;
 	}
 
 	/**
@@ -116,14 +144,18 @@ public class PedestrianSimulation {
 	public void movePeople() {
 		int currStep = simThread.getCurrTimeStep();
 		// iterate over all people currently in the simulation
-		for(Person p : people) {
+		//for(Person p : people) {
+		for(Iterator<Person> it = people.iterator(); it.hasNext();) {
+			Person p = it.next();
 			if(p.isMoveable(currStep)) {
 				calculateNextMove(p);
 				peopleToMove.add(p);
 			}
 		}
 		//while(!peopleToMove.isEmpty()) {	// implement this if person must find alternate move instead of waiting until next time step
-		for(Person p : peopleToMove) {
+		//for(Person p : peopleToMove) {
+		for(Iterator<Person> it = peopleToMove.iterator(); it.hasNext();) {
+			Person p = it.next();
 			// handle movement of people, potential collisions with other people, etc
 			Cell nextCell = p.getNextLocation();
 			if(nextCell == null) {
@@ -156,7 +188,7 @@ public class PedestrianSimulation {
 		// determine Person's most desirable next move
 		Cell currCell = p.getLocation();
 		if(currCell != null) {
-			ArrayList<Cell> neighbors = currCell.getCm().getNeighborAll(currCell);
+			ArrayList<Cell> neighbors = cm.getNeighborAll(currCell);
 			if(neighbors.size() > 0) {
 				Cell nextCell = neighbors.get(0);
 				for(Cell c: neighbors) {
@@ -177,7 +209,10 @@ public class PedestrianSimulation {
 			String line1 = "Type: " + c.getTypeName() + "\n";
 			String line2 = "Name: " + c.getName() + "\n";
 			String line3 = "Score: " + c.getScore() + "\n";
-			String line4 = "Person id: "; // TODO get information
+			String line4 = "";
+			if(c.isOccupied()) {
+				line4 = "Person id: " + c.getPerson().getId();
+			}
 			String text = line0 + line1 + line2 + line3 + line4;
 			vis.setTooltipText(text);
 		}
