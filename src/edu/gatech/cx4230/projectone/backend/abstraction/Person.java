@@ -6,6 +6,8 @@ public class Person {
 	private static int idNextPerson;
 	public static final int MAX_STRESS = 1000;
 	public static final int MIN_STRESS = 0;
+	public static final double MAX_SPEED = 1; // move every x time step
+	public static final double MIN_SPEED = 20; // move every x time steps
 	
 	private int id;
 	private Cell location;
@@ -56,7 +58,14 @@ public class Person {
 	}
 	
 	public void setCurrSpeed(double newSpeed) {
-		currSpeed = newSpeed;
+		if(minSpeed <= newSpeed && newSpeed <= maxSpeed) {
+			currSpeed = newSpeed;
+		} else if(newSpeed < minSpeed) {
+			currSpeed = minSpeed;
+		} else if(maxSpeed < newSpeed) {
+			currSpeed = maxSpeed;
+		}
+		
 	}
 	
 	public int getStressLevel() {
