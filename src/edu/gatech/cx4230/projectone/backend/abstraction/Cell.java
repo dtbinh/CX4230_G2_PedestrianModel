@@ -1,5 +1,6 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -53,7 +54,8 @@ public class Cell {
 		this.cellType = type; // cellType must be from a defined set of types (w-wall, s-sidewalk, etc)
 		this.csvRow = csvRow;
 		this.score = score;
-
+		
+		targeted = new ArrayList<Person>();
 	}
 	
 	public void setProperties(int x, int y, String name, char type, int csvRow) {
