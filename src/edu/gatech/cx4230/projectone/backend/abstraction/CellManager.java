@@ -138,10 +138,10 @@ public class CellManager {
 		int oX = lr + hereX;
 		Cell out = null;
 
-		if(0 <= oY && oY < cells.length) {
-			if(0 <= oX && oX < cells[oY].length) {
-				out = cells[oY][oX];
-			}
+		if(indexInBounds(oX, oY)) {
+
+			out = cells[oY][oX];
+
 		}
 
 		return out;
@@ -169,7 +169,7 @@ public class CellManager {
 
 					// set the score for the cell
 					cells[j][i].setScore(score);
-					
+
 				} else {
 					cells[j][i].setScore(Double.MIN_VALUE);
 				} // close else
@@ -195,25 +195,23 @@ public class CellManager {
 	public Cell[][] getCells() {
 		return cells;
 	}
-	
+
 	public int getCellsHeight() {
 		return cells.length;
 	}
-	
+
 	public int getCellsWidth() {
 		return cells[0].length;
 	}
-	
+
 	public Cell getCell(int x, int y) {
 		Cell out = null;
-		if(0 <= y && y < cells.length) {
-			if(0 <= x && x < cells[y].length) {
-				out = cells[y][x];
-			}
+		if(indexInBounds(x, y)) {
+			out = cells[y][x];
 		}
 		return out;
 	}
-	
+
 	/**
 	 * Sets a specific cell in the 2D array.  If the two cells don't equal,
 	 * then the new cell isn't set.
@@ -222,23 +220,47 @@ public class CellManager {
 	 * @param y
 	 */
 	public void setCellSmart(Cell newC, int x, int y) {
-		if(0 <= y && y < cells.length) {
-			if(0 <= x && x < cells[y].length) {
-				if(newC.equals(cells[y][x])) {
-					cells[y][x] = newC;
-				}
+		if(indexInBounds(x,y)) {
+			if(newC.equals(cells[y][x])) {
+				cells[y][x] = newC;
 			}
 		}
 	}
-	
+
 	public void setCellSmart(Cell c) {
 		setCellSmart(c, c.getX(), c.getY());
 	}
-	
-	public void setDoorCells(List<Cell> lc) {
+
+	public void setCells(List<Cell> lc) {
 		for(Cell c: lc) {
 			setCellSmart(c);
 		}
+	}
+
+	/**
+	 * Is the specified cell is unoccupied and traversable, adds a person to their given cell
+	 * @param p
+	 */
+	public void addPerson(Person p) {
+		int x = p.getLocation().getX();
+		int y = p.getLocation().getY();
+		
+		if(indexInBounds(x,y)) {
+			if(!cells[y][x].isOccupied() && cells[y][x].isTraversable()) {
+				cells[y][x].setPerson(p);
+			}
+		}
+
+	}
+
+	public boolean indexInBounds(int x, int y) {
+		boolean out = false;
+		if(0 <= y && y < cells.length) {
+			if(0 <= x && x < cells[y].length) {
+				out = true;
+			}
+		}
+		return out;
 	}
 
 }
