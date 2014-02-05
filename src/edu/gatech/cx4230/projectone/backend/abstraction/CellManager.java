@@ -213,5 +213,32 @@ public class CellManager {
 		}
 		return out;
 	}
+	
+	/**
+	 * Sets a specific cell in the 2D array.  If the two cells don't equal,
+	 * then the new cell isn't set.
+	 * @param newC
+	 * @param x
+	 * @param y
+	 */
+	public void setCellSmart(Cell newC, int x, int y) {
+		if(0 <= y && y < cells.length) {
+			if(0 <= x && x < cells[y].length) {
+				if(newC.equals(cells[y][x])) {
+					cells[y][x] = newC;
+				}
+			}
+		}
+	}
+	
+	public void setCellSmart(Cell c) {
+		setCellSmart(c, c.getX(), c.getY());
+	}
+	
+	public void setDoorCells(List<Cell> lc) {
+		for(Cell c: lc) {
+			setCellSmart(c);
+		}
+	}
 
 }
