@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
+import edu.gatech.cx4230.projectone.backend.utilities.ArrayManipulation;
 
 public class DoorScenarios {
 	private Cell[][] cells;
@@ -64,6 +65,7 @@ public class DoorScenarios {
 		int door6H = 1;
 		out.addAll(getCellsInArea(door6X, door6Y, door6W, door6H));
 		
+		System.out.println(ArrayManipulation.listToString(out));
 		return out;
 	}
 	

@@ -42,7 +42,7 @@ public class MapGridData {
 			width = overall.getWidthInd();
 			height = overall.getHeightInd();
 
-			Cell[][] cells = create2DArray(width + 1, height + 1);
+			Cell[][] cells = create2DArray(width, height);
 			cm = new CellManager();
 
 			int cellModCount = 0;

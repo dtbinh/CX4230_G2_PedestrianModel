@@ -52,7 +52,7 @@ public class VisualizationMain extends PApplet {
 		peopleMarkers = new ArrayList<Marker>();
 		
 		f = createFont("Arial", 40, true);
-		cTooltip = new CustomTooltip("Cell: ()", 20, 20, 200, 120);
+		cTooltip = new CustomTooltip("Cell: ()", 20, 20, 250, 120);
 
 		timeStep = 0;
 		ps = new PedestrianSimulation(this);
