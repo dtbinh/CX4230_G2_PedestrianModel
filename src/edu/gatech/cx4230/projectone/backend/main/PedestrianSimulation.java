@@ -30,7 +30,7 @@ public class PedestrianSimulation {
 
 	// Manager for the 2-D grid of cells in the simulation
 	private CellManager cm;
-	
+
 	// list of the door cells
 	private List<Cell> doors;
 
@@ -40,7 +40,7 @@ public class PedestrianSimulation {
 	// Simulation scenarios
 	public static final int TARGET_SCENARIO = 1;
 	public static final int DOOR_SCENARIO = 1;
-	
+
 	// Random Number Generator
 	private AbstractRNG rng;
 
@@ -102,10 +102,10 @@ public class PedestrianSimulation {
 		int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
 		Person p = new Person(door, speeds[1], speeds[0], speeds[2], stress, simThread.getCurrTimeStep());
 		cm.addPerson(p);
-		
+		System.out.println("Person added: " + p.toString());
 		return p;
 	}
-	
+
 	/**
 	 * Returns a subset of the door Cells which are not currently occupied
 	 * @return
@@ -164,18 +164,24 @@ public class PedestrianSimulation {
 				if(nextCell.getTargeted().size() == 1) {
 					p.move(currStep, nextCell);
 					nextCell.setPerson(p);
-					peopleToMove.remove(p);
+					//peopleToMove.remove(p); // Causes ConcurrentModificationException
+					it.remove();
 				}
 				else {
 					List<Person> targeted = nextCell.getTargeted();
-					Person winner = targeted.get(0);
-					for(Person t : targeted) {
-						if(t.getCurrSpeed() > winner.getCurrSpeed())
-							winner = t;
+					if(targeted != null && !targeted.isEmpty()) {
+						Person winner = targeted.get(0);
+						for(Person t : targeted) {
+							if(t.getCurrSpeed() > winner.getCurrSpeed())
+								winner = t;
+						}
+						winner.move(currStep, nextCell);
+						nextCell.setPerson(winner);
+
+						// Causes ConcurrentModificationException
+						peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
+						//it.remove();
 					}
-					winner.move(currStep, nextCell);
-					nextCell.setPerson(winner);
-					peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
 				}
 				nextCell.clearTargeted();
 			}
@@ -226,7 +232,7 @@ public class PedestrianSimulation {
 	public boolean timeChanged() {
 		return timeChanged;
 	}
-	
+
 	public void triggerThread() {
 		simThread.setRunning(!simThread.isRunning());
 	}
