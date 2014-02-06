@@ -98,7 +98,7 @@ public class PedestrianSimulation {
 		List<Cell> openDoors = getAvailableDoors();
 		int doorI = rng.nextInt(openDoors.size());
 		Cell door = openDoors.get(doorI);
-		double[] speeds = rng.nextDoublesArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
+		int[] speeds = rng.nextIntsArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
 		int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
 		Person p = new Person(door, speeds[1], speeds[0], speeds[2], stress, simThread.getCurrTimeStep());
 		cm.addPerson(p);
