@@ -3,6 +3,7 @@ package edu.gatech.cx4230.projectone.backend.utilities;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Contains many useful methods for when working with arrays
@@ -334,5 +335,16 @@ public class ArrayManipulation {
 		}
 		return arrayOut;
 	} // close method
+	
+	public static String listToString(List<?> list) {
+		String out = "";
+		if(list != null && !list.isEmpty()) {
+			for(int i = 0; i < list.size(); i++) {
+				out += i + "\t" + list.get(i).toString() + "\n";
+			}
+		}
+		
+		return out;
+	}
 
 } // close class
