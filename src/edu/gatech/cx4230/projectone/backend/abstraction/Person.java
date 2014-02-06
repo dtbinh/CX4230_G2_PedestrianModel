@@ -108,6 +108,11 @@ public class Person {
 	}
 	
 	public String toString() {
-		return "(" + id + "\tSpeed: " + currSpeed + ")";
+		String out = "(" + id;
+		if(location != null) {
+			out += " (" + location.getX() + "," + location.getY() + ")";
+		}
+		out += "\tSpeed: " + currSpeed + ")";
+		return out;
 	}
 }
