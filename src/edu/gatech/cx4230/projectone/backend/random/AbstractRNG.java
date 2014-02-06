@@ -110,7 +110,7 @@ public abstract class AbstractRNG {
 	 * @return the next int in the sequence with a range [min, max)
 	 */
 	public int nextIntInRange(int min, int max) {
-		return min + nextInt() * ((max - min) + 1);
+		return (int) (min + nextDouble() * ((max - min) + 1));
 	}
 	
 	/**
