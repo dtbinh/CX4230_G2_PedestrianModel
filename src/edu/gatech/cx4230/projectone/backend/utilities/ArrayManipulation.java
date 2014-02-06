@@ -10,13 +10,6 @@ import java.util.ArrayList;
  *
  */
 public class ArrayManipulation {
-
-	/**
-	 * Creates a new ArrayManipulation object
-	 */
-	public ArrayManipulation() {
-		
-	}
 	
 	/**
 	 * Finds the minimum value from a 2D array
@@ -186,7 +179,7 @@ public class ArrayManipulation {
 	 * @param dimension The desired dimension of the 3D array to be returned
 	 * @return The appropriate 2D array taken from the parameter 3D array
 	 */
-	public int[][] getArrayDim(int[][][] data, int dimension) {
+	public static int[][] getArrayDim(int[][][] data, int dimension) {
 		int[][] out = new int[data.length][];
 		
 		if(0 <= dimension && dimension < data[0][0].length) {
@@ -206,7 +199,7 @@ public class ArrayManipulation {
 	 * Prints out a 2D array of doubles to the Console
 	 * @param array 2D array of doubles to be printed
 	 */
-	public void print2DArray(double[][] array) {		
+	public static void print2DArray(double[][] array) {		
 		int height = array.length;
 		int width = array[0].length;
 		
@@ -223,7 +216,7 @@ public class ArrayManipulation {
 	 * Prints out a 2D array of ints to the Console
 	 * @param array 2D array of ints to be printed
 	 */
-	public void print2DArray(int[][] array) {
+	public static void print2DArray(int[][] array) {
 		int height = array.length;
 		int width = array[0].length;
 		
@@ -240,7 +233,7 @@ public class ArrayManipulation {
 	 * Prints out a 2D array of Objects to the Console
 	 * @param array 2D array of Objects to be printed
 	 */
-	public void print2DArray(Object[][] array) {
+	public static void print2DArray(Object[][] array) {
 		int height = array.length;
 		int width = array[0].length;
 		
@@ -257,7 +250,7 @@ public class ArrayManipulation {
 	 * Prints out a 2D array of booleans to the Console
 	 * @param array 2D array of booleans to be printed
 	 */
-	public void print2DArray(boolean[][] array) {
+	public static void print2DArray(boolean[][] array) {
 		int height = array.length;
 		int width = array[0].length;
 		
