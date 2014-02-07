@@ -155,7 +155,7 @@ public class CellManager {
 		for(int j = 0; j < cells.length; j++) {
 			for(int i = 0; i < cells[j].length; i++) {
 				if(cells[j][i].isTraversable()) {
-					double score = Double.MIN_VALUE;
+					double score = -1;
 					//Cell targetCell = null;
 					for(Cell c: targets) {
 
@@ -178,7 +178,7 @@ public class CellManager {
 	} // close method
 
 	public double calculateScore(Cell here, Cell target) {
-		double maxScore = 1000000;
+		double maxScore = 100000;
 		double minScore = 0;
 		double maxDist = 1500;
 		double minDist = 0;
@@ -261,6 +261,15 @@ public class CellManager {
 			}
 		}
 		return out;
+	}
+	
+	public void movePerson(Person p, int oldX, int oldY, int newX, int newY) {
+		if(p != null) {
+			if(indexInBounds(oldX, oldY) && indexInBounds(newX,newY)) {
+				cells[oldY][oldX].setPerson(null);
+				cells[newY][newX].setPerson(p);
+			}
+		}
 	}
 
 }
