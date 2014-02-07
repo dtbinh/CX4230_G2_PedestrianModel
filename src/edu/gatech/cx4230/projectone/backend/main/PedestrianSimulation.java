@@ -17,7 +17,7 @@ import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 public class PedestrianSimulation {
 
-	public static final int BUILDING_CAPACITY = 10;
+	public static final int BUILDING_CAPACITY = 500;
 
 	private int totalPeople;
 	private int countPeopleInBuilding;
@@ -70,8 +70,10 @@ public class PedestrianSimulation {
 		switch(TARGET_SCENARIO) {
 		case 1: // Maximize Distance
 			targets = ts.maximizeDistance();
+			break;
 		case 2: // specificTargetPoints1
 			targets = ts.specificTargetPoints1();
+			break;
 		}
 		cm.setCellsScores(targets);
 
@@ -94,16 +96,19 @@ public class PedestrianSimulation {
 	 * @return a new Person object
 	 */
 	public Person spawnPerson() {
+		Person p = null;
 		// TODO Improve this method
 		List<Cell> openDoors = getAvailableDoors();
-		int doorI = rng.nextInt(openDoors.size());
-		Cell door = openDoors.get(doorI);
-		int[] speeds = rng.nextIntsArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
-		int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
-		Person p = new Person(door, speeds[1], speeds[0], speeds[2], stress, simThread.getCurrTimeStep());
-		cm.addPerson(p);
-		countPeopleInBuilding--;
-		System.out.println("Person added: " + p.toString());
+		if(openDoors.size() > 0) {
+			int doorI = rng.nextInt(openDoors.size());
+			Cell door = openDoors.get(doorI);
+			int[] speeds = rng.nextIntsArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
+			int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
+			p = new Person(door, speeds[1], speeds[0], speeds[2], stress, simThread.getCurrTimeStep());
+			cm.addPerson(p);
+			countPeopleInBuilding--;
+			System.out.println("Person added: " + p.toString());
+		}
 		return p;
 	}
 
@@ -130,6 +135,7 @@ public class PedestrianSimulation {
 	 */
 	public void spawnPeople(int numPeople) {
 		int num = 0;
+		int numCreated = 0;
 		if(countPeopleInBuilding - numPeople >= 0) {
 			num = numPeople;
 		} else {
@@ -137,9 +143,12 @@ public class PedestrianSimulation {
 		}
 		for(int i = 0; i < num; i++) {
 			Person p = spawnPerson();
-			people.add(p);
+			if(p != null) {
+				people.add(p);
+				numCreated++;
+			}
 		}
-		if(num > 0) peopleAvailable = true;
+		if(numCreated > 0) peopleAvailable = true;
 	}
 
 	/**
@@ -169,8 +178,17 @@ public class PedestrianSimulation {
 				// TODO If the next Cell hasn't been specified
 			} else {
 				if(nextCell.getTargeted().size() == 1) {
+					
+					// Update the CellManager
+					int oldX = p.getLocation().getX();
+					int oldY = p.getLocation().getY();
+					int newX = nextCell.getX();
+					int newY = nextCell.getY();
 					p.move(currStep, nextCell);
-					nextCell.setPerson(p);
+					cm.movePerson(p, oldX, oldY, newX, newY);
+					
+					
+					nextCell.setPerson(p); // TODO is this line necessary?
 					//peopleToMove.remove(p); // Causes ConcurrentModificationException
 					it.remove();
 				}
@@ -182,15 +200,23 @@ public class PedestrianSimulation {
 							if(t.getCurrSpeed() > winner.getCurrSpeed())
 								winner = t;
 						}
+						
+						// Update the CellManager
+						int oldX = winner.getLocation().getX();
+						int oldY = winner.getLocation().getY();
+						int newX = nextCell.getX();
+						int newY = nextCell.getY();
 						winner.move(currStep, nextCell);
-						nextCell.setPerson(winner);
-
-						// Causes ConcurrentModificationException
+						cm.movePerson(winner, oldX, oldY, newX, newY);
+						nextCell.setPerson(winner); // TODO is this line necessary?
+						
 						peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
 						//it.remove();
 					}
 				}
 				nextCell.clearTargeted();
+				// TODO What happens to the nextCell object after this line? If the nextCell
+				// isn't stored in the CellManager, then Line 215 is useless.
 			}
 		} // close Person for
 
@@ -205,7 +231,7 @@ public class PedestrianSimulation {
 			if(neighbors.size() > 0) {
 				Cell nextCell = neighbors.get(0);
 				for(Cell c: neighbors) {
-					if(c.getScore() > nextCell.getScore() && nextCell.isTraversable())
+					if(c.getScore() > nextCell.getScore() && c.isTraversable())
 						nextCell = c;
 				} // close for
 
