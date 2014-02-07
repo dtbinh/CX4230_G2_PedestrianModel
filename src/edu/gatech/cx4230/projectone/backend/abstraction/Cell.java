@@ -43,6 +43,10 @@ public class Cell {
 		this(0, 0, "default", ERROR, 0, 0);
 	}
 	
+	public Cell(int x, int y) {
+		this(x, y, "default", ERROR, 0, 0);
+	}
+	
 	public Cell(int x, int y, String name, char type, int csvRow, int score) {
 		id = idNextCell++;
 		person = null; // initially, the cell is unoccupied
@@ -93,6 +97,10 @@ public class Cell {
 	
 	public String toString() {
 		return "[(" + x + ", " + y + ")\t" + "ID: " + id + "\t" + cellType + ": " + name + "]";
+	}
+	
+	public String csvInfo() {
+		return x + "," + y + "," + id + "," + cellType + "," + name;
 	}
 
 	/**

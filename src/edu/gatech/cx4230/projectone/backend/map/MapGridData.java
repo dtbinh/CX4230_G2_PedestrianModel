@@ -113,7 +113,7 @@ public class MapGridData {
 			cells[j] = new Cell[width];
 
 			for(int i = 0; i < width; i++) {
-				cells[j][i] = new Cell();
+				cells[j][i] = new Cell(i,j);
 			}
 		}
 

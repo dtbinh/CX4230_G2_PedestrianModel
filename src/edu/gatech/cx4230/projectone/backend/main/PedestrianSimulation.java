@@ -17,7 +17,7 @@ import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 public class PedestrianSimulation {
 
-	public static final int BUILDING_CAPACITY = 1500;
+	public static final int BUILDING_CAPACITY = 10;
 
 	private int totalPeople;
 	private int countPeopleInBuilding;
@@ -102,6 +102,7 @@ public class PedestrianSimulation {
 		int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
 		Person p = new Person(door, speeds[1], speeds[0], speeds[2], stress, simThread.getCurrTimeStep());
 		cm.addPerson(p);
+		countPeopleInBuilding--;
 		System.out.println("Person added: " + p.toString());
 		return p;
 	}
@@ -128,11 +129,17 @@ public class PedestrianSimulation {
 	 * @param numPeople the number of new Person objects to spawn
 	 */
 	public void spawnPeople(int numPeople) {
-		for(int i = 0; i < numPeople; i++) {
+		int num = 0;
+		if(countPeopleInBuilding - numPeople >= 0) {
+			num = numPeople;
+		} else {
+			num = countPeopleInBuilding;
+		}
+		for(int i = 0; i < num; i++) {
 			Person p = spawnPerson();
 			people.add(p);
 		}
-		peopleAvailable = true;
+		if(num > 0) peopleAvailable = true;
 	}
 
 	/**
@@ -198,7 +205,7 @@ public class PedestrianSimulation {
 			if(neighbors.size() > 0) {
 				Cell nextCell = neighbors.get(0);
 				for(Cell c: neighbors) {
-					if(c.getScore() > nextCell.getScore())
+					if(c.getScore() > nextCell.getScore() && nextCell.isTraversable())
 						nextCell = c;
 				} // close for
 
@@ -243,7 +250,8 @@ public class PedestrianSimulation {
 	 * @return True if the simulation is should continue, false otherwise
 	 */
 	public boolean continueSim() {
-		return (countPeopleInBuilding > 0 || people.size() < totalPeople);
+		return true;
+		//return (countPeopleInBuilding > 0 || people.size() < totalPeople);
 	}
 
 	/**
