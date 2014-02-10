@@ -122,6 +122,19 @@ public class CellManager {
 
 		return out;
 	}
+	
+	public ArrayList<Cell> getAllTraversableNeighbors(Cell here) {
+		ArrayList<Cell> out = new ArrayList<Cell>();
+		ArrayList<Cell> all = getNeighborAll(here);
+		
+		for(Cell c: all) {
+			if(c.isTraversable()) {
+				out.add(c);
+			}
+		}
+		
+		return out;
+	}
 
 	/**
 	 * Returns the cell located a given distance from a given cell.  Ex - if the given cell is located 
@@ -288,5 +301,19 @@ public class CellManager {
 		
 		return out;
 	}
-
+	
+	
+	public List<Cell> getAllTraversableCells() {
+		List<Cell> out = new ArrayList<Cell>();
+		
+		for(int j = 0; j < cells.length; j++) {
+			for(int i = 0; i < cells[j].length; i++) {
+				if(cells[j][i].isTraversable()) {
+					out.add(cells[j][i]);
+				}
+			}
+		}
+		
+		return out;
+	}
 }
