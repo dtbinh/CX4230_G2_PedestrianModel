@@ -168,14 +168,20 @@ public class CellManager {
 					} // close target for
 
 					// set the score for the cell
-					cells[j][i].setScore(score);
+					setScoreForCell(i,j, score);
 
 				} else {
-					cells[j][i].setScore(Double.MIN_VALUE);
+					setScoreForCell(i,j,Double.MIN_VALUE);
 				} // close else
 			} // close width for
 		} // close height for
 	} // close method
+	
+	public void setScoreForCell(int x, int y, double score) {
+		if(indexInBounds(x,y)) {
+			cells[y][x].setScore(score);
+		}
+	}
 
 	public double calculateScore(Cell here, Cell target) {
 		double maxScore = 100000;

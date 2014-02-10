@@ -5,7 +5,7 @@ import java.util.List;
 
 
 
-public class Cell {
+public class Cell implements Comparable<Cell> {
 
 	private static int idNextCell; // current value of idNextCell is the number of cells that have been instantiated
 	private CellManager cm;
@@ -259,5 +259,10 @@ public class Cell {
 			break;
 		}
 		return out;
+	}
+
+	@Override
+	public int compareTo(Cell arg0) {
+		return (int) (this.score - arg0.getScore());
 	}
 }

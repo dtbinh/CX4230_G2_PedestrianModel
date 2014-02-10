@@ -178,16 +178,10 @@ public class PedestrianSimulation {
 				// TODO If the next Cell hasn't been specified
 			} else {
 				if(nextCell.getTargeted().size() == 1) {
-					
+
 					// Update the CellManager
-					int oldX = p.getLocation().getX();
-					int oldY = p.getLocation().getY();
-					int newX = nextCell.getX();
-					int newY = nextCell.getY();
-					p.move(currStep, nextCell);
-					cm.movePerson(p, oldX, oldY, newX, newY);
-					
-					
+					movePerson(p, nextCell, currStep);
+
 					nextCell.setPerson(p); // TODO is this line necessary?
 					//peopleToMove.remove(p); // Causes ConcurrentModificationException
 					it.remove();
@@ -200,16 +194,11 @@ public class PedestrianSimulation {
 							if(t.getCurrSpeed() > winner.getCurrSpeed())
 								winner = t;
 						}
-						
+
 						// Update the CellManager
-						int oldX = winner.getLocation().getX();
-						int oldY = winner.getLocation().getY();
-						int newX = nextCell.getX();
-						int newY = nextCell.getY();
-						winner.move(currStep, nextCell);
-						cm.movePerson(winner, oldX, oldY, newX, newY);
+						movePerson(winner, nextCell, currStep);
 						nextCell.setPerson(winner); // TODO is this line necessary?
-						
+
 						peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
 						//it.remove();
 					}
@@ -222,6 +211,16 @@ public class PedestrianSimulation {
 
 		peopleAvailable = true;
 	} // close movePeople()
+	
+	private void movePerson(Person p, Cell nextCell, int currStep) {
+		// Update the CellManager
+		int oldX = p.getLocation().getX();
+		int oldY = p.getLocation().getY();
+		int newX = nextCell.getX();
+		int newY = nextCell.getY();
+		p.move(currStep, nextCell);
+		cm.movePerson(p, oldX, oldY, newX, newY);
+	}
 
 	public void calculateNextMove(Person p) {
 		// determine Person's most desirable next move
@@ -229,17 +228,31 @@ public class PedestrianSimulation {
 		if(currCell != null) {
 			ArrayList<Cell> neighbors = cm.getNeighborAll(currCell);
 			if(neighbors.size() > 0) {
-				Cell nextCell = neighbors.get(0);
-				for(Cell c: neighbors) {
-					if(c.getScore() > nextCell.getScore() && c.isTraversable())
-						nextCell = c;
-				} // close for
+				int i = getIndexOfFirstTraversable(neighbors);
+				if(0 <= i && i < neighbors.size()) {
+					Cell nextCell = neighbors.get(i);
+					for(Cell c: neighbors) {
+						if(c.getScore() > nextCell.getScore() && c.isTraversable() && !c.isOccupied())
+							nextCell = c;
+					} // close for
 
-				p.setNextLocation(nextCell);
-				nextCell.addToTargeted(p);
+					p.setNextLocation(nextCell);
+					nextCell.addToTargeted(p);
+				}
 			} // close if
 		} // close null if
 	} // close calculateNextMove()
+
+	private int getIndexOfFirstTraversable(List<Cell> cells) {
+		int out = -1;
+		for(int i = 0; i < cells.size(); i++) {
+			if(cells.get(i).isTraversable() && !cells.get(i).isOccupied()) {
+				out = i;
+				break;
+			}
+		}
+		return out;
+	}
 
 	public void infoForCell(int cellX, int cellY) {
 		Cell c = cm.getCell(cellX, cellY);
