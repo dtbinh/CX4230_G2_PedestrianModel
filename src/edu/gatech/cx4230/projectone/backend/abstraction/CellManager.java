@@ -316,4 +316,22 @@ public class CellManager {
 		
 		return out;
 	}
+	
+	public List<Edge> getTraversableEdgesForCells(List<Cell> cellsList) {
+		List<Edge> out = new ArrayList<Edge>();
+		
+		for(Cell source: cellsList) {
+			List<Cell> neighbors = getAllTraversableNeighbors(source);
+			
+			for(Cell dest: neighbors) {
+				Edge e = new Edge(source, dest);
+				out.add(e);
+			}
+		}	
+		return out;
+	}
+	
+	public List<Edge> getTraversableEdgesForCells() {
+		return getTraversableEdgesForCells(getAllTraversableCells());
+	}
 }
