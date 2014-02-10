@@ -184,13 +184,12 @@ public class CellManager {
 	}
 
 	public double calculateScore(Cell here, Cell target) {
-		double maxScore = 100000;
-		double minScore = 0;
 		double maxDist = 1500;
 		double minDist = 0;
-		double dist = here.getDistanceToCell(target);
-
-		double score = MathHelper.linearInterp(dist, minDist, maxScore, maxDist, minScore);
+		//double dist = here.getDistanceToCell(target);
+		double dist = here.getManhattanDistance(target);
+		
+		double score = MathHelper.linearInterp(dist, minDist, Cell.MAX_SCORE, maxDist, Cell.MIN_SCORE);
 		return score;
 	}
 
@@ -276,6 +275,18 @@ public class CellManager {
 				cells[newY][newX].setPerson(p);
 			}
 		}
+	}
+	
+	public List<Cell> getAllCells() {
+		List<Cell> out = new ArrayList<Cell>();
+		
+		for(int j = 0; j < cells.length; j++) {
+			for(int i = 0; i < cells[j].length; i++) {
+				out.add(cells[j][i]);
+			}
+		}
+		
+		return out;
 	}
 
 }
