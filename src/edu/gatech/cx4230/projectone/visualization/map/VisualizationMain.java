@@ -216,7 +216,7 @@ public class VisualizationMain extends PApplet {
 
 
 	public static void main(String[] args) {
-		PApplet.main(new String[] {"edu.gatech.cx4230.projectone.backend.map.VisualizationMain"});
+		PApplet.main(new String[] {"edu.gatech.cx4230.projectone.visualization.map.VisualizationMain"});
 	}
 
 
