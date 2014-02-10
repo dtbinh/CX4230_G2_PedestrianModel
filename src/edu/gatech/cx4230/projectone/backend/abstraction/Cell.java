@@ -9,6 +9,8 @@ public class Cell implements Comparable<Cell> {
 
 	private static int idNextCell; // current value of idNextCell is the number of cells that have been instantiated
 	private CellManager cm;
+	public static final double MIN_SCORE = 0;
+	public static final double MAX_SCORE = 100000;
 	public static final char BUILDING = 'B';
 	public static final String BUILDING_NAME = "BUILDING";
 	public static final char MODEL_BUILDING = 'M';
@@ -25,6 +27,7 @@ public class Cell implements Comparable<Cell> {
 	public static final String DOOR_NAME = "DOOR";
 	
 	private int id; // unique
+	private double distance;
 	private int csvRow;
 	private int x, y;
 	private char cellType;
@@ -225,6 +228,12 @@ public class Cell implements Comparable<Cell> {
 		return Math.sqrt(dx*dx + dy*dy);
 	}
 	
+	public double getManhattanDistance(Cell c) {
+		double dx = this.x - c.getX();
+		double dy = this.y - c.getY();
+		return Math.abs(dx) + Math.abs(dy);
+	}
+	
 	public boolean isTraversable() {
 		boolean out = false;
 		if(cellType == CROSSWALK || cellType == DOOR || cellType == SIDEWALK) {
@@ -259,6 +268,20 @@ public class Cell implements Comparable<Cell> {
 			break;
 		}
 		return out;
+	}
+
+	/**
+	 * @return the distance
+	 */
+	public double getDistance() {
+		return distance;
+	}
+
+	/**
+	 * @param distance the distance to set
+	 */
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 
 	@Override
