@@ -8,6 +8,7 @@ import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.abstraction.TargetScenarios;
+import edu.gatech.cx4230.projectone.backend.map.CrossWalkWaypoints;
 import edu.gatech.cx4230.projectone.backend.map.DoorScenarios;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
 import edu.gatech.cx4230.projectone.backend.random.AbstractRNG;
@@ -38,7 +39,7 @@ public class PedestrianSimulation {
 	private VisualizationMain vis;
 
 	// Simulation scenarios
-	public static final int TARGET_SCENARIO = 1;
+	public static final int TARGET_SCENARIO = TargetScenarios.MAXIMIZE_DIST;
 	public static final int DOOR_SCENARIO = 1;
 
 	// Random Number Generator
@@ -66,15 +67,8 @@ public class PedestrianSimulation {
 
 		// Load and Set target cells
 		TargetScenarios ts = new TargetScenarios(cm.getCells());
-		List<Cell> targets = null;
-		switch(TARGET_SCENARIO) {
-		case 1: // Maximize Distance
-			targets = ts.maximizeDistance();
-			break;
-		case 2: // specificTargetPoints1
-			targets = ts.specificTargetPoints1();
-			break;
-		}
+		List<Cell> targets = ts.getTargetScenario(TARGET_SCENARIO);
+		targets.addAll(CrossWalkWaypoints.getCrosswalkWaypoints(cm));
 		cm.setCellsScores(targets);
 
 		DoorScenarios ds = new DoorScenarios(cm.getCells());

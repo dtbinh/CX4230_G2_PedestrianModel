@@ -12,14 +12,8 @@ import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
  *
  */
 public class CrossWalkWaypoints {
-	private CellManager cm;
 	
-	public CrossWalkWaypoints(CellManager cm) {
-		this.cm = cm;
-		
-	}
-	
-	public List<Cell> getCrosswalkWaypoints() {
+	public static List<Cell> getCrosswalkWaypoints(CellManager cm) {
 		List<Cell> out = new ArrayList<Cell>();
 
 		// Spring & 5th

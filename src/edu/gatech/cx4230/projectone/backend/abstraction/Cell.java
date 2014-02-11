@@ -35,6 +35,7 @@ public class Cell implements Comparable<Cell> {
 	private Person person;
 	private double score;
 	private List<Person> targeted; // list of people who want to move to this cell
+	private int detourNumber; // used for Hadlock's Algorithm
 	
 	/**
 	 * Cell()
@@ -287,5 +288,19 @@ public class Cell implements Comparable<Cell> {
 	@Override
 	public int compareTo(Cell arg0) {
 		return (int) (this.score - arg0.getScore());
+	}
+
+	/**
+	 * @return the detourNumber
+	 */
+	public int getDetourNumber() {
+		return detourNumber;
+	}
+
+	/**
+	 * @param detourNumber the detourNumber to set
+	 */
+	public void setDetourNumber(int detourNumber) {
+		this.detourNumber = detourNumber;
 	}
 }

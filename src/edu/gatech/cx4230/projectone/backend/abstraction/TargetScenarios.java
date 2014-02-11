@@ -10,12 +10,14 @@ import java.util.List;
  */
 public class TargetScenarios {
 	private Cell[][] cells;
+	public static final int MAXIMIZE_DIST = 4325634;
+	public static final int SPEC_TARGET_1 = 6547465;
 
 	public TargetScenarios(Cell[][] cells) {
 		this.cells = cells;
 	}
 
-	public List<Cell> specificTargetPoints1() {
+	private List<Cell> specificTargetPoints1() {
 		ArrayList<Cell> out = new ArrayList<Cell>();
 
 		return out;
@@ -26,7 +28,7 @@ public class TargetScenarios {
 	 * Model Building as possible.
 	 * @return A list of target cells for the simulation
 	 */
-	public List<Cell> maximizeDistance() {
+	private List<Cell> maximizeDistance() {
 		ArrayList<Cell> out = new ArrayList<Cell>();
 
 		for(int i = 50; i < 105; i++) { // 5th Street going West
@@ -46,6 +48,19 @@ public class TargetScenarios {
 		}
 		
 		
+		return out;
+	}
+	
+	public List<Cell> getTargetScenario(int in) {
+		List<Cell> out = null;
+		switch(in) {
+		case MAXIMIZE_DIST:
+			out = maximizeDistance();
+			break;
+		case SPEC_TARGET_1:
+			out = specificTargetPoints1();
+			break;
+		}
 		return out;
 	}
 
