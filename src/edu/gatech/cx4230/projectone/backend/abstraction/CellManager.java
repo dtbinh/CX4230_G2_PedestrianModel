@@ -13,6 +13,7 @@ import edu.gatech.cx4230.projectone.backend.utilities.MathHelper;
  */
 public class CellManager {
 	private Cell[][] cells;
+	public static final double NEIGHBOR_PENALTY = 0.05;
 
 	public CellManager(Cell[][] cells) {
 		this.cells = cells;
@@ -122,17 +123,17 @@ public class CellManager {
 
 		return out;
 	}
-	
+
 	public ArrayList<Cell> getAllTraversableNeighbors(Cell here) {
 		ArrayList<Cell> out = new ArrayList<Cell>();
 		ArrayList<Cell> all = getNeighborAll(here);
-		
+
 		for(Cell c: all) {
 			if(c.isTraversable()) {
 				out.add(c);
 			}
 		}
-		
+
 		return out;
 	}
 
@@ -189,7 +190,7 @@ public class CellManager {
 			} // close width for
 		} // close height for
 	} // close method
-	
+
 	public void setScoreForCell(int x, int y, double score) {
 		if(indexInBounds(x,y)) {
 			cells[y][x].setScore(score);
@@ -201,8 +202,15 @@ public class CellManager {
 		double minDist = 0;
 		//double dist = here.getDistanceToCell(target);
 		double dist = here.getManhattanDistance(target);
-		
 		double score = MathHelper.linearInterp(dist, minDist, Cell.MAX_SCORE, maxDist, Cell.MIN_SCORE);
+		
+		// Correction for Edge cells
+		int travNeighborCount = getAllTraversableNeighbors(here).size();
+		int unpassable = 8 - travNeighborCount; // the number of untraversable neighboring cells
+		double penalty = score * unpassable * NEIGHBOR_PENALTY;
+		score -= penalty;
+		
+		
 		return score;
 	}
 
@@ -262,7 +270,7 @@ public class CellManager {
 	public void addPerson(Person p) {
 		int x = p.getLocation().getX();
 		int y = p.getLocation().getY();
-		
+
 		if(indexInBounds(x,y)) {
 			if(!cells[y][x].isOccupied() && cells[y][x].isTraversable()) {
 				cells[y][x].setPerson(p);
@@ -280,7 +288,7 @@ public class CellManager {
 		}
 		return out;
 	}
-	
+
 	public void movePerson(Person p, int oldX, int oldY, int newX, int newY) {
 		if(p != null) {
 			if(indexInBounds(oldX, oldY) && indexInBounds(newX,newY)) {
@@ -289,23 +297,23 @@ public class CellManager {
 			}
 		}
 	}
-	
+
 	public List<Cell> getAllCells() {
 		List<Cell> out = new ArrayList<Cell>();
-		
+
 		for(int j = 0; j < cells.length; j++) {
 			for(int i = 0; i < cells[j].length; i++) {
 				out.add(cells[j][i]);
 			}
 		}
-		
+
 		return out;
 	}
-	
-	
+
+
 	public List<Cell> getAllTraversableCells() {
 		List<Cell> out = new ArrayList<Cell>();
-		
+
 		for(int j = 0; j < cells.length; j++) {
 			for(int i = 0; i < cells[j].length; i++) {
 				if(cells[j][i].isTraversable()) {
@@ -313,16 +321,16 @@ public class CellManager {
 				}
 			}
 		}
-		
+
 		return out;
 	}
-	
+
 	public List<Edge> getTraversableEdgesForCells(List<Cell> cellsList) {
 		List<Edge> out = new ArrayList<Edge>();
-		
+
 		for(Cell source: cellsList) {
 			List<Cell> neighbors = getAllTraversableNeighbors(source);
-			
+
 			for(Cell dest: neighbors) {
 				Edge e = new Edge(source, dest);
 				out.add(e);
@@ -330,7 +338,7 @@ public class CellManager {
 		}	
 		return out;
 	}
-	
+
 	public List<Edge> getTraversableEdgesForCells() {
 		return getTraversableEdgesForCells(getAllTraversableCells());
 	}
