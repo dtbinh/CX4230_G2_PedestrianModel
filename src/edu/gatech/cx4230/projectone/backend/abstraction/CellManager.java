@@ -1,6 +1,8 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import edu.gatech.cx4230.projectone.backend.utilities.MathHelper;
@@ -121,6 +123,21 @@ public class CellManager {
 		Cell tl = getNeighborTopLeft(here);
 		if(tl != null) out.add(tl);
 
+		return out;
+	}
+	
+	public List<Cell> getNeighborAll(List<Cell> list) {
+		HashMap<Integer, Cell> neighbors = new HashMap<Integer, Cell>();
+		
+		for(Cell c: list) {
+			List<Cell> neigh = getNeighborAll(c);
+			
+			for(Cell d: neigh) {
+				neighbors.put(d.getID(), d);
+			}
+		}
+		Collection<Cell> coll = neighbors.values();
+		List<Cell> out = new ArrayList<Cell>(coll);
 		return out;
 	}
 
