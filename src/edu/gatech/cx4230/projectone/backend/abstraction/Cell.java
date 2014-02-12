@@ -36,6 +36,7 @@ public class Cell implements Comparable<Cell> {
 	private double score;
 	private List<Person> targeted; // list of people who want to move to this cell
 	private int detourNumber; // used for Hadlock's Algorithm
+	private Cell previous; // used for Hadlock's Algorithm
 	
 	/**
 	 * Cell()
@@ -62,6 +63,7 @@ public class Cell implements Comparable<Cell> {
 		this.cellType = type; // cellType must be from a defined set of types (w-wall, s-sidewalk, etc)
 		this.csvRow = csvRow;
 		this.score = score;
+		this.detourNumber = -1;
 		
 		targeted = new ArrayList<Person>();
 	}
@@ -306,5 +308,19 @@ public class Cell implements Comparable<Cell> {
 	 */
 	public void setDetourNumber(int detourNumber) {
 		this.detourNumber = detourNumber;
+	}
+
+	/**
+	 * @return the previous
+	 */
+	public Cell getPrevious() {
+		return previous;
+	}
+
+	/**
+	 * @param previous the previous to set
+	 */
+	public void setPrevious(Cell previous) {
+		this.previous = previous;
 	}
 }
