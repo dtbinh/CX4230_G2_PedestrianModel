@@ -287,7 +287,11 @@ public class Cell implements Comparable<Cell> {
 
 	@Override
 	public int compareTo(Cell arg0) {
-		return (int) (this.score - arg0.getScore());
+		int out = this.detourNumber - arg0.getDetourNumber();
+		if(out == 0) {
+			out = (int) (this.score - arg0.getScore());
+		}
+		return out;
 	}
 
 	/**
