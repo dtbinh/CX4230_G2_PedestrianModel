@@ -3,7 +3,6 @@ package edu.gatech.cx4230.projectone.backend.utilities;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Contains many useful methods for when working with arrays
@@ -107,6 +106,37 @@ public class ArrayManipulation {
 	 * @param filename Name of the csv File
 	 */
 	public static void writeDoubleArrayToCSV(double[][] array, String filename) {
+		try {
+			if(!filename.endsWith(".csv")) {
+				filename = filename + ".csv";
+			}
+			if(array != null) {
+				FileWriter fw = new FileWriter(filename);
+				for(int i = 0; i < array.length; i++) {
+					String line = "";
+					
+					for(int j = 0; j < array[i].length; j++) {
+						if(j != 0) line += ", ";
+						line += array[i][j];
+					} // close for j
+					line += "\n";
+					fw.write(line);
+				} // close for i
+				
+				fw.close();
+			} // close if null
+		} catch (IOException e) {
+			System.err.println("There was a problem writing Array to CSV file");
+			e.printStackTrace();
+		} // close catch
+	} // close method
+	
+	/**
+	 * Writes an array to a comma-separated-variable (CSV) file to the directory of this application
+	 * @param array Array to be saved to the file
+	 * @param filename Name of the csv File
+	 */
+	public static void writeIntArrayToCSV(int[][] array, String filename) {
 		try {
 			if(!filename.endsWith(".csv")) {
 				filename = filename + ".csv";
@@ -336,11 +366,37 @@ public class ArrayManipulation {
 		return arrayOut;
 	} // close method
 	
-	public static String listToString(List<?> list) {
-		String out = "";
-		if(list != null && !list.isEmpty()) {
-			for(int i = 0; i < list.size(); i++) {
-				out += i + "\t" + list.get(i).toString() + "\n";
+	public static int[][] getSubMatrix(int[][] big, int x, int y, int width, int height) {
+		int w = width;
+		int h = height;
+		if(x + width >= big[0].length) {
+			w = big[0].length - x;
+		}
+		if(y + height >= big.length) {
+			h = big.length - y;
+		}
+		int[][] out = new int[h][];
+		
+		for(int j = y; (j-y) < out.length; j++) {
+			out[j - y] = new int[w];
+			for(int i = x; (i-x) < out[j - y].length; i++) {
+				out[j - y][i - x] = big[j][i];
+			}
+		}
+		
+		return out;
+	} // close getSubMatrix(...)
+	
+	public static int[][] createMatrix(int w, int h) {
+		int[][] out = new int[h][];
+		
+		int count = 0;
+		for(int j = 0; j < out.length; j++) {
+			out[j] = new int[w];
+			
+			for(int i = 0; i < out[j].length; i++) {
+				out[j][i] = count;
+				count++;
 			}
 		}
 		

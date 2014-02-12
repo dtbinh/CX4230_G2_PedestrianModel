@@ -32,5 +32,18 @@ public class ListHelper {
 			e.printStackTrace();
 		} // close catch
 	} // close method
+	
+
+	
+	public static String listToString(List<?> list) {
+		String out = "";
+		if(list != null && !list.isEmpty()) {
+			for(int i = 0; i < list.size(); i++) {
+				out += i + "\t" + list.get(i).toString() + "\n";
+			}
+		}
+		
+		return out;
+	}
 
 }
