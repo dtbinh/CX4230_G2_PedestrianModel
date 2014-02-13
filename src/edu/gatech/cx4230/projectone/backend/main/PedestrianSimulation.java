@@ -68,7 +68,7 @@ public class PedestrianSimulation {
 		// Load and Set target cells
 		TargetScenarios ts = new TargetScenarios(cm.getCells());
 		List<Cell> targets = ts.getTargetScenario(TARGET_SCENARIO);
-		targets.addAll(CrossWalkWaypoints.getCrosswalkWaypoints(cm));
+		//targets.addAll(CrossWalkWaypoints.getCrosswalkWaypoints(cm));
 		cm.setCellsScores(targets);
 
 		DoorScenarios ds = new DoorScenarios(cm.getCells());
@@ -99,6 +99,12 @@ public class PedestrianSimulation {
 			int[] speeds = rng.nextIntsArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
 			int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
 			p = new Person(door, speeds[1], speeds[0], speeds[2], stress, simThread.getCurrTimeStep());
+			// TODO Choose closest target
+			
+			// TODO Find shortest route to target
+			
+			// TODO p.setNextTarget(target)
+			
 			cm.addPerson(p);
 			countPeopleInBuilding--;
 			System.out.println("Person added: " + p.toString());
