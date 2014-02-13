@@ -1,4 +1,6 @@
-package edu.gatech.cx4230.projectone.backend.abstraction;
+package edu.gatech.cx4230.projectone.backend.scoring;
+
+import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 
 public class Edge {
 	private int id;

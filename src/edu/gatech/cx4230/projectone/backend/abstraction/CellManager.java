@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.gatech.cx4230.projectone.backend.scoring.Edge;
 import edu.gatech.cx4230.projectone.backend.utilities.MathHelper;
 
 /**

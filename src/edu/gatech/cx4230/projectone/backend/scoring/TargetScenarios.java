@@ -1,7 +1,9 @@
-package edu.gatech.cx4230.projectone.backend.abstraction;
+package edu.gatech.cx4230.projectone.backend.scoring;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 
 /**
  * Contains several different scoring scenarios.

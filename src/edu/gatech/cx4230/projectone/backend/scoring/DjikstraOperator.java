@@ -1,4 +1,4 @@
-package edu.gatech.cx4230.projectone.backend.abstraction;
+package edu.gatech.cx4230.projectone.backend.scoring;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
+import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
 
 /**

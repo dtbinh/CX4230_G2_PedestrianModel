@@ -7,12 +7,12 @@ import java.util.List;
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
-import edu.gatech.cx4230.projectone.backend.abstraction.TargetScenarios;
 import edu.gatech.cx4230.projectone.backend.map.CrossWalkWaypoints;
 import edu.gatech.cx4230.projectone.backend.map.DoorScenarios;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
 import edu.gatech.cx4230.projectone.backend.random.AbstractRNG;
 import edu.gatech.cx4230.projectone.backend.random.JavaRNG;
+import edu.gatech.cx4230.projectone.backend.scoring.TargetScenarios;
 import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 
