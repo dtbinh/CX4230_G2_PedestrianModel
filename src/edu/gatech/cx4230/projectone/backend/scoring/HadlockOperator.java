@@ -26,76 +26,78 @@ public class HadlockOperator {
 		cpq = new CustomPriorityQueue();
 	}
 
-	public int findCost(Cell here, Cell dest) {
-		PriorityQueue<Cell> visitedCells = new PriorityQueue<Cell>();
-		
-		here.setDetourNumber(0);
-		here.setDistTodestination((int) here.getManhattanDistance(dest));
-		cpq.add(here);
-		int step = 0;
-		int stepLimit = Integer.MAX_VALUE;
-		Cell c = null;
-		
-		while(!cpq.isEmpty() && step < stepLimit) {
-			// Progress printing
-			if(DEBUG && step % 250 == 0) {
-				System.out.println("Step: " + step + "\tWaiting: " + cpq.size());
-			}
+	public List<Cell> findPath(Cell here, Cell dest) {
+		List<Cell> out = new ArrayList<Cell>();
+		if(here.isTraversable() && dest.isTraversable()) {
+			PriorityQueue<Cell> visitedCells = new PriorityQueue<Cell>();
 
-			c = cpq.poll();
-			List<Cell> cNeighbors = cm.getCardinalTraversableNeighbors(c);
-			int cMD = (int) c.getManhattanDistance(dest);
+			here.setDetourNumber(0);
+			here.setDistTodestination((int) here.getManhattanDistance(dest));
+			cpq.add(here);
+			int step = 0;
+			int stepLimit = Integer.MAX_VALUE;
+			Cell c = null;
 
-			Cell dnMin = getManhattanDistanceCell(cNeighbors);
-			if(dnMin != null) {
-				int pMD = (int) dnMin.getManhattanDistance(dest);
-
-				int detNum = dnMin.getDetourNumber();
-				if(cMD > pMD) {
-					detNum++;
+			while(!cpq.isEmpty() && step < stepLimit) {
+				// Progress printing
+				if(DEBUG && step % 250 == 0) {
+					System.out.println("Step: " + step + "\tWaiting: " + cpq.size());
 				}
-				c.setDetourNumber(detNum);			
-				cm.setCellSmart(c);
-			}
-			if(DEBUG) System.out.println("(" + c.getX() + ", " + c.getY() + ")\tDN: " + c.getDetourNumber());
-			for(Cell d: cNeighbors) {
-				if(!visitedCells.contains(d) && !cpq.contains(d)) {
-					d.setDistTodestination((int) d.getManhattanDistance(dest));
-					d.setPrevious(c);
-					cm.setCellSmart(d);
-					cpq.add(d);
-				}
-			} // close for
-			if(c.equals(dest)) {
-				dest.setDetourNumber(c.getDetourNumber());
-				break;
-			}
-			visitedCells.add(c);
 
-			step++;
-		} // close while
-		int out = dest.getDetourNumber() * 2 + (int) here.getManhattanDistance(dest);
-		if(DEBUG) System.out.println("Cell Filling complete after: " + step);
+				c = cpq.poll();
+				List<Cell> cNeighbors = cm.getCardinalTraversableNeighbors(c);
+				int cMD = (int) c.getManhattanDistance(dest);
+
+				Cell dnMin = getManhattanDistanceCell(cNeighbors);
+				if(dnMin != null) {
+					int pMD = (int) dnMin.getManhattanDistance(dest);
+
+					int detNum = dnMin.getDetourNumber();
+					if(cMD > pMD) {
+						detNum++;
+					}
+					c.setDetourNumber(detNum);			
+					cm.setCellSmart(c);
+				}
+				if(DEBUG) System.out.println("(" + c.getX() + ", " + c.getY() + ")\tDN: " + c.getDetourNumber());
+				for(Cell d: cNeighbors) {
+					if(!visitedCells.contains(d) && !cpq.contains(d)) {
+						d.setDistTodestination((int) d.getManhattanDistance(dest));
+						d.setPrevious(c);
+						cm.setCellSmart(d);
+						cpq.add(d);
+					}
+				} // close for
+				if(c.equals(dest)) {
+					dest.setDetourNumber(c.getDetourNumber());
+					break;
+				}
+				visitedCells.add(c);
+
+				step++;
+			} // close while
+			if(DEBUG) System.out.println("Cell Filling complete after: " + step);
+			out = retrace(here, dest);
+		} // close traversable if
 		return out;
 	} // close cellFilling(...)
-	
-	public List<Cell> retrace(Cell source, Cell dest) {
+
+	private List<Cell> retrace(Cell source, Cell dest) {
 		List<Cell> out = new ArrayList<Cell>();
 		Cell c = dest;
-		
+
 		do {
 			out.add(c);
 			c = c.getPrevious();
 		} while(!c.equals(source));
 		out.add(source);
-		
+
 		return out;
 	}
 
 	private Cell getManhattanDistanceCell(List<Cell> list) {
 		Cell out = null;
 		if(list != null && !list.isEmpty()) {
-
 			for(Cell c: list) {
 				if(c.isVisited()) {
 					if(out != null && c.getDistTodestination() < out.getDistTodestination()) {
@@ -104,11 +106,11 @@ public class HadlockOperator {
 						out = c;
 					}
 				}
-			}
-		}
+			} // close for
+		} // close null/empty if
 
 		return out;
-	}
+	} // close getManhattanDistanceCell(...)
 
 	public int[][] createDetourNumberMatrix(Cell[][] cells) {
 		int[][] out = new int[cells.length][];
@@ -146,7 +148,7 @@ public class HadlockOperator {
 		Cell source = cm.getCell(300, 315);
 		Cell dest = cm.getCell(325, 318);
 		HadlockOperator ho = new HadlockOperator(cm);
-		ho.findCost(source, dest);
+		ho.findPath(source, dest);
 		cm = ho.getCm();
 		int[][] dNs = ho.createDetourNumberMatrix(cm.getCells());
 		int[][] dNs2 = ArrayManipulation.getSubMatrix(dNs, 275, 280, 150, 50);
