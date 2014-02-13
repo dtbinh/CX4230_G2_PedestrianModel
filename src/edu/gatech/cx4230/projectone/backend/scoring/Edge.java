@@ -23,7 +23,7 @@ public class Edge {
 	}
 	
 	public Edge(Cell source, Cell destination) {
-		this(source, destination, 1);
+		this(source, destination, (int) source.getManhattanDistance(destination));
 	}
 	
 	public Cell getSource() {

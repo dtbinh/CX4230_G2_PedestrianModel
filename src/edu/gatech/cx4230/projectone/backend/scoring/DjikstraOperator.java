@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
-import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
-import edu.gatech.cx4230.projectone.backend.map.MapGridData;
 
 /**
  * Implements Djikstra's Algorithm for use with the Cell[][]
@@ -19,26 +17,18 @@ import edu.gatech.cx4230.projectone.backend.map.MapGridData;
  *
  */
 public class DjikstraOperator {
-	private CellManager cm;
-	private List<Cell> cellsList;
+	private List<Cell> nodes;
 	private List<Edge> edges;
 	private Set<Cell> settledNodes;
 	private Set<Cell> unSettledNodes;
 	private Map<Cell, Cell> predecessors;
 	private Map<Cell, Integer> distance;
 
-	public DjikstraOperator(CellManager cake) {
-		this.cm = cake;
-		cellsList = cm.getAllTraversableCells();
-		edges = cm.getTraversableEdgesForCells(cellsList);
+	public DjikstraOperator(SimpleGraph graph) {
+		nodes = graph.getNodes();
+		edges = graph.getEdges();
 	}
 
-	public CellManager performAlgorithm(CellManager cake) {
-
-
-
-		return cm;
-	}
 
 	public void execute(Cell source) {
 		settledNodes = new HashSet<Cell>();
@@ -144,18 +134,5 @@ public class DjikstraOperator {
 		LinkedList<Cell> path = getPath(target);
 		
 		return path.size();
-	}
-
-	public static void main(String[] args) {
-		MapGridData mgd = new MapGridData();
-		CellManager cm = mgd.getCellManager();
-		System.out.println("Traversable cells count: " + cm.getAllTraversableCells().size());
-		DjikstraOperator dOp = new DjikstraOperator(cm);
-		Cell source = cm.getCell(122, 315);
-		Cell dest = cm.getCell(372, 315);
-		dOp.execute(source);
-		System.out.println("Distance: " + dOp.getPathLength(dest));
-		
-		
 	}
 }
