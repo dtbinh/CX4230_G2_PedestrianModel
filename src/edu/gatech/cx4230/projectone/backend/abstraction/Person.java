@@ -1,5 +1,8 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Person {
 
@@ -17,6 +20,8 @@ public class Person {
 	private int maxSpeed;
 	private int stressLevel;
 	private int timeLastMove;
+	private List<Cell> visitedTargets;
+	private Cell nextTarget;
 	
 	/**
 	 * Person()
@@ -35,6 +40,7 @@ public class Person {
 		maxSpeed = maxS;
 		stressLevel = startStress;
 		timeLastMove = startTime;
+		visitedTargets = new ArrayList<Cell>();
 	}
 	
 	public Cell getLocation() {
@@ -42,7 +48,11 @@ public class Person {
 	}
 	
 	private void setLocation(Cell newLocation) {
-		location = newLocation;
+		this.location = newLocation;
+		if(location.equals(nextTarget)) {
+			visitedTargets.add(nextTarget);
+			nextTarget = null;
+		}
 	}
 	
 	public Cell getNextLocation() {
@@ -85,6 +95,52 @@ public class Person {
 	}
 	
 	/**
+	 * @return the minSpeed
+	 */
+	public int getMinSpeed() {
+		return minSpeed;
+	}
+
+	/**
+	 * @param minSpeed the minSpeed to set
+	 */
+	public void setMinSpeed(int minSpeed) {
+		this.minSpeed = minSpeed;
+	}
+
+	/**
+	 * @return the maxSpeed
+	 */
+	public int getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	/**
+	 * @param maxSpeed the maxSpeed to set
+	 */
+	public void setMaxSpeed(int maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+
+	/**
+	 * @return the visitedTargets
+	 */
+	public List<Cell> getVisitedTargets() {
+		return visitedTargets;
+	}
+
+	/**
+	 * @param visitedTargets the visitedTargets to set
+	 */
+	public void setVisitedTargets(List<Cell> visitedTargets) {
+		this.visitedTargets = visitedTargets;
+	}
+	
+	public void addVisitedTarget(Cell c) {
+		if(c != null) visitedTargets.add(c);
+	}
+
+	/**
 	 * @return the id
 	 */
 	public int getId() {
@@ -96,6 +152,20 @@ public class Person {
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the nextTarget
+	 */
+	public Cell getNextTarget() {
+		return nextTarget;
+	}
+
+	/**
+	 * @param nextTarget the nextTarget to set
+	 */
+	public void setNextTarget(Cell nextTarget) {
+		this.nextTarget = nextTarget;
 	}
 
 	public boolean isMoveable(int time) {
@@ -114,5 +184,9 @@ public class Person {
 		}
 		out += "\tSpeed: " + currSpeed + ")";
 		return out;
+	}
+	
+	public boolean hasVisitedTarget(Cell t) {
+		return visitedTargets.contains(t);
 	}
 }
