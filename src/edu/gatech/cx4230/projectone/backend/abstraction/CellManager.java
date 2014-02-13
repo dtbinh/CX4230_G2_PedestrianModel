@@ -153,6 +153,22 @@ public class CellManager {
 
 		return out;
 	}
+	
+	public List<Cell> getCardinalTraversableNeighbors(Cell here) {
+		List<Cell> out = new ArrayList<Cell>();
+		
+		Cell top = getNeighborTop(here);
+		Cell right = getNeighborRight(here);
+		Cell left = getNeighborLeft(here);
+		Cell bottom = getNeighborBottom(here);
+		
+		if(top != null && top.isTraversable()) out.add(top);
+		if(right != null && right.isTraversable()) out.add(right);
+		if(left != null && left.isTraversable()) out.add(left);
+		if(bottom != null && bottom.isTraversable()) out.add(bottom);
+		
+		return out;
+	}
 
 	/**
 	 * Returns the cell located a given distance from a given cell.  Ex - if the given cell is located 
