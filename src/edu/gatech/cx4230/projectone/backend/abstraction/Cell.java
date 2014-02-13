@@ -38,6 +38,7 @@ public class Cell implements Comparable<Cell> {
 	private int detourNumber; // used for Hadlock's Algorithm
 	private Cell previous; // used for Hadlock's Algorithm
 	private boolean visited; // used for Hadlock's Algorithm
+	private int distTodestination; // used for Hadlock's Algorithm
 	
 	/**
 	 * Cell()
@@ -65,6 +66,7 @@ public class Cell implements Comparable<Cell> {
 		this.csvRow = csvRow;
 		this.score = score;
 		this.detourNumber = Integer.MAX_VALUE / 1000;
+		this.distTodestination = Integer.MAX_VALUE;
 		
 		targeted = new ArrayList<Person>();
 	}
@@ -290,7 +292,7 @@ public class Cell implements Comparable<Cell> {
 
 	@Override
 	public int compareTo(Cell arg0) {
-		int out = this.detourNumber - arg0.getDetourNumber();
+		int out = this.distTodestination - arg0.getDistTodestination();
 //		if(out == 0) {
 //			out = (int) this.getManhattanDistance(arg0);
 //		}
@@ -338,5 +340,19 @@ public class Cell implements Comparable<Cell> {
 	 */
 	public void setVisited(boolean visited) {
 		this.visited = visited;
+	}
+
+	/**
+	 * @return the distTodestination
+	 */
+	public int getDistTodestination() {
+		return distTodestination;
+	}
+
+	/**
+	 * @param distTodestination the distTodestination to set
+	 */
+	public void setDistTodestination(int distTodestination) {
+		this.distTodestination = distTodestination;
 	}
 }
