@@ -22,37 +22,38 @@ public class Path implements Comparable<Path> {
 	 * means make sure that the list is initialized in EVERY constructor
 	 */
 	private List<Edge> list;
-	
+
 	public Path() {
 		list = new ArrayList<Edge>();
+		weight = 0;
 	}
-	
+
 	public Path(Edge e) {
-		super();
+		this();
 		list.add(e);
 		weight = e.getWeight();
 	}
-	
+
 	public Path(Path p, Edge e) {
-		super();
+		this();
 		list.addAll(p.getList());
 		weight = p.getWeight() + e.getWeight();
 	}
-	
+
 	public Path(List<Cell> l) {
-		if(l != null && !l.isEmpty()) {
+		this();
+		if(l != null && l.size() >= 2) {
 			Cell prev = l.get(0);
-			
-			if(l.size() > 1) {
-				for(int i = 1; i < l.size(); i++) {
-					Edge e = new Edge(prev, l.get(i));
-					addEdge(e);
-					prev = l.get(i);
-				}
+
+			for(int i = 1; i < l.size(); i++) {
+				Edge e = new Edge(prev, l.get(i));
+				addEdge(e);
+				prev = l.get(i);
 			}
+
 		}
 	}
-	
+
 	public void addEdge(Edge e) {
 		list.add(e);
 		weight += e.getWeight();
@@ -90,7 +91,7 @@ public class Path implements Comparable<Path> {
 	public void setList(List<Edge> list) {
 		this.list = list;
 	}
-	
+
 	public Cell getSource() {
 		Cell out = null;
 		if(list != null && !list.isEmpty()) {
@@ -98,7 +99,7 @@ public class Path implements Comparable<Path> {
 		}
 		return out;
 	}
-	
+
 	public Cell removeSource() {
 		Cell out = null;
 		if(list != null && !list.isEmpty()) {
@@ -108,10 +109,10 @@ public class Path implements Comparable<Path> {
 		}
 		return out;
 	}
-	
+
 	public boolean hasNext() {
 		return !(getSource() == null);
 	}
 
-	
+
 }

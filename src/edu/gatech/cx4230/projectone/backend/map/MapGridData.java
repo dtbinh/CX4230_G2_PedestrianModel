@@ -1,5 +1,6 @@
 package edu.gatech.cx4230.projectone.backend.map;
 
+import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.utilities.CSVReader;
 import edu.gatech.cx4230.projectone.backend.utilities.CSVRow;
+import edu.gatech.cx4230.projectone.backend.utilities.ListHelper;
 import edu.gatech.cx4230.projectone.visualization.abstraction.CellMarker;
 import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
@@ -136,6 +138,10 @@ public class MapGridData {
 
 	public static void main(String[] args) {
 		MapGridData mgd = new MapGridData();
+		CellManager cm = mgd.getCellManager();
+		List<Point> nullCells = cm.getNullLocations();
+		System.out.println("Null cell Locations:");
+		System.out.println(ListHelper.listToString(nullCells));
 		System.out.println("Rows: " + mgd.getCellManager().getCells().length);
 	}
 

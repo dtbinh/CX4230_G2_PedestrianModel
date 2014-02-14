@@ -24,8 +24,8 @@ public class SimpleGraph {
 		Cell sw5 = cm.getCell(0, 99);
 		Cell nwS = cm.getCell(81, 0);
 		Cell neS = cm.getCell(116, 0);
-		Cell ne5 = cm.getCell(477, 180);
-		Cell se5 = cm.getCell(477, 206);
+		Cell ne5 = cm.getCell(476, 180);
+		Cell se5 = cm.getCell(476, 206);
 		Cell neP = cm.getCell(418, 0);
 		Cell nwP = cm.getCell(375, 0);
 		sinks.add(nw5);

@@ -1,5 +1,6 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -375,5 +376,19 @@ public class CellManager {
 
 	public List<Edge> getTraversableEdgesForCells() {
 		return getTraversableEdgesForCells(getAllTraversableCells());
+	}
+	
+	public List<Point> getNullLocations() {
+		List<Point> out = new ArrayList<Point>();
+		
+		for(int j = 0; j < cells.length; j++) {
+			for(int i = 0; i < cells[j].length; i++) {
+				if(cells[j][i] == null) {
+					out.add(new Point(i,j));
+				}
+			}
+		}
+		return out;
+		
 	}
 }

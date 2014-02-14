@@ -23,12 +23,13 @@ public class HadlockOperator {
 
 	public HadlockOperator(CellManager cake) {
 		this.cm = cake;
-		cpq = new CustomPriorityQueue();
+		
 	}
 
 	public List<Cell> findPath(Cell here, Cell dest) {
 		List<Cell> out = new ArrayList<Cell>();
 		if(here.isTraversable() && dest.isTraversable()) {
+			cpq = new CustomPriorityQueue();
 			PriorityQueue<Cell> visitedCells = new PriorityQueue<Cell>();
 
 			here.setDetourNumber(0);

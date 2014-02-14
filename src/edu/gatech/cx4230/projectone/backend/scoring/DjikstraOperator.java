@@ -23,6 +23,7 @@ public class DjikstraOperator {
 	private Set<Cell> unSettledNodes;
 	private Map<Cell, Cell> predecessors;
 	private Map<Cell, Integer> distance;
+	public static final boolean DEBUG = false;
 
 	public DjikstraOperator(SimpleGraph graph) {
 		nodes = graph.getNodes();
@@ -38,7 +39,7 @@ public class DjikstraOperator {
 		unSettledNodes.add(source);
 		while (unSettledNodes.size() > 0) {
 			Cell node = getMinimum(unSettledNodes);
-			System.out.println("UN size: " + unSettledNodes.size() + "\t" + node.toString());
+			if(DEBUG) System.out.println("UN size: " + unSettledNodes.size() + "\t" + node.toString());
 			settledNodes.add(node);
 			unSettledNodes.remove(node);
 			findMinimalDistances(node);

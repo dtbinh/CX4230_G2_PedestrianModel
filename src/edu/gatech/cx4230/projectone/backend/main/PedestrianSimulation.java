@@ -12,6 +12,7 @@ import edu.gatech.cx4230.projectone.backend.map.MapGridData;
 import edu.gatech.cx4230.projectone.backend.random.AbstractRNG;
 import edu.gatech.cx4230.projectone.backend.random.JavaRNG;
 import edu.gatech.cx4230.projectone.backend.scoring.DjikstraOperator;
+import edu.gatech.cx4230.projectone.backend.scoring.HadlockOperator;
 import edu.gatech.cx4230.projectone.backend.scoring.Path;
 import edu.gatech.cx4230.projectone.backend.scoring.PathOrganizer;
 import edu.gatech.cx4230.projectone.backend.scoring.SimpleGraph;
@@ -54,6 +55,7 @@ public class PedestrianSimulation {
 	private List<Cell> targets;
 	private List<Cell> sources;
 	private PathOrganizer pathOrganizer;
+	private HadlockOperator hadlock;
 	
 	public PedestrianSimulation(VisualizationMain vis) {
 		this.vis = vis;
@@ -90,6 +92,7 @@ public class PedestrianSimulation {
 		DoorScenarios ds = new DoorScenarios(cm.getCells());
 		doors = ds.getScenario(DOOR_SCENARIO);
 		cm.setCells(doors);
+		hadlock = new HadlockOperator(cm);
 		// TODO Send doors to vis
 
 		peopleAvailable = false;
@@ -202,6 +205,7 @@ public class PedestrianSimulation {
 			Person p = it.next();
 			// handle movement of people, potential collisions with other people, etc
 			Cell nextCell = p.getNextLocation();
+			nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
 			if(nextCell == null) {
 				// TODO If the next Cell hasn't been specified
 			} else {
@@ -250,13 +254,34 @@ public class PedestrianSimulation {
 		Cell currCell = p.getLocation();
 		if(currCell != null) {
 			// TODO Calculate path to nextTarget using Hadlock
+			Cell nextTarget = p.getNextTarget();
+			hadlock.setCm(cm);
+			List<Cell> personClosePath = hadlock.findPath(currCell, nextTarget);
+			
 			
 			// TODO p.setNextLocation(first cell in path to nextTarget) GIVEN checks
 			// checks include isTraversable() and !isOccupied(), but cell should be
 			// traversable because of Hadlock
+			if(personClosePath != null && personClosePath.size() >= 2) {
+				// The first cell in personClosePath should be the person's current cell
+				Cell nextCellInPath = personClosePath.get(1);
+				int nextX = nextCellInPath.getX();
+				int nextY = nextCellInPath.getY();
+				Cell nextFromCM = cm.getCell(nextX, nextY);
+				if(currCell.getManhattanDistance(nextFromCM) == 1) {
+					if(nextFromCM.isOccupied()) {
+						// TODO Something clever with conflicts
+					} else { // The next cell is empty, person can move (probably)
+						nextFromCM.addToTargeted(p);
+						p.setNextLocation(nextFromCM);
+						cm.setCellSmart(nextFromCM);
+					}
+				} else {
+					// TODO There is some error
+				}
 			
 			
-			
+			}
 			// Old Implementation
 			ArrayList<Cell> neighbors = cm.getNeighborAll(currCell);
 			if(neighbors.size() > 0) {
@@ -270,6 +295,7 @@ public class PedestrianSimulation {
 
 					p.setNextLocation(nextCell);
 					nextCell.addToTargeted(p);
+					cm.setCellSmart(nextCell);
 				}
 			} // close if
 		} // close null if
