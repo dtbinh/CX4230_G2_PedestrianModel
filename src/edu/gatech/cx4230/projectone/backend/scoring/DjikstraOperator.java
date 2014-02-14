@@ -29,7 +29,6 @@ public class DjikstraOperator {
 		edges = graph.getEdges();
 	}
 
-
 	public void execute(Cell source) {
 		settledNodes = new HashSet<Cell>();
 		unSettledNodes = new HashSet<Cell>();
@@ -113,7 +112,7 @@ public class DjikstraOperator {
 	 * This method returns the path from the source to the selected target and
 	 * NULL if no path exists
 	 */
-	public LinkedList<Cell> getPath(Cell target) {
+	public Path getPath(Cell target) {
 		LinkedList<Cell> path = new LinkedList<Cell>();
 		Cell step = target;
 		// check if a path exists
@@ -127,12 +126,13 @@ public class DjikstraOperator {
 		}
 		// Put it into the correct order
 		Collections.reverse(path);
-		return path;
+		Path out = new Path(path);
+		return out;
 	}
 	
 	public int getPathLength(Cell target) {
-		LinkedList<Cell> path = getPath(target);
+		Path path = getPath(target);
 		
-		return path.size();
+		return path.getWeight();
 	}
 }

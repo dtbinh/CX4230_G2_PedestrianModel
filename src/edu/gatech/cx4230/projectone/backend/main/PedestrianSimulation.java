@@ -7,12 +7,14 @@ import java.util.List;
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
-import edu.gatech.cx4230.projectone.backend.map.CrossWalkWaypoints;
 import edu.gatech.cx4230.projectone.backend.map.DoorScenarios;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
 import edu.gatech.cx4230.projectone.backend.random.AbstractRNG;
 import edu.gatech.cx4230.projectone.backend.random.JavaRNG;
-import edu.gatech.cx4230.projectone.backend.scoring.TargetScenarios;
+import edu.gatech.cx4230.projectone.backend.scoring.DjikstraOperator;
+import edu.gatech.cx4230.projectone.backend.scoring.Path;
+import edu.gatech.cx4230.projectone.backend.scoring.PathOrganizer;
+import edu.gatech.cx4230.projectone.backend.scoring.SimpleGraph;
 import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 
@@ -39,7 +41,6 @@ public class PedestrianSimulation {
 	private VisualizationMain vis;
 
 	// Simulation scenarios
-	public static final int TARGET_SCENARIO = TargetScenarios.MAXIMIZE_DIST;
 	public static final int DOOR_SCENARIO = 1;
 
 	// Random Number Generator
@@ -49,6 +50,11 @@ public class PedestrianSimulation {
 	private boolean peopleAvailable = false;
 	private boolean timeChanged = false;
 
+	// Changes for Proposed Targeting
+	private List<Cell> targets;
+	private List<Cell> sources;
+	private PathOrganizer pathOrganizer;
+	
 	public PedestrianSimulation(VisualizationMain vis) {
 		this.vis = vis;
 
@@ -66,10 +72,20 @@ public class PedestrianSimulation {
 		vis.setCellsWidth(cm.getCellsWidth());
 
 		// Load and Set target cells
-		TargetScenarios ts = new TargetScenarios(cm.getCells());
-		List<Cell> targets = ts.getTargetScenario(TARGET_SCENARIO);
-		//targets.addAll(CrossWalkWaypoints.getCrosswalkWaypoints(cm));
-		cm.setCellsScores(targets);
+		SimpleGraph graph = new SimpleGraph(cm);
+//		crosswalks = graph.getCrosswalkWaypoints();
+		targets = graph.getSinks();
+		sources = graph.getSources();
+		
+		DjikstraOperator dOp = new DjikstraOperator(graph);
+		pathOrganizer = new PathOrganizer();
+		for(Cell here: sources) {
+			dOp.execute(here);
+			for(Cell t: targets) {
+				pathOrganizer.addPath(dOp.getPath(t));
+			}
+		}
+		
 
 		DoorScenarios ds = new DoorScenarios(cm.getCells());
 		doors = ds.getScenario(DOOR_SCENARIO);
@@ -99,17 +115,29 @@ public class PedestrianSimulation {
 			int[] speeds = rng.nextIntsArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
 			int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
 			p = new Person(door, speeds[1], speeds[0], speeds[2], stress, simThread.getCurrTimeStep());
-			// TODO Choose closest target
 			
-			// TODO Find shortest route to target
+			Cell t = getClosestSource(p);
+			Path path = pathOrganizer.getMinimumPath(t);
+			p.setNextTargets(path);
 			
-			// TODO p.setNextTarget(target)
 			
 			cm.addPerson(p);
 			countPeopleInBuilding--;
 			System.out.println("Person added: " + p.toString());
 		}
 		return p;
+	}
+	
+	private Cell getClosestSource(Person p) {
+		Cell out = null;
+		Cell pCell = p.getLocation();
+		for(Cell c: sources) {
+			if(out == null || c.getManhattanDistance(pCell) < out.getManhattanDistance(pCell)) {
+				out = c;
+			}
+		}
+		
+		return out;
 	}
 
 	/**
@@ -182,7 +210,6 @@ public class PedestrianSimulation {
 					// Update the CellManager
 					movePerson(p, nextCell, currStep);
 
-					nextCell.setPerson(p); // TODO is this line necessary?
 					//peopleToMove.remove(p); // Causes ConcurrentModificationException
 					it.remove();
 				}
@@ -197,15 +224,11 @@ public class PedestrianSimulation {
 
 						// Update the CellManager
 						movePerson(winner, nextCell, currStep);
-						nextCell.setPerson(winner); // TODO is this line necessary?
 
 						peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
 						//it.remove();
 					}
 				}
-				nextCell.clearTargeted();
-				// TODO What happens to the nextCell object after this line? If the nextCell
-				// isn't stored in the CellManager, then Line 215 is useless.
 			}
 		} // close Person for
 
@@ -226,6 +249,15 @@ public class PedestrianSimulation {
 		// determine Person's most desirable next move
 		Cell currCell = p.getLocation();
 		if(currCell != null) {
+			// TODO Calculate path to nextTarget using Hadlock
+			
+			// TODO p.setNextLocation(first cell in path to nextTarget) GIVEN checks
+			// checks include isTraversable() and !isOccupied(), but cell should be
+			// traversable because of Hadlock
+			
+			
+			
+			// Old Implementation
 			ArrayList<Cell> neighbors = cm.getNeighborAll(currCell);
 			if(neighbors.size() > 0) {
 				int i = getIndexOfFirstTraversable(neighbors);

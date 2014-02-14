@@ -10,12 +10,14 @@ public class SimpleGraph {
 	private List<Cell> nodes;
 	private List<Edge> edges;
 	private List<Cell> sinks;
+	private List<Cell> sources;
 
 
 	public SimpleGraph(CellManager cm) {
 		nodes = new ArrayList<Cell>();
 		edges = new ArrayList<Edge>();
 		sinks = new ArrayList<Cell>();
+		sources = new ArrayList<Cell>();
 
 		// Sinks
 		Cell nw5 = cm.getCell(0, 55);
@@ -56,10 +58,12 @@ public class SimpleGraph {
 		// - West
 		Cell cAWN = cm.getCell(118, 294);
 		Cell cAWS = cm.getCell(118, 312);
+		sources.add(cAWS);
 
 		// - East
 		Cell cAEN = cm.getCell(372, 294);
 		Cell cAES = cm.getCell(372, 312);
+		sources.add(cAES);
 
 
 		// FIVE & FIVE - South
@@ -219,6 +223,41 @@ public class SimpleGraph {
 	 */
 	public List<Cell> getSinks() {
 		return sinks;
+	}
+	
+	public List<Cell> getCrosswalkWaypoints() {
+		List<Cell> out = new ArrayList<Cell>();
+		
+		for(Cell c: nodes) {
+			if(!sinks.contains(c)) {
+				out.add(c);
+			}
+		}
+		return out;
+	}
+
+
+	/**
+	 * @return the sources
+	 */
+	public List<Cell> getSources() {
+		return sources;
+	}
+
+
+	/**
+	 * @param sources the sources to set
+	 */
+	public void setSources(List<Cell> sources) {
+		this.sources = sources;
+	}
+
+
+	/**
+	 * @param sinks the sinks to set
+	 */
+	public void setSinks(List<Cell> sinks) {
+		this.sinks = sinks;
 	}
 
 }

@@ -3,6 +3,8 @@ package edu.gatech.cx4230.projectone.backend.abstraction;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.gatech.cx4230.projectone.backend.scoring.Path;
+
 
 public class Person {
 
@@ -22,6 +24,7 @@ public class Person {
 	private int timeLastMove;
 	private List<Cell> visitedTargets;
 	private Cell nextTarget;
+	private Path nextTargets;
 	
 	/**
 	 * Person()
@@ -51,7 +54,11 @@ public class Person {
 		this.location = newLocation;
 		if(location.equals(nextTarget)) {
 			visitedTargets.add(nextTarget);
-			nextTarget = null;
+			if(nextTargets.hasNext()) {
+				nextTarget = nextTargets.removeSource();
+			} else {
+				// TODO Person has reached last target
+			}
 		}
 	}
 	
@@ -188,5 +195,20 @@ public class Person {
 	
 	public boolean hasVisitedTarget(Cell t) {
 		return visitedTargets.contains(t);
+	}
+
+	/**
+	 * @return the nextTargets
+	 */
+	public Path getNextTargets() {
+		return nextTargets;
+	}
+
+	/**
+	 * @param nextTargets the nextTargets to set
+	 */
+	public void setNextTargets(Path nextTargets) {
+		this.nextTargets = nextTargets;
+		setNextTarget(nextTargets.getSource());
 	}
 }
