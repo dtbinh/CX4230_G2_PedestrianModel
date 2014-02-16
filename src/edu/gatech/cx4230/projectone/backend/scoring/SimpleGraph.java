@@ -19,7 +19,7 @@ public class SimpleGraph {
 		sinks = new ArrayList<Cell>();
 		sources = new ArrayList<Cell>();
 
-		// Sinks
+		// Sinks (Sidewalk Targets)
 		Cell nw5 = cm.getCell(0, 55);
 		Cell sw5 = cm.getCell(0, 99);
 		Cell nwS = cm.getCell(81, 0);

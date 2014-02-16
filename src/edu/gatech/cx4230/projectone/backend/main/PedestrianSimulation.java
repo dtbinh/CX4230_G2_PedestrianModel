@@ -271,6 +271,8 @@ public class PedestrianSimulation {
 				if(currCell.getManhattanDistance(nextFromCM) == 1) {
 					if(nextFromCM.isOccupied()) {
 						// TODO Something clever with conflicts
+						// Maybe test if the person is within X cells of the targetCell,
+						// and if so, maybe move on to the next target
 					} else { // The next cell is empty, person can move (probably)
 						nextFromCM.addToTargeted(p);
 						p.setNextLocation(nextFromCM);
