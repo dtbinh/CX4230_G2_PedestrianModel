@@ -24,7 +24,7 @@ import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
  *
  */
 public class MapGridData {
-	private static String filename = "res/Model_Roster.csv";
+	private static String filename = "../res/Model_Roster.csv";
 	public static final String NAME = "name";
 	public static final String TYPE = "type";
 	private int width, height;
