@@ -114,8 +114,8 @@ public class SimpleGraph {
 		
 		edges.add(new Edge(nwS, cS5NW)); // 1
 		edges.add(new Edge(cS5NW, nwS)); // 1
-		edges.add(new Edge(ne5, cS5NE)); // 2
-		edges.add(new Edge(cS5NE, ne5)); // 2
+		edges.add(new Edge(neS, cS5NE)); // 2
+		edges.add(new Edge(cS5NE, neS)); // 2
 		edges.add(new Edge(cS5NW, cS5NE)); // 3
 		edges.add(new Edge(cS5NE, cS5NW)); // 3
 		edges.add(new Edge(cS5NW, cS5WN)); // 4

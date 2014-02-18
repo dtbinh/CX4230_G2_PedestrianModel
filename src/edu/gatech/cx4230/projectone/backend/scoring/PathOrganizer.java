@@ -24,7 +24,7 @@ public class PathOrganizer {
 		Path out = null;
 		
 		for(Path p: paths) {
-			if(p.getSource().equals(source)) {
+			if(p != null && p.getSource().equals(source)) {
 				if(out == null || p.getWeight() < out.getWeight()) {
 					out = p;
 				}
