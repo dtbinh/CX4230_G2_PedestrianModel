@@ -205,10 +205,10 @@ public class PedestrianSimulation {
 			Person p = it.next();
 			// handle movement of people, potential collisions with other people, etc
 			Cell nextCell = p.getNextLocation();
-			nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
 			if(nextCell == null) {
 				// TODO If the next Cell hasn't been specified
 			} else {
+				nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
 				if(nextCell.getTargeted().size() == 1) {
 
 					// Update the CellManager
