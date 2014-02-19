@@ -55,6 +55,7 @@ public class PedestrianSimulation {
 	private List<Cell> targets, sources, nodes;
 	private PathOrganizer pathOrganizer;
 	private HadlockOperator hadlock;
+	private DjikstraOperator dOp;
 	public static final boolean oldImplementation = false;
 
 	public static final boolean DEBUG = true;
@@ -82,7 +83,7 @@ public class PedestrianSimulation {
 		sources = graph.getSources();
 		nodes = graph.getNodes();
 
-		DjikstraOperator dOp = new DjikstraOperator(graph);
+		dOp = new DjikstraOperator(graph);
 		pathOrganizer = new PathOrganizer();
 		for(Cell here: sources) {
 			dOp.execute(here);
@@ -137,10 +138,17 @@ public class PedestrianSimulation {
 			Path path = null;
 			if(sources.contains(t)) {
 				path = pathOrganizer.getMinimumPath(t);
+				if(path == null) {
+					dOp.execute(t);
+					PathOrganizer pathO = new PathOrganizer();
+
+					for(Cell tar: targets) {
+						pathO.addPath(dOp.getPath(tar));
+					}
+					path = pathO.getMinimumPath(t);
+				}
 			} else {
-				System.err.println("PS.fNTPFP() Line 141 - Calculating path");
-				SimpleGraph graph = new SimpleGraph(cm, p.getVisitedTargets());
-				DjikstraOperator dOp = new DjikstraOperator(graph);
+				System.err.println("PS.fNTPFP() Line 144 - Calculating path");
 				dOp.execute(t);
 				PathOrganizer pathO = new PathOrganizer();
 
@@ -228,7 +236,7 @@ public class PedestrianSimulation {
 			// handle movement of people, potential collisions with other people, etc
 			Cell nextCell = p.getNextLocation();
 			if(nextCell == null) {
-				if(DEBUG) System.err.println("PS.movePerson() Line 210 - nextCell is null");
+				//if(DEBUG) System.err.println("PS.movePerson() Line 234 - nextCell is null");
 				// TODO If the next Cell hasn't been specified
 			} else {
 				nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
@@ -280,7 +288,7 @@ public class PedestrianSimulation {
 			Cell nextTarget = p.getNextTarget();
 			hadlock.setCm(cm);
 			if(nextTarget == null) {
-
+				if(DEBUG) System.err.println("PS.calcNextMove() Line 286 - Person.nextTarget is null");
 			} else {
 				List<Cell> personClosePath = hadlock.findPath(currCell, nextTarget);
 
@@ -305,6 +313,7 @@ public class PedestrianSimulation {
 							cm.setCellSmart(nextFromCM);
 						}
 					} else {
+						System.err.println("PS.calcNextMove() - Manhattan Distance != 1");
 						// TODO There is some error
 					}
 
@@ -351,12 +360,13 @@ public class PedestrianSimulation {
 			String line0 = "(" + cellX + ", " + cellY + ")\n";
 			String line1 = "Type: " + c.getTypeName() + "\n";
 			String line2 = "Name: " + c.getName() + "\n";
-			String line3 = "Score: " + c.getScore() + "\n";
-			String line4 = "";
+			String line3 = "";
 			if(c.isOccupied()) {
-				line4 = "Person id: " + c.getPerson().toString();
+				line3 = "Person id: " + c.getPerson().toString() + "\n";
+				line3 += "NextTarget: " + c.getPerson().getNextTarget() + "\n";
+				line3 += "NextLocation: " + c.getPerson().getLocation() + "\n";
 			}
-			String text = line0 + line1 + line2 + line3 + line4;
+			String text = line0 + line1 + line2 + line3;
 			vis.setTooltipText(text);
 		}
 	}
