@@ -9,6 +9,7 @@ import edu.gatech.cx4230.projectone.backend.utilities.ListHelper;
 public class DoorScenarios {
 	private Cell[][] cells;
 	public static final int DOOR_SCENARIO = 1;
+	public static boolean DEBUG = false;
 	
 	/**
 	 * Dimensions of the model building
@@ -65,7 +66,7 @@ public class DoorScenarios {
 		int door6H = 1;
 		out.addAll(getCellsInArea(door6X, door6Y, door6W, door6H));
 		
-		System.out.println(ListHelper.listToString(out));
+		if(DEBUG) System.out.println(ListHelper.listToString(out));
 		return out;
 	}
 	
