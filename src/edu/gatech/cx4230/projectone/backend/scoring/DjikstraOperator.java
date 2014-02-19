@@ -17,6 +17,7 @@ import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
  *
  */
 public class DjikstraOperator {
+	@SuppressWarnings("unused")
 	private List<Cell> nodes;
 	private List<Edge> edges;
 	private Set<Cell> settledNodes;

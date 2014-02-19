@@ -113,6 +113,16 @@ public class Path implements Comparable<Path> {
 	public boolean hasNext() {
 		return !(getSource() == null);
 	}
+	
+	public String toString() {
+		String out = "(";
+		Cell s = getSource();
+		out += s.getX() + ", " + s.getY() + ") to (";
+		Cell d = list.get(list.size() - 1).getDestination();
+		out += d.getX() + ", " + d.getY() + ")";
+		out += " Weight: " + weight;
+		return out;
+	}
 
 
 }

@@ -1,6 +1,7 @@
 package edu.gatech.cx4230.projectone.backend.scoring;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -30,6 +31,8 @@ public class HadlockOperator {
 		List<Cell> out = new ArrayList<Cell>();
 		if(here.isTraversable() && dest.isTraversable()) {
 			cpq = new CustomPriorityQueue();
+			CellManager cmThis = cm;
+			
 			PriorityQueue<Cell> visitedCells = new PriorityQueue<Cell>();
 
 			here.setDetourNumber(0);
@@ -46,7 +49,7 @@ public class HadlockOperator {
 				}
 
 				c = cpq.poll();
-				List<Cell> cNeighbors = cm.getCardinalTraversableNeighbors(c);
+				List<Cell> cNeighbors = cmThis.getCardinalTraversableNeighbors(c);
 				int cMD = (int) c.getManhattanDistance(dest);
 
 				Cell dnMin = getManhattanDistanceCell(cNeighbors);
@@ -58,14 +61,14 @@ public class HadlockOperator {
 						detNum++;
 					}
 					c.setDetourNumber(detNum);			
-					cm.setCellSmart(c);
+					cmThis.setCellSmart(c);
 				}
 				if(DEBUG) System.out.println("(" + c.getX() + ", " + c.getY() + ")\tDN: " + c.getDetourNumber());
 				for(Cell d: cNeighbors) {
 					if(!visitedCells.contains(d) && !cpq.contains(d)) {
 						d.setDistTodestination((int) d.getManhattanDistance(dest));
 						d.setPrevious(c);
-						cm.setCellSmart(d);
+						cmThis.setCellSmart(d);
 						cpq.add(d);
 					}
 				} // close for
@@ -92,7 +95,8 @@ public class HadlockOperator {
 			c = c.getPrevious();
 		} while(!c.equals(source));
 		out.add(source);
-
+		
+		Collections.reverse(out);
 		return out;
 	}
 

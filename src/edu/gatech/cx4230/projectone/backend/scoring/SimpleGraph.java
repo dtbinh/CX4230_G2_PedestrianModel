@@ -183,6 +183,11 @@ public class SimpleGraph {
 		edges.add(new Edge(cS5SE, cFFWS)); // 32
 		edges.add(new Edge(cFFWS, cS5SE)); // 32
 		
+	} // close constructor
+	
+	public SimpleGraph(CellManager cake, List<Cell> cellsToExclude) {
+		this(cake);
+		// TODO Maybe
 	}
 
 

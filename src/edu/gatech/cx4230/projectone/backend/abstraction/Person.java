@@ -25,6 +25,7 @@ public class Person {
 	private List<Cell> visitedTargets;
 	private Cell nextTarget;
 	private Path nextTargets;
+	public static final boolean DEBUG = true;
 	
 	/**
 	 * Person()
@@ -207,8 +208,13 @@ public class Person {
 	/**
 	 * @param nextTargets the nextTargets to set
 	 */
-	public void setNextTargets(Path nextTargets) {
-		this.nextTargets = nextTargets;
-		setNextTarget(nextTargets.getSource());
+	public void setNextTargets(Path nt) {
+		this.nextTargets = nt;
+		if(nt != null) {
+			setNextTarget(nextTargets.removeSource());
+			if(DEBUG) System.out.println("Person(Ln 215): Next Target: " + nextTarget.toString());
+		} else {
+			System.err.println("setNextTargets path is null");
+		}
 	}
 }

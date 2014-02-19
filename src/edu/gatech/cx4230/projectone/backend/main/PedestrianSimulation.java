@@ -21,7 +21,7 @@ import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 public class PedestrianSimulation {
 
-	public static final int BUILDING_CAPACITY = 500;
+	public static final int BUILDING_CAPACITY = 15;
 
 	private int totalPeople;
 	private int countPeopleInBuilding;
@@ -52,11 +52,13 @@ public class PedestrianSimulation {
 	private boolean timeChanged = false;
 
 	// Changes for Proposed Targeting
-	private List<Cell> targets;
-	private List<Cell> sources;
+	private List<Cell> targets, sources, nodes;
 	private PathOrganizer pathOrganizer;
 	private HadlockOperator hadlock;
-	
+	public static final boolean oldImplementation = false;
+
+	public static final boolean DEBUG = true;
+
 	public PedestrianSimulation(VisualizationMain vis) {
 		this.vis = vis;
 
@@ -75,10 +77,11 @@ public class PedestrianSimulation {
 
 		// Load and Set target cells
 		SimpleGraph graph = new SimpleGraph(cm);
-//		crosswalks = graph.getCrosswalkWaypoints();
+		//		crosswalks = graph.getCrosswalkWaypoints();
 		targets = graph.getSinks();
 		sources = graph.getSources();
-		
+		nodes = graph.getNodes();
+
 		DjikstraOperator dOp = new DjikstraOperator(graph);
 		pathOrganizer = new PathOrganizer();
 		for(Cell here: sources) {
@@ -87,13 +90,12 @@ public class PedestrianSimulation {
 				pathOrganizer.addPath(dOp.getPath(t));
 			}
 		}
-		
+
 
 		DoorScenarios ds = new DoorScenarios(cm.getCells());
 		doors = ds.getScenario(DOOR_SCENARIO);
 		cm.setCells(doors);
 		hadlock = new HadlockOperator(cm);
-		// TODO Send doors to vis
 
 		peopleAvailable = false;
 		simThread = new SimulationThread(PedestrianSimulation.this, 50, "Ped Sim Thread");
@@ -118,28 +120,49 @@ public class PedestrianSimulation {
 			int[] speeds = rng.nextIntsArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
 			int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
 			p = new Person(door, speeds[1], speeds[0], speeds[2], stress, simThread.getCurrTimeStep());
-			
-			Cell t = getClosestSource(p);
-			Path path = pathOrganizer.getMinimumPath(t);
-			p.setNextTargets(path);
-			
-			
+
+			p = findNextTargetPathForPerson(p);
+
+
 			cm.addPerson(p);
 			countPeopleInBuilding--;
-			System.out.println("Person added: " + p.toString());
+			if(DEBUG) System.out.println("Person added: " + p.toString() + "\n");
 		}
 		return p;
 	}
-	
-	private Cell getClosestSource(Person p) {
+
+	private Person findNextTargetPathForPerson(Person p) {
+		if(p != null) {
+			Cell t = getClosestNodeNotVisited(p);
+			Path path = null;
+			if(sources.contains(t)) {
+				path = pathOrganizer.getMinimumPath(t);
+			} else {
+				System.err.println("PS.fNTPFP() Line 141 - Calculating path");
+				SimpleGraph graph = new SimpleGraph(cm, p.getVisitedTargets());
+				DjikstraOperator dOp = new DjikstraOperator(graph);
+				dOp.execute(t);
+				PathOrganizer pathO = new PathOrganizer();
+
+				for(Cell tar: targets) {
+					pathO.addPath(dOp.getPath(tar));
+				}
+				path = pathO.getMinimumPath(t);
+			}
+
+			p.setNextTargets(path);
+		}
+		return p;
+	}
+
+	private Cell getClosestNodeNotVisited(Person p) {
 		Cell out = null;
 		Cell pCell = p.getLocation();
-		for(Cell c: sources) {
-			if(out == null || c.getManhattanDistance(pCell) < out.getManhattanDistance(pCell)) {
-				out = c;
+		for(Cell n: nodes) {
+			if(out == null || n.getManhattanDistance(pCell) < out.getManhattanDistance(pCell) && !p.hasVisitedTarget(n)) {
+				out = n;
 			}
 		}
-		
 		return out;
 	}
 
@@ -195,17 +218,17 @@ public class PedestrianSimulation {
 		for(Iterator<Person> it = people.iterator(); it.hasNext();) {
 			Person p = it.next();
 			if(p.isMoveable(currStep)) {
-				calculateNextMove(p);
+				p = calculateNextMove(p);
 				peopleToMove.add(p);
 			}
 		}
-		//while(!peopleToMove.isEmpty()) {	// implement this if person must find alternate move instead of waiting until next time step
-		//for(Person p : peopleToMove) {
+
 		for(Iterator<Person> it = peopleToMove.iterator(); it.hasNext();) {
 			Person p = it.next();
 			// handle movement of people, potential collisions with other people, etc
 			Cell nextCell = p.getNextLocation();
 			if(nextCell == null) {
+				if(DEBUG) System.err.println("PS.movePerson() Line 210 - nextCell is null");
 				// TODO If the next Cell hasn't been specified
 			} else {
 				nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
@@ -238,7 +261,7 @@ public class PedestrianSimulation {
 
 		peopleAvailable = true;
 	} // close movePeople()
-	
+
 	private void movePerson(Person p, Cell nextCell, int currStep) {
 		// Update the CellManager
 		int oldX = p.getLocation().getX();
@@ -249,58 +272,66 @@ public class PedestrianSimulation {
 		cm.movePerson(p, oldX, oldY, newX, newY);
 	}
 
-	public void calculateNextMove(Person p) {
+	public Person calculateNextMove(Person p) {
 		// determine Person's most desirable next move
 		Cell currCell = p.getLocation();
 		if(currCell != null) {
 			// TODO Calculate path to nextTarget using Hadlock
 			Cell nextTarget = p.getNextTarget();
 			hadlock.setCm(cm);
-			List<Cell> personClosePath = hadlock.findPath(currCell, nextTarget);
-			
-			
-			// TODO p.setNextLocation(first cell in path to nextTarget) GIVEN checks
-			// checks include isTraversable() and !isOccupied(), but cell should be
-			// traversable because of Hadlock
-			if(personClosePath != null && personClosePath.size() >= 2) {
-				// The first cell in personClosePath should be the person's current cell
-				Cell nextCellInPath = personClosePath.get(1);
-				int nextX = nextCellInPath.getX();
-				int nextY = nextCellInPath.getY();
-				Cell nextFromCM = cm.getCell(nextX, nextY);
-				if(currCell.getManhattanDistance(nextFromCM) == 1) {
-					if(nextFromCM.isOccupied()) {
-						// TODO Something clever with conflicts
-						// Maybe test if the person is within X cells of the targetCell,
-						// and if so, maybe move on to the next target
-					} else { // The next cell is empty, person can move (probably)
-						nextFromCM.addToTargeted(p);
-						p.setNextLocation(nextFromCM);
-						cm.setCellSmart(nextFromCM);
-					}
-				} else {
-					// TODO There is some error
-				}
-			
-			
-			}
-			// Old Implementation
-			ArrayList<Cell> neighbors = cm.getNeighborAll(currCell);
-			if(neighbors.size() > 0) {
-				int i = getIndexOfFirstTraversable(neighbors);
-				if(0 <= i && i < neighbors.size()) {
-					Cell nextCell = neighbors.get(i);
-					for(Cell c: neighbors) {
-						if(c.getScore() > nextCell.getScore() && c.isTraversable() && !c.isOccupied())
-							nextCell = c;
-					} // close for
+			if(nextTarget == null) {
 
-					p.setNextLocation(nextCell);
-					nextCell.addToTargeted(p);
-					cm.setCellSmart(nextCell);
+			} else {
+				List<Cell> personClosePath = hadlock.findPath(currCell, nextTarget);
+
+
+				// TODO p.setNextLocation(first cell in path to nextTarget) GIVEN checks
+				// checks include isTraversable() and !isOccupied(), but cell should be
+				// traversable because of Hadlock
+				if(personClosePath != null && personClosePath.size() >= 2) {
+					// The first cell in personClosePath should be the person's current cell
+					Cell nextCellInPath = personClosePath.get(1);
+					int nextX = nextCellInPath.getX();
+					int nextY = nextCellInPath.getY();
+					Cell nextFromCM = cm.getCell(nextX, nextY);
+					if(currCell.getManhattanDistance(nextFromCM) == 1) {
+						if(nextFromCM.isOccupied()) {
+							// TODO Something clever with conflicts
+							// Maybe test if the person is within X cells of the targetCell,
+							// and if so, maybe move on to the next target
+						} else { // The next cell is empty, person can move (probably)
+							nextFromCM.addToTargeted(p);
+							p.setNextLocation(nextFromCM);
+							cm.setCellSmart(nextFromCM);
+						}
+					} else {
+						// TODO There is some error
+					}
+
 				}
-			} // close if
+			} // close else
+
+
+			if(oldImplementation) {
+				// Old Implementation
+				ArrayList<Cell> neighbors = cm.getNeighborAll(currCell);
+				if(neighbors.size() > 0) {
+					int i = getIndexOfFirstTraversable(neighbors);
+					if(0 <= i && i < neighbors.size()) {
+						Cell nextCell = neighbors.get(i);
+						for(Cell c: neighbors) {
+							if(c.getScore() > nextCell.getScore() && c.isTraversable() && !c.isOccupied())
+								nextCell = c;
+						} // close for
+
+						p.setNextLocation(nextCell);
+						nextCell.addToTargeted(p);
+						cm.setCellSmart(nextCell);
+					}
+				} // close if
+			} // close oldImplementation if
 		} // close null if
+		return p;
 	} // close calculateNextMove()
 
 	private int getIndexOfFirstTraversable(List<Cell> cells) {
@@ -350,7 +381,7 @@ public class PedestrianSimulation {
 	 */
 	public boolean continueSim() {
 		return true;
-		//return (countPeopleInBuilding > 0 || people.size() < totalPeople);
+		// TODO return (countPeopleInBuilding > 0 || people.size() < totalPeople);
 	}
 
 	/**

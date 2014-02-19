@@ -45,5 +45,13 @@ public class Edge {
 	public String getName() {
 		return name;
 	}
+	
+	public boolean hasCell(Cell c) {
+		boolean out = false;
+		if(c != null) {
+			out = c.equals(source) || c.equals(destination);
+		}
+		return out;
+	}
 
 }
