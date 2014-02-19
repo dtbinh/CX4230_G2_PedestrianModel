@@ -20,14 +20,22 @@ public class HadlockOperator {
 	private CellManager cm;
 	private CustomPriorityQueue cpq;
 	public static boolean DEBUG = false;
+	private int[] detourNumbers; // index in array maps to Cell.id
 
 
 	public HadlockOperator(CellManager cake) {
 		this.cm = cake;
-		
+	}
+	
+	private void resetDetourNumbers() {
+		detourNumbers = new int[cm.getCellsHeight() * cm.getCellsWidth()];
+		for(int i = 0; i < detourNumbers.length; i++) {
+			detourNumbers[i] = Integer.MAX_VALUE / 1000;
+		}
 	}
 
 	public List<Cell> findPath(Cell here, Cell dest) {
+		resetDetourNumbers();
 		List<Cell> out = new ArrayList<Cell>();
 		if(here.isTraversable() && dest.isTraversable()) {
 			cpq = new CustomPriorityQueue();
@@ -35,7 +43,8 @@ public class HadlockOperator {
 			
 			PriorityQueue<Cell> visitedCells = new PriorityQueue<Cell>();
 
-			here.setDetourNumber(0);
+			detourNumbers[here.getID()] = 0;
+			here.setVisited(true);
 			here.setDistTodestination((int) here.getManhattanDistance(dest));
 			cpq.add(here);
 			int step = 0;
@@ -56,14 +65,15 @@ public class HadlockOperator {
 				if(dnMin != null) {
 					int pMD = (int) dnMin.getManhattanDistance(dest);
 
-					int detNum = dnMin.getDetourNumber();
+					int detNum = detourNumbers[dnMin.getID()];
 					if(cMD > pMD) {
 						detNum++;
 					}
-					c.setDetourNumber(detNum);			
+					detourNumbers[c.getID()] = detNum;
+					c.setVisited(true);
 					cmThis.setCellSmart(c);
 				}
-				if(DEBUG) System.out.println("(" + c.getX() + ", " + c.getY() + ")\tDN: " + c.getDetourNumber());
+				if(DEBUG) System.out.println("(" + c.getX() + ", " + c.getY() + ")\tDN: " + detourNumbers[c.getID()]);
 				for(Cell d: cNeighbors) {
 					if(!visitedCells.contains(d) && !cpq.contains(d)) {
 						d.setDistTodestination((int) d.getManhattanDistance(dest));
@@ -73,7 +83,7 @@ public class HadlockOperator {
 					}
 				} // close for
 				if(c.equals(dest)) {
-					dest.setDetourNumber(c.getDetourNumber());
+					detourNumbers[dest.getID()] = detourNumbers[c.getID()];
 					break;
 				}
 				visitedCells.add(c);
@@ -124,7 +134,7 @@ public class HadlockOperator {
 			out[j] = new int[cells[j].length];
 
 			for(int i = 0; i < out[j].length; i++) {
-				out[j][i] = cells[j][i].getDetourNumber();
+				out[j][i] = detourNumbers[cells[j][i].getID()];
 			}
 		}
 

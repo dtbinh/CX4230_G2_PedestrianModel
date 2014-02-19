@@ -35,7 +35,6 @@ public class Cell implements Comparable<Cell> {
 	private Person person;
 	private double score;
 	private List<Person> targeted; // list of people who want to move to this cell
-	private int detourNumber; // used for Hadlock's Algorithm
 	private Cell previous; // used for Hadlock's Algorithm
 	private boolean visited; // used for Hadlock's Algorithm
 	private int distTodestination; // used for Hadlock's Algorithm
@@ -65,7 +64,6 @@ public class Cell implements Comparable<Cell> {
 		this.cellType = type; // cellType must be from a defined set of types (w-wall, s-sidewalk, etc)
 		this.csvRow = csvRow;
 		this.score = score;
-		this.detourNumber = Integer.MAX_VALUE / 1000;
 		this.distTodestination = Integer.MAX_VALUE;
 		
 		targeted = new ArrayList<Person>();
@@ -105,7 +103,7 @@ public class Cell implements Comparable<Cell> {
 	}
 	
 	public String toString() {
-		return "[(" + x + ", " + y + ")\t" + "DN: " + detourNumber + "]";
+		return "[(" + x + ", " + y + ")\t" + "DN: " + "]";
 	}
 	
 	public String csvInfo() {
@@ -306,21 +304,6 @@ public class Cell implements Comparable<Cell> {
 //			out = (int) this.getManhattanDistance(arg0);
 //		}
 		return out;
-	}
-
-	/**
-	 * @return the detourNumber
-	 */
-	public int getDetourNumber() {
-		return detourNumber;
-	}
-
-	/**
-	 * @param detourNumber the detourNumber to set
-	 */
-	public void setDetourNumber(int detourNumber) {
-		this.visited = true;
-		this.detourNumber = detourNumber;
 	}
 
 	/**
