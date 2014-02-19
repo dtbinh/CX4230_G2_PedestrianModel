@@ -38,7 +38,7 @@ public class HadlockOperator {
 		resetDetourNumbers();
 		List<Cell> out = new ArrayList<Cell>();
 		if(here.isTraversable() && dest.isTraversable()) {
-			cpq = new CustomPriorityQueue();
+			cpq = new CustomPriorityQueue(this);
 			CellManager cmThis = cm;
 			
 			PriorityQueue<Cell> visitedCells = new PriorityQueue<Cell>();
@@ -153,6 +153,20 @@ public class HadlockOperator {
 	 */
 	public void setCm(CellManager cm) {
 		this.cm = cm;
+	}
+
+	/**
+	 * @return the detourNumbers
+	 */
+	public int[] getDetourNumbers() {
+		return detourNumbers;
+	}
+
+	/**
+	 * @param detourNumbers the detourNumbers to set
+	 */
+	public void setDetourNumbers(int[] detourNumbers) {
+		this.detourNumbers = detourNumbers;
 	}
 
 	public static void main(String[] args) {

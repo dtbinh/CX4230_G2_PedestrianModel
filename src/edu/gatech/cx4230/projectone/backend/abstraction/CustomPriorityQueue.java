@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
+import edu.gatech.cx4230.projectone.backend.scoring.HadlockOperator;
 import edu.gatech.cx4230.projectone.backend.utilities.ListHelper;
 
 public class CustomPriorityQueue {
@@ -14,16 +15,18 @@ public class CustomPriorityQueue {
 	public static final int DIST_TO_DEST = 31435;
 	public static final int DETOUR_NUMBER = 365753;
 	private int simCase = DIST_TO_DEST;
+	private HadlockOperator hadlock;
 
 
-	public CustomPriorityQueue() {
+	public CustomPriorityQueue(HadlockOperator h) {
+		this.hadlock = h;
 		data = new HashMap<Integer, Queue<Cell>>();
 	}
 
 	public void add(Cell c) {
 		if(c != null) {
 			int i = getSimCase(c);
-
+			
 			Queue<Cell> queue;
 			if(data.get(i) == null) {
 				queue = new LinkedList<Cell>();
@@ -122,7 +125,7 @@ public class CustomPriorityQueue {
 			out = c.getDistTodestination();
 			break;
 		case DETOUR_NUMBER:
-			out = c.getDetourNumber();
+			out = hadlock.getDetourNumbers()[c.getID()];
 			break;
 		}
 		return out;
