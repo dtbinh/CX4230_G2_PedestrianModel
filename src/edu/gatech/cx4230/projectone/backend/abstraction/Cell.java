@@ -227,6 +227,15 @@ public class Cell implements Comparable<Cell> {
 		}
 	}
 	
+	public boolean equals(Cell c) {
+		boolean out = false;
+		if(c != null && c.getX() == x && c.getY() == y) {
+			out = true;
+		}
+		
+		return out;
+	}
+	
 	public double getDistanceToCell(Cell c) {
 		double dx = this.x - c.getX();
 		double dy = this.y - c.getY();
