@@ -364,7 +364,7 @@ public class PedestrianSimulation {
 			if(c.isOccupied()) {
 				line3 = "Person id: " + c.getPerson().toString() + "\n";
 				line3 += "NextTarget: " + c.getPerson().getNextTarget() + "\n";
-				line3 += "NextLocation: " + c.getPerson().getLocation() + "\n";
+				line3 += "NextLocation: " + c.getPerson().getNextLocation() + "\n";
 			}
 			String text = line0 + line1 + line2 + line3;
 			vis.setTooltipText(text);
