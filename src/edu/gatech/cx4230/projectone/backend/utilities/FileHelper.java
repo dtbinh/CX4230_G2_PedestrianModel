@@ -78,4 +78,20 @@ public class FileHelper {
 		}
 		return out;
 	}
+	
+	public String getPathToResource(String filename) {
+		String RESOURCE_PATH = "res/";
+		String workingDirectory = System.getProperty("user.dir");
+		int index = workingDirectory.indexOf("CX4230_G2_PedestrianModel");
+		String localPath = workingDirectory.substring(0,index);
+		String out = localPath + "CX4230_G2_PedestrianModel/" + RESOURCE_PATH + filename;
+		
+		return out;
+	}
+	
+	public static void main(String[] args) {
+		FileHelper fh = new FileHelper();
+		String out = fh.getPathToResource("Model_Roster.csv");
+		System.out.println(out);
+	}
 }

@@ -434,7 +434,7 @@ public class PedestrianSimulation {
 		
 		for(Person p : people) {
 			Cell c = p.getLocation();
-			if(c != null && c.getY() > boundaryLine) {
+			if(c != null && c.getY() < boundaryLine) {
 				out = false;
 				break;
 			}

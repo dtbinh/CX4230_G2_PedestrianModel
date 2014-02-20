@@ -14,6 +14,7 @@ import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.utilities.CSVReader;
 import edu.gatech.cx4230.projectone.backend.utilities.CSVRow;
+import edu.gatech.cx4230.projectone.backend.utilities.FileHelper;
 import edu.gatech.cx4230.projectone.backend.utilities.ListHelper;
 import edu.gatech.cx4230.projectone.visualization.abstraction.CellMarker;
 import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
@@ -24,7 +25,7 @@ import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
  *
  */
 public class MapGridData {
-	private static String filename = "../res/Model_Roster.csv";
+	private static String filename = "Model_Roster.csv";
 	public static final String NAME = "name";
 	public static final String TYPE = "type";
 	private int width, height;
@@ -32,7 +33,9 @@ public class MapGridData {
 	private List<Marker> cellMarkers;
 
 	public MapGridData() {
-		File file = new File(filename);
+		FileHelper fh = new FileHelper();
+		String fname = fh.getPathToResource(filename);
+		File file = new File(fname);
 		String absolutePath = file.getAbsolutePath();
 
 		CSVReader cReader = new CSVReader(absolutePath);
