@@ -40,8 +40,8 @@ public class SimulationThread extends Thread {
 				// TODO spawn people
 				int numPeople = 10; // use random here to decide how many ppl to spawn at each time step?
 				ps.spawnPeople(numPeople);
-
 				ps.movePeople();
+				
 
 				try {
 					sleep((long) wait);
@@ -58,6 +58,11 @@ public class SimulationThread extends Thread {
 
 	public void quit() {
 		System.out.println("Quitting Thread...");
+		
+		// TODO Elaborate on Terminating condition
+		System.out.println("Simulation Terminated. Condition " + PedestrianSimulation.terminatingCondition);
+		System.out.println("Time steps: " + currTimeStep);
+		
 		running = false;
 		interrupt();
 	}

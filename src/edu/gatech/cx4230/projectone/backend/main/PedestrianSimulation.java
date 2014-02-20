@@ -22,7 +22,7 @@ import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 public class PedestrianSimulation {
 
 	public static final int BUILDING_CAPACITY = 15;
-
+	
 	private int totalPeople;
 	private int countPeopleInBuilding;
 
@@ -38,11 +38,13 @@ public class PedestrianSimulation {
 	// list of the door cells
 	private List<Cell> doors;
 
-	// Visualization of the simulation
-	private VisualizationMain vis;
 
 	// Simulation scenarios
 	public static final int DOOR_SCENARIO = 1;
+	public static final int TERM_CON_1 = 1;
+	public static final int TERM_CON_2 = 2;
+	public static int terminatingCondition = TERM_CON_2;
+	public final int boundaryLine = 200;
 
 	// Random Number Generator
 	private AbstractRNG rng;
@@ -59,9 +61,10 @@ public class PedestrianSimulation {
 	public static final boolean oldImplementation = false;
 
 	public static final boolean DEBUG = true;
+	private boolean useVisualization;
 
-	public PedestrianSimulation(VisualizationMain vis) {
-		this.vis = vis;
+	public PedestrianSimulation(VisualizationMain vis, boolean visBol) {
+		this.useVisualization = visBol;
 
 		totalPeople = BUILDING_CAPACITY; // this may be variable for each simulation, with BUILDING_CAPACITY as the max
 		countPeopleInBuilding = totalPeople;
@@ -71,10 +74,13 @@ public class PedestrianSimulation {
 
 		// Read in and create the map grid
 		MapGridData mgd = new MapGridData();
-		vis.setMarkers(mgd.getCellMarkers());
 		cm = mgd.getCellManager();
-		vis.setCellsHeight(cm.getCellsHeight());
-		vis.setCellsWidth(cm.getCellsWidth());
+		
+		if(useVisualization && vis != null) {
+			vis.setMarkers(mgd.getCellMarkers());
+			vis.setCellsHeight(cm.getCellsHeight());
+			vis.setCellsWidth(cm.getCellsWidth());
+		}
 
 		// Load and Set target cells
 		SimpleGraph graph = new SimpleGraph(cm);
@@ -102,6 +108,10 @@ public class PedestrianSimulation {
 		simThread = new SimulationThread(PedestrianSimulation.this, 50, "Ped Sim Thread");
 		simThread.start();
 	} // close constructor
+	
+	public PedestrianSimulation() {
+		this(null, false);
+	}
 
 	/**
 	 * spawnPerson
@@ -240,31 +250,29 @@ public class PedestrianSimulation {
 				// TODO If the next Cell hasn't been specified
 			} else {
 				nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
-				if(nextCell.getTargeted().size() == 1) {
-
+				if(nextCell.getTargeted().size() == 1) { // if no conflicts
 					// Update the CellManager
 					movePerson(p, nextCell, currStep);
-
-					//peopleToMove.remove(p); // Causes ConcurrentModificationException
 					it.remove();
 				}
-				else {
+				else { // Multiple people want same Cell
 					List<Person> targeted = nextCell.getTargeted();
 					if(targeted != null && !targeted.isEmpty()) {
 						Person winner = targeted.get(0);
 						for(Person t : targeted) {
-							if(t.getCurrSpeed() > winner.getCurrSpeed())
+							if(t.getCurrSpeed() > winner.getCurrSpeed()) {
 								winner = t;
-						}
+							}
+						} // close for
 
 						// Update the CellManager
 						movePerson(winner, nextCell, currStep);
 
 						peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
 						//it.remove();
-					}
-				}
-			}
+					} // close targeted if
+				} // close else
+			} // close else
 		} // close Person for
 
 		peopleAvailable = true;
@@ -354,7 +362,8 @@ public class PedestrianSimulation {
 		return out;
 	}
 
-	public void infoForCell(int cellX, int cellY) {
+	public String infoForCell(int cellX, int cellY) {
+		String out = "";
 		Cell c = cm.getCell(cellX, cellY);
 		if(c != null) {
 			String line0 = "(" + cellX + ", " + cellY + ")\n";
@@ -366,9 +375,9 @@ public class PedestrianSimulation {
 				line3 += "NextTarget: " + c.getPerson().getNextTarget() + "\n";
 				line3 += "NextLocation: " + c.getPerson().getNextLocation() + "\n";
 			}
-			String text = line0 + line1 + line2 + line3;
-			vis.setTooltipText(text);
-		}
+			out = line0 + line1 + line2 + line3;
+		} // close null
+		return out;
 	}
 
 	public int getTimeStep() {
@@ -390,8 +399,41 @@ public class PedestrianSimulation {
 	 * @return True if the simulation is should continue, false otherwise
 	 */
 	public boolean continueSim() {
-		return true;
-		// TODO return (countPeopleInBuilding > 0 || people.size() < totalPeople);
+		boolean out = true;
+		switch(terminatingCondition) {
+		case TERM_CON_1:
+			out = terminatingConditionOne();
+			break;
+		case TERM_CON_2:
+			out = terminatingConditionTwo();
+			break;
+		} // close switch
+		return out;
+	}
+	
+	private boolean terminatingConditionOne() {
+		boolean out = false;
+		out = (countPeopleInBuilding > 0 || people.size() < totalPeople);
+		return out;
+	}
+	
+	/**
+	 * Checks to see if all the people have moved above (y-location) a line at
+	 * y-value = boundaryLine.
+	 * 
+	 * @return True if all the people are above the line and false otherwise
+	 */
+	private boolean terminatingConditionTwo() {
+		boolean out = true;
+		
+		for(Person p : people) {
+			Cell c = p.getLocation();
+			if(c != null && c.getY() > boundaryLine) {
+				out = false;
+				break;
+			}
+		}
+		return out;
 	}
 
 	/**

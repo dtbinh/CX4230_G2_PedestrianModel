@@ -55,7 +55,7 @@ public class VisualizationMain extends PApplet {
 		cTooltip = new CustomTooltip("Cell: ()", 20, 20, 250, 120);
 
 		timeStep = 0;
-		ps = new PedestrianSimulation(this);
+		ps = new PedestrianSimulation(this, true);
 	}
 
 
@@ -136,7 +136,7 @@ public class VisualizationMain extends PApplet {
 		
 		if(0 <= cellX && cellX < cellsWidth) {
 			if(0 <= cellY && cellY < cellsHeight) {
-				ps.infoForCell(cellX, cellY);
+				setTooltipText(ps.infoForCell(cellX, cellY));
 			}
 		}
 	} // close mouseClicked()
