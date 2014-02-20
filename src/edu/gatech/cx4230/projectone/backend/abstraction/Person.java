@@ -13,6 +13,7 @@ public class Person {
 	public static final int MIN_STRESS = 0;
 	public static final int MAX_SPEED = 1; // move every x time step
 	public static final int MIN_SPEED = 20; // move every x time steps
+	public static final double WAIT_INCREASE_STRESS = 0.05;
 	
 	private int id;
 	private Cell location;
@@ -45,6 +46,10 @@ public class Person {
 		stressLevel = startStress;
 		timeLastMove = startTime;
 		visitedTargets = new ArrayList<Cell>();
+	}
+	
+	public void increaseStress(double percent) {
+		stressLevel *= percent;
 	}
 	
 	public Cell getLocation() {
@@ -192,6 +197,10 @@ public class Person {
 		}
 		out += "\tSpeed: " + currSpeed + ")";
 		return out;
+	}
+	
+	public boolean equals(Person p) {
+		return (this.id == p.getId());
 	}
 	
 	public boolean hasVisitedTarget(Cell t) {
