@@ -105,7 +105,13 @@ public class PedestrianSimulation {
 		hadlock = new HadlockOperator(cm);
 
 		peopleAvailable = false;
-		simThread = new SimulationThread(PedestrianSimulation.this, 50, "Ped Sim Thread");
+		int wait = 0;
+		if(useVisualization) {
+			wait = 50;
+		} else {
+			wait = 0;
+		}
+		simThread = new SimulationThread(PedestrianSimulation.this, wait, "Ped Sim Thread");
 		simThread.start();
 	} // close constructor
 	
