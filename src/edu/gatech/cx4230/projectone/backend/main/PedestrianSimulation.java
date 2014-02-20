@@ -480,4 +480,39 @@ public class PedestrianSimulation {
 		this.timeChanged = in;
 	}
 
+	/**
+	 * @return the rng
+	 */
+	public AbstractRNG getRng() {
+		return rng;
+	}
+
+	/**
+	 * @param rng the rng to set
+	 */
+	public void setRng(AbstractRNG rng) {
+		this.rng = rng;
+	}
+
+	/**
+	 * @return the totalPeople
+	 */
+	public int getTotalPeople() {
+		return totalPeople;
+	}
+
+	/**
+	 * @return the countPeopleInBuilding
+	 */
+	public int getCountPeopleInBuilding() {
+		return countPeopleInBuilding;
+	}
+
+	/**
+	 * @return the simThread
+	 */
+	public SimulationThread getSimThread() {
+		return simThread;
+	}
+
 }
