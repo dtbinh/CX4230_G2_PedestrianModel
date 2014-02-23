@@ -16,6 +16,7 @@ import edu.gatech.cx4230.projectone.backend.scoring.HadlockOperator;
 import edu.gatech.cx4230.projectone.backend.scoring.Path;
 import edu.gatech.cx4230.projectone.backend.scoring.PathOrganizer;
 import edu.gatech.cx4230.projectone.backend.scoring.SimpleGraph;
+import edu.gatech.cx4230.projectone.backend.utilities.ListHelper;
 import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 
@@ -242,7 +243,8 @@ public class PedestrianSimulation {
 		for(Iterator<Person> it = people.iterator(); it.hasNext();) {
 			Person p = it.next();
 			if(p.isMoveable(currStep)) {
-				p = calculateNextMove(p);
+				calculateNextMove(p);
+				//p = calculateNextMove(p);
 				peopleToMove.add(p);
 			}
 		}
@@ -256,14 +258,19 @@ public class PedestrianSimulation {
 				// TODO If the next Cell hasn't been specified
 			} else {
 				nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
+				
 				if(nextCell.getTargeted().size() == 1) { // if no conflicts
-					// Update the CellManager
 					movePerson(p, nextCell, currStep);
 					it.remove();
 				}
 				else { // Multiple people want same Cell
 					List<Person> targeted = nextCell.getTargeted();
+					if(DEBUG) System.out.println("Conflicts for:" + nextCell );
+					
 					if(targeted != null && !targeted.isEmpty()) {
+						if(DEBUG) System.out.println(ListHelper.listToString(targeted));
+						if(DEBUG) System.out.println();
+						
 						Person winner = targeted.get(0);
 						for(Person t : targeted) {
 							if(t.getCurrSpeed() > winner.getCurrSpeed()) {
@@ -307,9 +314,6 @@ public class PedestrianSimulation {
 				List<Cell> personClosePath = hadlock.findPath(currCell, nextTarget);
 
 
-				// TODO p.setNextLocation(first cell in path to nextTarget) GIVEN checks
-				// checks include isTraversable() and !isOccupied(), but cell should be
-				// traversable because of Hadlock
 				if(personClosePath != null && personClosePath.size() >= 2) {
 					// The first cell in personClosePath should be the person's current cell
 					Cell nextCellInPath = personClosePath.get(1);
@@ -317,7 +321,45 @@ public class PedestrianSimulation {
 					int nextY = nextCellInPath.getY();
 					Cell nextFromCM = cm.getCell(nextX, nextY);
 					if(currCell.getManhattanDistance(nextFromCM) == 1) {
-						if(nextFromCM.isOccupied()) {
+						if(nextFromCM.isOccupied()) { // Try to move to different neighbor
+							if(DEBUG) System.out.println("Person " + p + " moving around " + nextFromCM);
+							// TODO Apply some probability to deviating from path
+							int dx = nextFromCM.getX() - currCell.getX();
+							int dy = nextFromCM.getY() - currCell.getY();
+							if(dx == 0) { // Wanting to move up/down
+								Cell left = cm.getNeighborLeft(currCell);
+								Cell right = cm.getNeighborRight(currCell);
+								boolean bLeft = left != null && left.isTraversable() && !left.isTraversable();
+								boolean bRight = right != null && right.isTraversable() && !right.isOccupied();
+								if(bLeft && bRight) {
+									
+								} else if(bLeft){
+									left.addToTargeted(p);
+									p.setNextLocation(left);
+									cm.setCellSmart(left);
+								} else if(bRight) {
+									right.addToTargeted(p);
+									p.setNextLocation(right);
+									cm.setCellSmart(right);
+								}
+								
+							} else if(dy == 0) { // Wanting to move left/right
+								Cell up = cm.getNeighborTop(currCell);
+								Cell down = cm.getNeighborBottom(currCell);
+								boolean bUp = up!=null && up.isTraversable() && !up.isOccupied();
+								boolean bDown = down!=null && down.isTraversable() && !down.isOccupied();
+								if(bUp && bDown) {
+									
+								} else if(bUp) {
+									up.addToTargeted(p);
+									p.setNextLocation(up);
+									cm.setCellSmart(up);
+								} else if(bDown) {
+									down.addToTargeted(p);
+									p.setNextLocation(down);
+									cm.setCellSmart(down);
+								}
+							} // close if(dy==0)
 							// TODO Something clever with conflicts
 							// Maybe test if the person is within X cells of the targetCell,
 							// and if so, maybe move on to the next target
@@ -327,10 +369,12 @@ public class PedestrianSimulation {
 							cm.setCellSmart(nextFromCM);
 						}
 					} else {
-						System.err.println("PS.calcNextMove() - Manhattan Distance != 1");
+						if(DEBUG) System.err.println("PS.calcNextMove() - Manhattan Distance != 1 for " + p);
 						// TODO There is some error
 					}
 
+				} else {
+					if(DEBUG)  System.out.println("PersonClosePath is either null or of size 1 for " + p);
 				}
 			} // close else
 
