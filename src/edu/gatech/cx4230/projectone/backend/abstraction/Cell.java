@@ -103,7 +103,7 @@ public class Cell implements Comparable<Cell> {
 	}
 	
 	public String toString() {
-		return "[(" + x + ", " + y + ")\t" + "DN: " + "]";
+		return "[(" + x + ", " + y + ") " + "Type: " + getType() + "]";
 	}
 	
 	public String csvInfo() {
