@@ -329,6 +329,7 @@ public class CellManager {
 			if(indexInBounds(oldX, oldY) && indexInBounds(newX,newY)) {
 				cells[oldY][oldX].setPerson(null);
 				cells[newY][newX].setPerson(p);
+				cells[newY][newX].clearTargeted();
 			}
 		}
 	}
