@@ -48,8 +48,19 @@ public class Person {
 		visitedTargets = new ArrayList<Cell>();
 	}
 	
+	/**
+	 * Increase the stress level by a specific percent.
+	 * @param percent
+	 */
 	public void increaseStress(double percent) {
-		stressLevel *= percent;
+		int newStress =(int) (stressLevel * (1 + percent));
+		if(MIN_STRESS <= newStress && newStress <= MAX_STRESS) {
+			stressLevel = newStress;
+		} else if(MIN_STRESS > newStress) {
+			stressLevel = MIN_STRESS;
+		} else if(MAX_STRESS < newStress) {
+			stressLevel = MAX_STRESS;
+		}
 	}
 	
 	public Cell getLocation() {
