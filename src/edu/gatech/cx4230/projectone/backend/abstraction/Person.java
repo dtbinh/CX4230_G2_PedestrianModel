@@ -59,12 +59,17 @@ public class Person {
 	private void setLocation(Cell newLocation) {
 		this.location = newLocation;
 		if(location.equals(nextTarget)) {
-			visitedTargets.add(nextTarget);
-			if(nextTargets.hasNext()) {
-				nextTarget = nextTargets.removeSource();
-			} else {
-				// TODO Person has reached last target
-			}
+			setToNextTarget();
+		}
+	}
+	
+	public void setToNextTarget() {
+		visitedTargets.add(nextTarget);
+		if(nextTargets.hasNext()) {
+			nextTarget = nextTargets.removeSource();
+		} else {
+			if(DEBUG) System.out.println(this.toString() + ": No NEXT Target");
+			// TODO Person has reached last target
 		}
 	}
 	
