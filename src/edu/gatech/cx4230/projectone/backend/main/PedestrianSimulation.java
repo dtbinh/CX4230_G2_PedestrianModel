@@ -248,7 +248,9 @@ public class PedestrianSimulation {
 				peopleToMove.add(p);
 			}
 		}
-		while(!peopleToMove.isEmpty()) {
+		
+		int moveAttempts = 0;
+		while(!peopleToMove.isEmpty() && ++moveAttempts <= 2) {
 			for(Iterator<Person> it = peopleToMove.iterator(); it.hasNext();) {
 				Person p = it.next();
 				// handle movement of people, potential collisions with other people, etc
@@ -440,18 +442,25 @@ public class PedestrianSimulation {
 			 swayCells[0] = cm.getNeighborTopLeft(currCell);
 			 swayCells[1] = cm.getNeighborBottomLeft(currCell);
 		}
+		else {
+			 swayCells[0] = currCell;
+			 swayCells[1] = currCell;
+		}
 		
-		// choose which way to "sway" based on which gets person closer to next target
-		if(swayCells[0].getDistanceToCell(p.getNextTarget()) < 
-				swayCells[1].getDistanceToCell(p.getNextTarget())) {
+		// choose which way to "sway" based on which cell gets person closer to next target
+		if(!swayCells[0].isOccupied() && 
+				(swayCells[0].getDistanceToCell(p.getNextTarget()) < 
+				swayCells[1].getDistanceToCell(p.getNextTarget()))) {
 			alternateNextCell = swayCells[0];
 		}
-		else {
+		else if (!swayCells[1].isOccupied()){
 			alternateNextCell = swayCells[1];
 		}
 		
 		p.setNextLocation(alternateNextCell);
-		alternateNextCell.addToTargeted(p);
+		if(!alternateNextCell.equals(currCell)) {
+			alternateNextCell.addToTargeted(p);
+		}
 	}
 	
 	
