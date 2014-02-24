@@ -28,7 +28,13 @@ public class JavaRNG extends AbstractRNG {
 	}
 
 	@Override
+	/**
+	 * Returns random integer across entire range of doubles.
+	 */
 	public double nextDouble() {
+		public int nextInt() {
+			long x = RNG();
+			return (double) x % Double.MAX_VALUE;
 	}
 
 	@Override
@@ -44,16 +50,21 @@ public class JavaRNG extends AbstractRNG {
 	}
 
 	@Override
-	//returns random number between 0 and 99.
+	/**
+	 * Returns random integer across entire range of ints.
+	 */
 	public int nextInt() {
 		long x = RNG();
-		return (int) x % 100;
+		return (int) x % 2147483647;
 	}
 
-	//Will do later.
 	@Override
+	/**
+	 * Returns random int between 0 (inclusive) and n (exclusive).
+	 */
 	public int nextInt(int n) {
-		return rand.nextInt(n);
+		long x = RNG();
+		return (int) x & n;
 	}
 
 }
