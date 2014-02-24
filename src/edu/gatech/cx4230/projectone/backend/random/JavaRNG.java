@@ -24,7 +24,7 @@ public class JavaRNG extends AbstractRNG {
 		b = c;
 		c = d;
 		d = (d ^ (d >>> 19) ^ (t ^ (t >>> 8)));
-		
+		return d;
 	}
 
 	@Override
@@ -32,7 +32,6 @@ public class JavaRNG extends AbstractRNG {
 	 * Returns random integer across entire range of doubles.
 	 */
 	public double nextDouble() {
-		public int nextInt() {
 			long x = RNG();
 			return (double) x % Double.MAX_VALUE;
 	}
@@ -43,7 +42,7 @@ public class JavaRNG extends AbstractRNG {
 	 */
 	public boolean nextBoolean() {
 		long x = RNG();
-		if (x % 2 = 0)
+		if (x % 2 == 0)
 			return true;
 		else return false;
 		
