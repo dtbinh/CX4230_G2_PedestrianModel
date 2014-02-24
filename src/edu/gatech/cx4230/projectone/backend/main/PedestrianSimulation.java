@@ -294,12 +294,13 @@ public class PedestrianSimulation {
 					} // close else
 				} // close else
 			} // close Person for
-		} // close while !peopleToMove.isEmpty
+		} // close while
 		
 		// For the people still waiting to move:
 		for(Person p: peopleToMove) {
 			p.increaseStress(0.05);
 		}
+		peopleToMove.clear();
 
 		peopleAvailable = true;
 	} // close movePeople()
