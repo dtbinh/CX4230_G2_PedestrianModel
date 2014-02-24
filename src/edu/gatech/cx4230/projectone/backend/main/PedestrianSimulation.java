@@ -341,6 +341,7 @@ public class PedestrianSimulation {
 			p.increaseStress(0.05);
 		}
 		peopleToMove.clear();
+		peopleInConflict.clear();
 
 		peopleAvailable = true;
 	} // close movePeople()
