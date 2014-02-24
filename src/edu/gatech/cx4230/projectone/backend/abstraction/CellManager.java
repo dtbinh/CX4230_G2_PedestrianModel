@@ -18,6 +18,10 @@ import edu.gatech.cx4230.projectone.backend.utilities.MathHelper;
 public class CellManager {
 	private Cell[][] cells;
 	public static final double NEIGHBOR_PENALTY = 0.05;
+	public static final int NORTH = 0;
+	public static final int SOUTH = 1;
+	public static final int EAST = 2;
+	public static final int WEST = 3;
 
 	public CellManager(Cell[][] cells) {
 		this.cells = cells;
@@ -391,5 +395,25 @@ public class CellManager {
 		}
 		return out;
 		
+	}
+	
+	public int getMovementDirection(Cell fromCell, Cell toCell) {
+		int direction = -1;
+		
+		if(fromCell != null && toCell != null) {
+			if(fromCell.getID() == toCell.getID() - 1){ // toCell is East of fromCell
+				direction = EAST;
+			}
+			else if(fromCell.getID() == toCell.getID() + 1){ // toCell is West of fromCell
+				direction = WEST;
+			}
+			else if(fromCell.getID() < toCell.getID()){ // toCell is South of fromCell
+				direction = SOUTH;
+			}
+			else if(fromCell.getID() > toCell.getID()){ // toCell is North of fromCell
+				direction = NORTH;
+			}
+		}
+		return direction;
 	}
 }

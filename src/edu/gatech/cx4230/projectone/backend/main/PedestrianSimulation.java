@@ -248,50 +248,63 @@ public class PedestrianSimulation {
 				peopleToMove.add(p);
 			}
 		}
-
-		for(Iterator<Person> it = peopleToMove.iterator(); it.hasNext();) {
-			Person p = it.next();
-			// handle movement of people, potential collisions with other people, etc
-			Cell nextCell = p.getNextLocation();
-			if(nextCell == null) {
-				//if(DEBUG) System.err.println("PS.movePerson() Line 234 - nextCell is null");
-				// TODO If the next Cell hasn't been specified
-			} else {
-				nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
-				
-				if(nextCell.getTargeted().size() == 1) { // if no conflicts
-					movePerson(p, nextCell, currStep);
-					it.remove();
-				}
-				else { // Multiple people want same Cell
-					List<Person> targeted = nextCell.getTargeted();
-					if(DEBUG) System.out.println("Conflicts for:" + nextCell );
+		
+		int moveAttempts = 0;
+		while(!peopleToMove.isEmpty() && ++moveAttempts <= 2) {
+			for(Iterator<Person> it = peopleToMove.iterator(); it.hasNext();) {
+				Person p = it.next();
+				// handle movement of people, potential collisions with other people, etc
+				Cell nextCell = p.getNextLocation();
+				if(nextCell == null) {
+					//if(DEBUG) System.err.println("PS.movePerson() Line 234 - nextCell is null");
+					// TODO If the next Cell hasn't been specified
+				} else {
+					nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
 					
-					if(targeted != null && !targeted.isEmpty()) {
-						if(DEBUG) System.out.println(ListHelper.listToString(targeted));
-						if(DEBUG) System.out.println();
+					if(nextCell.getTargeted().size() == 1) { // if no conflicts
+						movePerson(p, nextCell, currStep);
+						it.remove();
+					}
+					else { // Multiple people want same Cell
+						List<Person> targeted = nextCell.getTargeted();
+						if(DEBUG) System.out.println("Conflicts for:" + nextCell );
 						
-						Person winner = targeted.get(0);
-						for(Person t : targeted) {
-							if(t.getCurrSpeed() > winner.getCurrSpeed()) {
-								winner = t;
-							}
-						} // close for
-
-						// Update the CellManager
-						movePerson(winner, nextCell, currStep);
-
-						peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
-						//it.remove();
-					} // close targeted if
+						if(targeted != null && !targeted.isEmpty()) {
+							if(DEBUG) System.out.println(ListHelper.listToString(targeted));
+							if(DEBUG) System.out.println();
+							
+							Person winner = targeted.get(0);
+							for(Person t : targeted) {
+								if(t.getCurrSpeed() > winner.getCurrSpeed()) {
+									winner = t;
+								}
+							} // close for
+	
+							// Update the CellManager
+							movePerson(winner, nextCell, currStep);
+							
+							//peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
+							peopleToMove.remove(winner);
+							//it.remove();
+						} // close targeted if
+					} // close else
 				} // close else
-			} // close else
-		} // close Person for
+			} // close Person for
+			
+			// calculate alternative moves for people who had conflicts
+			if(moveAttempts < 2) {
+				for(Person p : peopleToMove) { // people that couldn't move because of conflict
+					calculateAlternativeMove(p, p.getNextLocation());
+				}
+			}
+
+		} // close while
 		
 		// For the people still waiting to move:
 		for(Person p: peopleToMove) {
 			p.increaseStress(0.05);
 		}
+		peopleToMove.clear();
 
 		peopleAvailable = true;
 	} // close movePeople()
@@ -406,6 +419,56 @@ public class PedestrianSimulation {
 		return p;
 	} // close calculateNextMove()
 
+	/**
+	 * 
+	 * @param p the Person that is trying to move
+	 * @param nextCell the preferred nextCell that is unavailable due to conflict
+	 */
+	private void calculateAlternativeMove(Person p, Cell nextCell) {
+		Cell currCell = p.getLocation();
+		Cell alternateNextCell = currCell;
+		int direction = cm.getMovementDirection(currCell, nextCell);
+		Cell[] swayCells = new Cell[2];
+		
+		// find "sway" cells 
+		if(direction == cm.NORTH) {
+			 swayCells[0] = cm.getNeighborTopRight(currCell);
+			 swayCells[1] = cm.getNeighborTopLeft(currCell);
+		}
+		else if(direction == cm.SOUTH) {
+			 swayCells[0] = cm.getNeighborBottomRight(currCell);
+			 swayCells[1] = cm.getNeighborBottomLeft(currCell);
+		}
+		else if(direction == cm.EAST) {
+			 swayCells[0] = cm.getNeighborTopRight(currCell);
+			 swayCells[1] = cm.getNeighborBottomRight(currCell);
+		}				
+		else if(direction == cm.WEST) {
+			 swayCells[0] = cm.getNeighborTopLeft(currCell);
+			 swayCells[1] = cm.getNeighborBottomLeft(currCell);
+		}
+		else {
+			 swayCells[0] = currCell;
+			 swayCells[1] = currCell;
+		}
+		
+		// choose which way to "sway" based on which cell gets person closer to next target
+		if(!swayCells[0].isOccupied() && 
+				(swayCells[0].getDistanceToCell(p.getNextTarget()) < 
+				swayCells[1].getDistanceToCell(p.getNextTarget()))) {
+			alternateNextCell = swayCells[0];
+		}
+		else if (!swayCells[1].isOccupied()){
+			alternateNextCell = swayCells[1];
+		}
+		
+		p.setNextLocation(alternateNextCell);
+		if(!alternateNextCell.equals(currCell)) {
+			alternateNextCell.addToTargeted(p);
+		}
+	}
+	
+	
 	private int getIndexOfFirstTraversable(List<Cell> cells) {
 		int out = -1;
 		for(int i = 0; i < cells.size(); i++) {
