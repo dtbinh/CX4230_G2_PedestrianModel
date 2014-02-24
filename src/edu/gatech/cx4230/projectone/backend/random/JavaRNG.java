@@ -3,37 +3,68 @@ package edu.gatech.cx4230.projectone.backend.random;
 import java.util.Random;
 
 /**
- * Random number generator which uses Java's built in Random object.  This
- * object is not for use with the final project, but is instead meant to be
- * used as a test RNG during development.
- * @author tbowling3
+ * RNG using xorshift.
+ * @author telliott8
  *
  */
 public class JavaRNG extends AbstractRNG {
 	private Random rand;
 	
-	public JavaRNG() {
-		rand = new Random();
+	
+	public JavaRNG() {}
+	
+	private long RNG() {
+		long a = System.nanoTime() % 100000;
+		long b = System.nanoTime() % 200000;
+		long c = System.nanoTime() % 400000;
+		long d = System.nanoTime() % 800000;
+		
+		long t = a ^ (a << 11);
+		a = b;
+		b = c;
+		c = d;
+		d = (d ^ (d >>> 19) ^ (t ^ (t >>> 8)));
+		
 	}
 
 	@Override
+	/**
+	 * Returns random integer across entire range of doubles.
+	 */
 	public double nextDouble() {
-		return rand.nextDouble();
+		public int nextInt() {
+			long x = RNG();
+			return (double) x % Double.MAX_VALUE;
 	}
 
 	@Override
+	/**
+	 * Returns true if randomly generated number is even.
+	 */
 	public boolean nextBoolean() {
-		return rand.nextBoolean();
+		long x = RNG();
+		if (x % 2 = 0)
+			return true;
+		else return false;
+		
 	}
 
 	@Override
+	/**
+	 * Returns random integer across entire range of ints.
+	 */
 	public int nextInt() {
-		return rand.nextInt();
+		long x = RNG();
+		return (int) x % 2147483647;
 	}
 
 	@Override
+	/**
+	 * Returns random int between 0 (inclusive) and n (exclusive).
+	 */
 	public int nextInt(int n) {
-		return rand.nextInt(n);
+		long x = RNG();
+		return (int) x & n;
 	}
 
 }
