@@ -285,15 +285,19 @@ public class PedestrianSimulation {
 							
 							//peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
 							peopleToMove.remove(winner);
-							targeted.remove(winner);
-							for(Person t : targeted) { // people that couldn't move because of conflict
-								calculateAlternativeMove(t, nextCell);
-							}
 							//it.remove();
 						} // close targeted if
 					} // close else
 				} // close else
 			} // close Person for
+			
+			// calculate alternative moves for people who had conflicts
+			if(moveAttempts < 2) {
+				for(Person p : peopleToMove) { // people that couldn't move because of conflict
+					calculateAlternativeMove(p, p.getNextLocation());
+				}
+			}
+
 		} // close while
 		
 		// For the people still waiting to move:
