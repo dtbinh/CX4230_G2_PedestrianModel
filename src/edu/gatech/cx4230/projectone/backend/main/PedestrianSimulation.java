@@ -422,6 +422,9 @@ public class PedestrianSimulation {
 	} // close calculateNextMove()
 
 	/**
+	 * calculateAlternativeMove finds a "sway" cell (to the left or right of the desired cell) if it is available.
+	 * this method assumes that the desired movement was in the N,S,E, or W direction,
+	 * and gives a "sway" cell the would produce diagonal movement (NW, NE, SW, SE).
 	 * 
 	 * @param p the Person that is trying to move
 	 * @param nextCell the preferred nextCell that is unavailable due to conflict

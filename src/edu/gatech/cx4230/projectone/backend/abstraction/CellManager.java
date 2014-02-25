@@ -18,10 +18,13 @@ import edu.gatech.cx4230.projectone.backend.utilities.MathHelper;
 public class CellManager {
 	private Cell[][] cells;
 	public static final double NEIGHBOR_PENALTY = 0.05;
+	public static final int NONE = -1;
 	public static final int NORTH = 0;
 	public static final int SOUTH = 1;
 	public static final int EAST = 2;
 	public static final int WEST = 3;
+	public static final int DIAGONAL = 4;
+	
 
 	public CellManager(Cell[][] cells) {
 		this.cells = cells;
@@ -399,8 +402,34 @@ public class CellManager {
 	
 	public int getMovementDirection(Cell fromCell, Cell toCell) {
 		int direction = -1;
+		int oldX = fromCell.getX();
+		int oldY = fromCell.getY();
+		int newX = toCell.getX();
+		int newY = toCell.getY();
 		
-		if(fromCell != null && toCell != null) {
+		if(oldX == newX && oldY == newY) {
+			direction = NONE;
+		}
+		else if(oldX == newX && oldY < newY) {
+			direction = SOUTH;
+		}
+		else if(oldX == newX && oldY > newY) {
+			direction = NORTH;
+		}
+		else if(oldX < newX && oldY == newY) {
+			direction = EAST;
+		}
+		else if(oldX > newX && oldY == newY) {
+			direction = WEST;
+		}
+		else {
+			direction = DIAGONAL;
+		}
+		
+		/*
+		 //method based on assumption that cells are generated left to right, top to bottom
+		 //method assumes that movement is either in N (up), S (down), E (right), or W (left) direction
+		 if(fromCell != null && toCell != null) {
 			if(fromCell.getID() == toCell.getID() - 1){ // toCell is East of fromCell
 				direction = EAST;
 			}
@@ -413,7 +442,7 @@ public class CellManager {
 			else if(fromCell.getID() > toCell.getID()){ // toCell is North of fromCell
 				direction = NORTH;
 			}
-		}
+		}*/
 		return direction;
 	}
 }
