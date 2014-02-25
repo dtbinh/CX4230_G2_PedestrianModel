@@ -1,7 +1,9 @@
 package edu.gatech.cx4230.projectone.backend.main;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
@@ -107,7 +109,8 @@ public class PedestrianSimulation {
 		
 		
 		if(oldImplementation) {
-			cm.setCellsScoresAlternateMethod(targets);
+			//cm.setCellsScoresAlternateMethod(targets);
+			setCellsScoresAlternateMethod();
 		}
 
 		peopleAvailable = false;
@@ -124,6 +127,47 @@ public class PedestrianSimulation {
 	public PedestrianSimulation() {
 		this(null, false);
 	}
+
+	private void setCellsScoresAlternateMethod() {
+		Cell[][] cells = cm.getCells();
+		for(int j = 0; j < cells.length; j++) {
+			for(int i = 0; i < cells[j].length; i++) {
+				cells[j][i].setScore(Double.MAX_VALUE); // Lower score means more desirable
+			}
+		}
+		
+		LinkedList<Cell> cellsToBeScored = new LinkedList<Cell>();
+		HashSet<Cell> cellsScored = new HashSet<Cell>();
+		ArrayList<Cell> neighbors = new ArrayList<Cell>();
+		
+		for(Cell t : targets) {
+			cellsToBeScored.add(t);
+			while(!cellsToBeScored.isEmpty()) {
+				Cell c = cellsToBeScored.removeFirst();
+				if(c != null && !cellsScored.contains(c)) {
+					cellsScored.add(c);
+					double score = getTraversibleDistance(c,t);
+					
+					if(score < c.getScore()) {
+						// set cell score
+						c.setScore(score);
+					}
+					neighbors = cm.getAllTraversableNeighbors(c);
+					cellsToBeScored.addAll(neighbors);
+				}
+			}
+			cellsScored.clear();
+			cellsToBeScored.clear();
+		}
+	}
+	
+	public double getTraversibleDistance(Cell here, Cell target) {
+		//double distance = here.getDistanceToCell(target);
+		double distance = Double.MAX_VALUE;
+		
+		return distance;
+	}
+	
 
 	/**
 	 * spawnPerson

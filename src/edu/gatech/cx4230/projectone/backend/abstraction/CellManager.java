@@ -234,10 +234,11 @@ public class CellManager {
 		} // close height for
 	} // close method
 	
-	/**
+	/*
 	 * Iterates over all the cells in Cell[][] and sets the score for each cell.  
 	 * @param targets
-	 */
+	 *	
+	//Moved to PedestrianSimulation 
 	public void setCellsScoresAlternateMethod(List<Cell> targets) {
 		
 		for(int j = 0; j < cells.length; j++) {
@@ -256,11 +257,8 @@ public class CellManager {
 				Cell c = cellsToBeScored.removeFirst();
 				if(c != null && !cellsScored.contains(c)) {
 					cellsScored.add(c);
-					double score = c.getDistanceToCell(t);
-					// Correction for Edge cells
-					int travNeighborCount = getAllTraversableNeighbors(c).size();
-					int unpassable = 8 - travNeighborCount; // the number of untraversable neighboring cells
-					score += unpassable;
+					double score = getTraversibleDistance(c,t);
+					
 					if(score < c.getScore()) {
 						// set cell score
 						c.setScore(score);
@@ -272,7 +270,7 @@ public class CellManager {
 			cellsScored.clear();
 			cellsToBeScored.clear();
 		}
-	}
+	}*/
 
 	public void setScoreForCell(int x, int y, double score) {
 		if(indexInBounds(x,y)) {
@@ -486,4 +484,5 @@ public class CellManager {
 		}*/
 		return direction;
 	}
+	
 }
