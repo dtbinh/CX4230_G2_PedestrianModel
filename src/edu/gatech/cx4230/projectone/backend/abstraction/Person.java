@@ -28,6 +28,7 @@ public class Person {
 	private List<Cell> visitedTargets;
 	private Cell nextTarget;
 	private Path nextTargets;
+	private boolean finished = false;
 	public static final boolean DEBUG = true;
 	
 	/**
@@ -65,6 +66,21 @@ public class Person {
 		}
 	}
 	
+	/**
+	 * Decrease the stress level by a specific percent.
+	 * @param percent
+	 */
+	public void decreaseStress(double percent) {
+		int newStress =(int) (stressLevel * (1 - percent));
+		if(MIN_STRESS <= newStress && newStress <= MAX_STRESS) {
+			stressLevel = newStress;
+		} else if(MIN_STRESS > newStress) {
+			stressLevel = MIN_STRESS;
+		} else if(MAX_STRESS < newStress) {
+			stressLevel = MAX_STRESS;
+		}
+	}
+	
 	public Cell getLocation() {
 		return location;
 	}
@@ -82,7 +98,7 @@ public class Person {
 			nextTarget = nextTargets.removeSource();
 		} else {
 			if(DEBUG) System.out.println(this.toString() + ": No NEXT Target");
-			// TODO Person has reached last target
+			finished  = true;
 		}
 	}
 	
@@ -201,6 +217,10 @@ public class Person {
 
 	public boolean isMoveable(int time) {
 		return (time - timeLastMove) >= currSpeed;
+	}
+	
+	public boolean isFinished() {
+		return finished;
 	}
 	
 	public void move(int time, Cell newLocation) {

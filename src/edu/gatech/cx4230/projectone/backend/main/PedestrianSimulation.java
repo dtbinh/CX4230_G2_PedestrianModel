@@ -1,5 +1,6 @@
 package edu.gatech.cx4230.projectone.backend.main;
 
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,6 +35,9 @@ public class PedestrianSimulation {
 
 	// list of people to move at each time step
 	private List<Person> peopleToMove;
+	
+	// list of people who have exited the simulation
+	private ArrayList<Person> finishedPeople;
 
 	// Manager for the 2-D grid of cells in the simulation
 	private CellManager cm;
@@ -66,6 +70,7 @@ public class PedestrianSimulation {
 	public static final boolean DEBUG = true;
 
 	private boolean useVisualization;
+
 
 	public PedestrianSimulation(VisualizationMain vis, boolean visBol) {
 		this.useVisualization = visBol;
@@ -358,7 +363,7 @@ public class PedestrianSimulation {
 			
 		// For the people still waiting to move:
 		for(Person p: peopleToMove) {
-			p.increaseStress(0.05);
+			p.increaseStress(0.5);
 		}
 		peopleToMove.clear();
 		peopleInConflict.clear();
@@ -373,7 +378,13 @@ public class PedestrianSimulation {
 		int newX = nextCell.getX();
 		int newY = nextCell.getY();
 		p.move(currStep, nextCell);
+		p.decreaseStress(0.05);
 		cm.movePerson(p, oldX, oldY, newX, newY);
+		
+		if(p.isFinished()) {
+			people.remove(p);
+			finishedPeople.add(p);
+		}
 	}
 
 	private void calculatePanicMove(Person p) {
