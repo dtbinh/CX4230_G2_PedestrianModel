@@ -257,7 +257,12 @@ public class CellManager {
 				if(c != null && !cellsScored.contains(c)) {
 					cellsScored.add(c);
 					double score = c.getDistanceToCell(t);
+					// Correction for Edge cells
+					int travNeighborCount = getAllTraversableNeighbors(c).size();
+					int unpassable = 8 - travNeighborCount; // the number of untraversable neighboring cells
+					score += unpassable;
 					if(score < c.getScore()) {
+						// set cell score
 						c.setScore(score);
 					}
 					neighbors = this.getAllTraversableNeighbors(c);

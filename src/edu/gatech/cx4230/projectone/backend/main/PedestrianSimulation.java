@@ -85,7 +85,7 @@ public class PedestrianSimulation {
 
 		// Load and Set target cells
 		SimpleGraph graph = new SimpleGraph(cm);
-		List<Cell> crosswalks = graph.getCrosswalkWaypoints();
+		// crosswalks = graph.getCrosswalkWaypoints();
 		targets = graph.getSinks();
 		sources = graph.getSources();
 		nodes = graph.getNodes();
@@ -107,7 +107,6 @@ public class PedestrianSimulation {
 		
 		
 		if(oldImplementation) {
-			//targets.removeAll(crosswalks);
 			cm.setCellsScoresAlternateMethod(targets);
 		}
 
