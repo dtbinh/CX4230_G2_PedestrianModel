@@ -14,6 +14,8 @@ public class Person {
 	public static final int MAX_SPEED = 1; // move every x time step
 	public static final int MIN_SPEED = 20; // move every x time steps
 	public static final double WAIT_INCREASE_STRESS = 0.05;
+	public static final int PANIC_THRESHOLD = 500;
+
 	
 	private int id;
 	private Cell location;

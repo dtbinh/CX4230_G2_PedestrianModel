@@ -59,6 +59,7 @@ public class HadlockOperator {
 
 				c = cpq.poll();
 				List<Cell> cNeighbors = cmThis.getCardinalTraversableNeighbors(c);
+				Collections.shuffle(cNeighbors);
 				int cMD = (int) c.getManhattanDistance(dest);
 
 				Cell dnMin = getManhattanDistanceCell(cNeighbors);

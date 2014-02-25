@@ -24,7 +24,7 @@ import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 public class PedestrianSimulation {
 
-	public static final int BUILDING_CAPACITY = 15;
+	public static final int BUILDING_CAPACITY = 150;
 	
 	private int totalPeople;
 	private int countPeopleInBuilding;
@@ -64,6 +64,7 @@ public class PedestrianSimulation {
 	public static final boolean oldImplementation = false;
 
 	public static final boolean DEBUG = true;
+
 	private boolean useVisualization;
 
 	public PedestrianSimulation(VisualizationMain vis, boolean visBol) {
@@ -162,8 +163,8 @@ public class PedestrianSimulation {
 	}
 	
 	public double getTraversibleDistance(Cell here, Cell target) {
-		//double distance = here.getDistanceToCell(target);
-		double distance = Double.MAX_VALUE;
+		double distance = here.getDistanceToCell(target);
+		//double distance = Double.MAX_VALUE;
 		
 		return distance;
 	}
@@ -292,7 +293,12 @@ public class PedestrianSimulation {
 		for(Iterator<Person> it = people.iterator(); it.hasNext();) {
 			Person p = it.next();
 			if(p.isMoveable(currStep)) {
-				calculateNextMove(p);
+				if(p.getStressLevel() >= Person.PANIC_THRESHOLD) {
+					calculatePanicMove(p);
+				}
+				else {
+					calculateNextMove(p);
+				}
 				//p = calculateNextMove(p);
 				peopleToMove.add(p);
 			}
@@ -368,6 +374,18 @@ public class PedestrianSimulation {
 		int newY = nextCell.getY();
 		p.move(currStep, nextCell);
 		cm.movePerson(p, oldX, oldY, newX, newY);
+	}
+
+	private void calculatePanicMove(Person p) {
+		Cell currCell = p.getLocation();
+		Cell nextCell = currCell;
+		ArrayList<Cell> neighbors = cm.getAllTraversableNeighbors(currCell);
+		int choice = rng.nextInt(9);
+		if(choice < neighbors.size()) {
+			nextCell = neighbors.get(choice);
+			nextCell.addToTargeted(p);
+		}
+		p.setNextLocation(nextCell);
 	}
 
 	public Person calculateNextMove(Person p) {
