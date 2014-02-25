@@ -365,6 +365,7 @@ public class PedestrianSimulation {
 		for(Person p: peopleToMove) {
 			p.increaseStress(0.5);
 		}
+					
 		peopleToMove.clear();
 		peopleInConflict.clear();
 
@@ -736,6 +737,11 @@ public class PedestrianSimulation {
 	 */
 	public SimulationThread getSimThread() {
 		return simThread;
+	}
+
+	public EndSimulationResult getEndSimulationResult() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
