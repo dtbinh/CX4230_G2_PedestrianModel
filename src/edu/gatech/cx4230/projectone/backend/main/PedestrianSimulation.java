@@ -61,7 +61,7 @@ public class PedestrianSimulation {
 	private PathOrganizer pathOrganizer;
 	private HadlockOperator hadlock;
 	private DjikstraOperator dOp;
-	public static final boolean oldImplementation = true;
+	public static final boolean oldImplementation = false;
 
 	public static final boolean DEBUG = true;
 	private boolean useVisualization;
