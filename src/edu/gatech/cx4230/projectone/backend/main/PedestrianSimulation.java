@@ -85,7 +85,7 @@ public class PedestrianSimulation {
 
 		// Load and Set target cells
 		SimpleGraph graph = new SimpleGraph(cm);
-		//		crosswalks = graph.getCrosswalkWaypoints();
+		List<Cell> crosswalks = graph.getCrosswalkWaypoints();
 		targets = graph.getSinks();
 		sources = graph.getSources();
 		nodes = graph.getNodes();
@@ -104,6 +104,12 @@ public class PedestrianSimulation {
 		doors = ds.getScenario(DOOR_SCENARIO);
 		cm.setCells(doors);
 		hadlock = new HadlockOperator(cm);
+		
+		
+		if(oldImplementation) {
+			//targets.removeAll(crosswalks);
+			cm.setCellsScoresAlternateMethod(targets);
+		}
 
 		peopleAvailable = false;
 		int wait = 0;

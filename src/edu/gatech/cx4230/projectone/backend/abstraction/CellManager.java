@@ -242,7 +242,7 @@ public class CellManager {
 		
 		for(int j = 0; j < cells.length; j++) {
 			for(int i = 0; i < cells[j].length; i++) {
-				cells[i][j].setScore(Double.MAX_VALUE); // Lower score means more desirable
+				cells[j][i].setScore(Double.MAX_VALUE); // Lower score means more desirable
 			}
 		}
 		
