@@ -250,91 +250,56 @@ public class PedestrianSimulation {
 		}
 		
 		ArrayList<Person> peopleInConflict = new ArrayList<Person>();
-		for(Iterator<Person> it = peopleToMove.iterator(); it.hasNext();) {
-			Person p = it.next();
-			// handle movement of people, potential collisions with other people, etc
-			Cell nextCell = p.getNextLocation();
-			if(nextCell == null) {
-				//if(DEBUG) System.err.println("PS.movePerson() Line 234 - nextCell is null");
-				// TODO If the next Cell hasn't been specified
-			} else {
-				nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
-				
-				if(nextCell.getTargeted().size() == 1) { // if no conflicts
-					movePerson(p, nextCell, currStep);
-					it.remove();
-				}
-				else { // Multiple people want same Cell
-					List<Person> targeted = nextCell.getTargeted();
-					if(DEBUG) System.out.println("Conflicts for:" + nextCell );
-					
-					if(targeted != null && !targeted.isEmpty()) {
-						if(DEBUG) System.out.println(ListHelper.listToString(targeted));
-						if(DEBUG) System.out.println();
-						
-						Person winner = targeted.get(0);
-						for(Person t : targeted) {
-							if(t.getCurrSpeed() > winner.getCurrSpeed()) {
-								winner = t;
-							}
-						} // close for
-
-						// Update the CellManager
-						movePerson(winner, nextCell, currStep);
-						
-						peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
-						//peopleToMove.remove(winner);
-						targeted.remove(winner);
-						peopleInConflict.addAll(targeted);
-						//it.remove();
-					} // close targeted if
-				} // close else
-			} // close else
-		} // close Person for
 		
-		// calculate alternative moves for people who had conflicts
-		for(Person p : peopleInConflict) { // people that couldn't move because of conflict
-			calculateAlternativeMove(p, p.getNextLocation());
-		}
-	
-		for(Iterator<Person> it = peopleInConflict.iterator(); it.hasNext();) {
-			Person p = it.next();
-			// handle movement of people, potential collisions with other people, etc
-			Cell nextCell = p.getNextLocation();
-			if(nextCell == null) {
-				//if(DEBUG) System.err.println("PS.movePerson() Line 234 - nextCell is null");
-				// TODO If the next Cell hasn't been specified
-			} else {
-				nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
-				
-				if(nextCell.getTargeted().size() == 1) { // if no conflicts
-					movePerson(p, nextCell, currStep);
-					it.remove();
-				}
-				else { // Multiple people want same Cell
-					List<Person> targeted = nextCell.getTargeted();
-					if(DEBUG) System.out.println("Conflicts for:" + nextCell );
+		for(int i = 0; i < 2; i++) { // max 2 attempts for a person to move in this time step
+			for(Iterator<Person> it = peopleToMove.iterator(); it.hasNext();) {
+				Person p = it.next();
+				// handle movement of people, potential collisions with other people, etc
+				Cell nextCell = p.getNextLocation();
+				if(nextCell == null) {
+					//if(DEBUG) System.err.println("PS.movePerson() Line 234 - nextCell is null");
+					// TODO If the next Cell hasn't been specified
+				} else {
+					nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
 					
-					if(targeted != null && !targeted.isEmpty()) {
-						if(DEBUG) System.out.println(ListHelper.listToString(targeted));
-						if(DEBUG) System.out.println();
+					if(nextCell.getTargeted().size() == 1) { // if no conflicts
+						movePerson(p, nextCell, currStep);
+						it.remove();
+					}
+					else { // Multiple people want same Cell
+						List<Person> targeted = nextCell.getTargeted();
+						if(DEBUG) System.out.println("Conflicts for:" + nextCell );
 						
-						Person winner = targeted.get(0);
-						for(Person t : targeted) {
-							if(t.getCurrSpeed() > winner.getCurrSpeed()) {
-								winner = t;
-							}
-						} // close for
-
-						// Update the CellManager
-						movePerson(winner, nextCell, currStep);
-						
-						peopleInConflict.remove(targeted); // this assumes "losers" will wait until next time step
-						//it.remove();
-					} // close targeted if
+						if(targeted != null && !targeted.isEmpty()) {
+							if(DEBUG) System.out.println(ListHelper.listToString(targeted));
+							if(DEBUG) System.out.println();
+							
+							Person winner = targeted.get(0);
+							for(Person t : targeted) {
+								if(t.getCurrSpeed() > winner.getCurrSpeed()) {
+									winner = t;
+								}
+							} // close for
+	
+							// Update the CellManager
+							movePerson(winner, nextCell, currStep);
+							
+							peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
+							//peopleToMove.remove(winner);
+							targeted.remove(winner);
+							peopleInConflict.addAll(targeted);
+							//it.remove();
+						} // close targeted if
+					} // close else
 				} // close else
-			} // close else
-		} // close Person for
+			} // close Person for
+			
+			// calculate alternative moves for people who had conflicts
+			for(Person p : peopleInConflict) { // people that couldn't move because of conflict
+				calculateAlternativeMove(p, p.getNextLocation());
+			}
+			peopleToMove = peopleInConflict;
+		}
 			
 		// For the people still waiting to move:
 		for(Person p: peopleToMove) {
