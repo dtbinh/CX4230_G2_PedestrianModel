@@ -59,7 +59,7 @@ public class PedestrianSimulation {
 	private PathOrganizer pathOrganizer;
 	private HadlockOperator hadlock;
 	private DjikstraOperator dOp;
-	public static final boolean oldImplementation = false;
+	public static final boolean oldImplementation = true;
 
 	public static final boolean DEBUG = true;
 	private boolean useVisualization;
@@ -325,89 +325,113 @@ public class PedestrianSimulation {
 		// determine Person's most desirable next move
 		Cell currCell = p.getLocation();
 		if(currCell != null) {
-			// TODO Calculate path to nextTarget using Hadlock
-			Cell nextTarget = p.getNextTarget();
-			hadlock.setCm(cm);
-			if(nextTarget == null) {
-				if(DEBUG) System.err.println("PS.calcNextMove() Line 286 - Person.nextTarget is null");
-			} else {
-				List<Cell> personClosePath = hadlock.findPath(currCell, nextTarget);
-
-
-				if(personClosePath != null && personClosePath.size() >= 2) {
-					// The first cell in personClosePath should be the person's current cell
-					Cell nextCellInPath = personClosePath.get(1);
-					int nextX = nextCellInPath.getX();
-					int nextY = nextCellInPath.getY();
-					Cell nextFromCM = cm.getCell(nextX, nextY);
-					if(currCell.getManhattanDistance(nextFromCM) == 1) {
-						if(nextFromCM.isOccupied()) { // Try to move to different neighbor
-							if(DEBUG) System.out.println("Person " + p + " moving around " + nextFromCM);
-							// TODO Apply some probability to deviating from path
-							int dx = nextFromCM.getX() - currCell.getX();
-							int dy = nextFromCM.getY() - currCell.getY();
-							if(dx == 0) { // Wanting to move up/down
-								Cell left = cm.getNeighborLeft(currCell);
-								Cell right = cm.getNeighborRight(currCell);
-								boolean bLeft = left != null && left.isTraversable() && !left.isTraversable();
-								boolean bRight = right != null && right.isTraversable() && !right.isOccupied();
-								if(bLeft && bRight) {
-									
-								} else if(bLeft){
-									left.addToTargeted(p);
-									p.setNextLocation(left);
-									cm.setCellSmart(left);
-								} else if(bRight) {
-									right.addToTargeted(p);
-									p.setNextLocation(right);
-									cm.setCellSmart(right);
-								}
-								
-							} else if(dy == 0) { // Wanting to move left/right
-								Cell up = cm.getNeighborTop(currCell);
-								Cell down = cm.getNeighborBottom(currCell);
-								boolean bUp = up!=null && up.isTraversable() && !up.isOccupied();
-								boolean bDown = down!=null && down.isTraversable() && !down.isOccupied();
-								if(bUp && bDown) {
-									
-								} else if(bUp) {
-									up.addToTargeted(p);
-									p.setNextLocation(up);
-									cm.setCellSmart(up);
-								} else if(bDown) {
-									down.addToTargeted(p);
-									p.setNextLocation(down);
-									cm.setCellSmart(down);
-								}
-							} // close if(dy==0)
-							// TODO Something clever with conflicts
-							// Maybe test if the person is within X cells of the targetCell,
-							// and if so, maybe move on to the next target
-						} else { // The next cell is empty, person can move (probably)
-							nextFromCM.addToTargeted(p);
-							p.setNextLocation(nextFromCM);
-							cm.setCellSmart(nextFromCM);
-						}
-					} else {
-						if(DEBUG) System.err.println("PS.calcNextMove() - Manhattan Distance != 1 for " + p);
-						// TODO There is some error
-					}
-
+			if (!oldImplementation) {
+				// TODO Calculate path to nextTarget using Hadlock
+				Cell nextTarget = p.getNextTarget();
+				hadlock.setCm(cm);
+				if (nextTarget == null) {
+					if (DEBUG)
+						System.err
+								.println("PS.calcNextMove() Line 286 - Person.nextTarget is null");
 				} else {
-					if(DEBUG)  System.out.println("PersonClosePath is either null or of size 1 for " + p);
-				}
-			} // close else
+					List<Cell> personClosePath = hadlock.findPath(currCell,
+							nextTarget);
 
+					if (personClosePath != null && personClosePath.size() >= 2) {
+						// The first cell in personClosePath should be the person's current cell
+						Cell nextCellInPath = personClosePath.get(1);
+						int nextX = nextCellInPath.getX();
+						int nextY = nextCellInPath.getY();
+						Cell nextFromCM = cm.getCell(nextX, nextY);
+						if (currCell.getManhattanDistance(nextFromCM) == 1) {
+							if (nextFromCM.isOccupied()) { // Try to move to different neighbor
+								if (DEBUG)
+									System.out.println("Person " + p
+											+ " moving around " + nextFromCM);
+								// TODO Apply some probability to deviating from path
+								int dx = nextFromCM.getX() - currCell.getX();
+								int dy = nextFromCM.getY() - currCell.getY();
+								if (dx == 0) { // Wanting to move up/down
+									Cell left = cm.getNeighborLeft(currCell);
+									Cell right = cm.getNeighborRight(currCell);
+									boolean bLeft = left != null
+											&& left.isTraversable()
+											&& !left.isTraversable();
+									boolean bRight = right != null
+											&& right.isTraversable()
+											&& !right.isOccupied();
+									if (bLeft && bRight) {
 
-			if(oldImplementation) {
+									} else if (bLeft) {
+										left.addToTargeted(p);
+										p.setNextLocation(left);
+										cm.setCellSmart(left);
+									} else if (bRight) {
+										right.addToTargeted(p);
+										p.setNextLocation(right);
+										cm.setCellSmart(right);
+									}
+
+								} else if (dy == 0) { // Wanting to move left/right
+									Cell up = cm.getNeighborTop(currCell);
+									Cell down = cm.getNeighborBottom(currCell);
+									boolean bUp = up != null
+											&& up.isTraversable()
+											&& !up.isOccupied();
+									boolean bDown = down != null
+											&& down.isTraversable()
+											&& !down.isOccupied();
+									if (bUp && bDown) {
+
+									} else if (bUp) {
+										up.addToTargeted(p);
+										p.setNextLocation(up);
+										cm.setCellSmart(up);
+									} else if (bDown) {
+										down.addToTargeted(p);
+										p.setNextLocation(down);
+										cm.setCellSmart(down);
+									}
+								} // close if(dy==0)
+									// TODO Something clever with conflicts
+									// Maybe test if the person is within X cells of the targetCell,
+									// and if so, maybe move on to the next target
+							} else { // The next cell is empty, person can move (probably)
+								nextFromCM.addToTargeted(p);
+								p.setNextLocation(nextFromCM);
+								cm.setCellSmart(nextFromCM);
+							}
+						} else {
+							if (DEBUG)
+								System.err
+										.println("PS.calcNextMove() - Manhattan Distance != 1 for "
+												+ p);
+							// TODO There is some error
+						}
+
+					} else {
+						if (DEBUG)
+							System.out
+									.println("PersonClosePath is either null or of size 1 for "
+											+ p);
+					}
+				} // close else
+			}// close oldImplementation if
+			
+			else if(oldImplementation) {
 				// Old Implementation
-				ArrayList<Cell> neighbors = cm.getNeighborAll(currCell);
+				//ArrayList<Cell> neighbors = cm.getNeighborAll(currCell);
+				ArrayList<Cell> neighbors = cm.getAllTraversableNeighbors(currCell);
+				Cell nextCell = null;
 				if(neighbors.size() > 0) {
 					int i = getIndexOfFirstTraversable(neighbors);
 					if(0 <= i && i < neighbors.size()) {
-						Cell nextCell = neighbors.get(i);
+						nextCell = neighbors.get(i);
 						for(Cell c: neighbors) {
-							if(c.getScore() > nextCell.getScore() && c.isTraversable() && !c.isOccupied())
+							if(c != null
+									&& c.isTraversable() 
+									&& !c.isOccupied()
+									&& c.getScore() < nextCell.getScore()) // Lower score is more desirable
 								nextCell = c;
 						} // close for
 
@@ -416,8 +440,12 @@ public class PedestrianSimulation {
 						cm.setCellSmart(nextCell);
 					}
 				} // close if
-			} // close oldImplementation if
+				else {
+					p.setNextLocation(currCell);
+				}
+			} // close oldImplementation else if
 		} // close null if
+		
 		return p;
 	} // close calculateNextMove()
 

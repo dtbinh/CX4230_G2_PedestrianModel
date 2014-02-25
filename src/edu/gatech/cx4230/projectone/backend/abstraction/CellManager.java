@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.gatech.cx4230.projectone.backend.scoring.Edge;
@@ -210,28 +212,62 @@ public class CellManager {
 	public void setCellsScores(List<Cell> targets) {
 		for(int j = 0; j < cells.length; j++) {
 			for(int i = 0; i < cells[j].length; i++) {
+				double score = -1; // Higher score means closer to cell
+				//double score = Double.MAX_VALUE; // Lower score means closer to cell
 				if(cells[j][i].isTraversable()) {
-					double score = -1;
 					//Cell targetCell = null;
 					for(Cell c: targets) {
 
-						// Higher score means closer to cell
 						double curScore = calculateScore(cells[j][i], c);
-						if(curScore > score) {
+						if(curScore > score) { // Higher score means closer to cell
+						//if(curScore < score) { // Lower score means closer to cell
 							score = curScore;
 							//targetCell = c;
 						}
 					} // close target for
-
-					// set the score for the cell
-					setScoreForCell(i,j, score);
-
-				} else {
-					setScoreForCell(i,j,Double.MIN_VALUE);
-				} // close else
+				} // close isTraversable if
+				
+				// set the score for the cell
+				setScoreForCell(i,j,score);
+				
 			} // close width for
 		} // close height for
 	} // close method
+	
+	/**
+	 * Iterates over all the cells in Cell[][] and sets the score for each cell.  
+	 * @param targets
+	 */
+	public void setCellsScoresAlternateMethod(List<Cell> targets) {
+		
+		for(int j = 0; j < cells.length; j++) {
+			for(int i = 0; i < cells[j].length; i++) {
+				cells[i][j].setScore(Double.MAX_VALUE); // Lower score means more desirable
+			}
+		}
+		
+		LinkedList<Cell> cellsToBeScored = new LinkedList<Cell>();
+		HashSet<Cell> cellsScored = new HashSet<Cell>();
+		ArrayList<Cell> neighbors = new ArrayList<Cell>();
+		
+		for(Cell t : targets) {
+			cellsToBeScored.add(t);
+			while(!cellsToBeScored.isEmpty()) {
+				Cell c = cellsToBeScored.removeFirst();
+				if(c != null && !cellsScored.contains(c)) {
+					cellsScored.add(c);
+					double score = c.getDistanceToCell(t);
+					if(score < c.getScore()) {
+						c.setScore(score);
+					}
+					neighbors = this.getAllTraversableNeighbors(c);
+					cellsToBeScored.addAll(neighbors);
+				}
+			}
+			cellsScored.clear();
+			cellsToBeScored.clear();
+		}
+	}
 
 	public void setScoreForCell(int x, int y, double score) {
 		if(indexInBounds(x,y)) {
