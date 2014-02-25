@@ -48,7 +48,7 @@ public class CustomRNG extends AbstractRNG {
 	@Override
 	public int nextInt(int n) {
 		long x = RNG();
-		return (int) x & n;
+		return (int) x % n;
 	}
 
 }
