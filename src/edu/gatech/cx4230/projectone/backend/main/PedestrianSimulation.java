@@ -1,6 +1,5 @@
 package edu.gatech.cx4230.projectone.backend.main;
 
-import java.awt.Container;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -68,7 +67,7 @@ public class PedestrianSimulation {
 	private DjikstraOperator dOp;
 	public static final boolean oldImplementation = false;
 
-	public static final boolean DEBUG = true;
+	public static boolean DEBUG = true;
 
 	private boolean useVisualization;
 
@@ -133,6 +132,13 @@ public class PedestrianSimulation {
 	
 	public PedestrianSimulation() {
 		this(null, false);
+	}
+	
+	public PedestrianSimulation(VisualizationMain vis, boolean visBol, boolean debug) {
+		this(vis, visBol);
+		PedestrianSimulation.DEBUG = debug;
+		Person.DEBUG = debug;
+		MapGridData.DEBUG = debug;
 	}
 
 	private void setCellsScoresAlternateMethod() {
@@ -221,7 +227,7 @@ public class PedestrianSimulation {
 					path = pathO.getMinimumPath(t);
 				}
 			} else {
-				System.err.println("PS.fNTPFP() Line 144 - Calculating path");
+				if(DEBUG) System.err.println("PS.fNTPFP() Line 144 - Calculating path");
 				dOp.execute(t);
 				PathOrganizer pathO = new PathOrganizer();
 

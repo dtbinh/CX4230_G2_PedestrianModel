@@ -22,7 +22,7 @@ public class NoVisualizationMain {
 	}
 	
 	public void run() {
-		PedestrianSimulation ps = new PedestrianSimulation();
+		PedestrianSimulation ps = new PedestrianSimulation(null, false, false);
 		
 		if(!ps.continueSim()) {
 			results.add(ps.getEndSimulationResult());
@@ -55,9 +55,16 @@ public class NoVisualizationMain {
 	
 	
 	public static void main(String[] args) {
-		int trials = 100;
+		int trials = 1;
 		NoVisualizationMain experiment = new NoVisualizationMain(trials);
-		experiment.processResults();
+		try {
+			experiment.wait();
+			experiment.processResults();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 }

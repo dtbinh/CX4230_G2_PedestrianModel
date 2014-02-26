@@ -29,7 +29,7 @@ public class Person {
 	private Cell nextTarget;
 	private Path nextTargets;
 	private boolean finished = false;
-	public static final boolean DEBUG = true;
+	public static boolean DEBUG = true;
 	
 	/**
 	 * Person()

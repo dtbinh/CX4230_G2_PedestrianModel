@@ -31,6 +31,7 @@ public class MapGridData {
 	private int width, height;
 	private CellManager cm;
 	private List<Marker> cellMarkers;
+	public static boolean DEBUG = false;
 
 	public MapGridData() {
 		FileHelper fh = new FileHelper();
@@ -97,7 +98,7 @@ public class MapGridData {
 				cellsMap.add(sf);
 
 			} // close for
-			System.out.println("Cells updated: " + cellModCount);
+			if(DEBUG) System.out.println("Cells updated: " + cellModCount);
 
 			MarkerFactory mf = new MarkerFactory();
 			mf.setPolygonClass(CellMarker.class);
@@ -107,7 +108,7 @@ public class MapGridData {
 
 			cm.setCells(cells);
 		} else {
-			System.err.println(file.getAbsolutePath() + " not found!");
+			if(DEBUG) System.err.println(file.getAbsolutePath() + " not found!");
 		}
 	} // close constructor
 
