@@ -14,6 +14,7 @@ import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.main.PedestrianSimulation;
 import edu.gatech.cx4230.projectone.visualization.abstraction.CustomTooltip;
+import edu.gatech.cx4230.projectone.visualization.abstraction.DoorMarker;
 import edu.gatech.cx4230.projectone.visualization.abstraction.PersonMarker;
 
 /**
@@ -37,6 +38,7 @@ public class VisualizationMain extends PApplet {
 	public static final double TOP_LEFT_LON = -35;
 	private PedestrianSimulation ps;
 	private List<Marker> markers;
+	private List<DoorMarker> doorMarkers;
 	private List<Marker> peopleMarkers;
 	private int timeStep = 0;
 	private PFont f;
@@ -50,12 +52,16 @@ public class VisualizationMain extends PApplet {
 		MapUtils.createDefaultEventDispatcher(this, map);
 		map.zoomAndPanTo(new Location(TOP_LEFT_LAT, TOP_LEFT_LON), 5);
 		peopleMarkers = new ArrayList<Marker>();
+		doorMarkers = new ArrayList<DoorMarker>();
 		
 		f = createFont("Arial", 40, true);
 		cTooltip = new CustomTooltip("Cell: ()", 20, 20, 250, 120);
 
 		timeStep = 0;
 		ps = new PedestrianSimulation(this, true);
+		
+		updateDoorMarkers();
+		
 	}
 
 
@@ -72,6 +78,11 @@ public class VisualizationMain extends PApplet {
 			}
 		}
 
+		if(doorMarkers != null && !doorMarkers.isEmpty()) {
+			for(DoorMarker m: doorMarkers) {
+				m.draw(this.g);
+			}
+		}
 		updatePeopleMarkers();
 		if(peopleMarkers != null && !peopleMarkers.isEmpty()) {
 			for(Marker m: peopleMarkers) {
@@ -92,6 +103,20 @@ public class VisualizationMain extends PApplet {
 		}
 	}
 
+	public void updateDoorMarkers() {
+		if(doorMarkers == null) {
+			doorMarkers = new ArrayList<DoorMarker>();
+		}
+		doorMarkers.clear();
+		List<Cell> doors = ps.getDoors();
+		for(Cell d : doors) {
+			Location loc = getMapLocationForCellLocation(d.getX(), d.getY());
+			float size = Math.abs(loc.getLat() - getMapLocationForCellLocation(d.getX()+1, d.getY()).getLat());
+			DoorMarker dm = new DoorMarker(loc, size);
+			doorMarkers.add(dm);
+		}
+	}
+	
 	private void updatePeopleMarkers() {
 		if(ps.peopleAvailable()) {
 			List<Person> people = ps.getPeople();

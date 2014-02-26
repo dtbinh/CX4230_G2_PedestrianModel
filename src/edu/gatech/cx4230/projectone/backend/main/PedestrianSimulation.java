@@ -740,6 +740,10 @@ public class PedestrianSimulation {
 		return countPeopleInBuilding;
 	}
 
+	public List<Cell> getDoors() {
+		return doors;
+	}
+	
 	/**
 	 * @return the simThread
 	 */

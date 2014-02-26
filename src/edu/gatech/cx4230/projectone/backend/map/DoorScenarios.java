@@ -66,6 +66,10 @@ public class DoorScenarios {
 		int door6H = 1;
 		out.addAll(getCellsInArea(door6X, door6Y, door6W, door6H));
 		
+		for(Cell c : out) {
+			c.setType(Cell.DOOR);
+		}
+		
 		if(DEBUG) System.out.println(ListHelper.listToString(out));
 		return out;
 	}
