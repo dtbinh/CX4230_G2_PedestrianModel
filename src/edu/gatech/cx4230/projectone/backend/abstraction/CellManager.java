@@ -234,44 +234,6 @@ public class CellManager {
 		} // close height for
 	} // close method
 	
-	/*
-	 * Iterates over all the cells in Cell[][] and sets the score for each cell.  
-	 * @param targets
-	 *	
-	//Moved to PedestrianSimulation 
-	public void setCellsScoresAlternateMethod(List<Cell> targets) {
-		
-		for(int j = 0; j < cells.length; j++) {
-			for(int i = 0; i < cells[j].length; i++) {
-				cells[j][i].setScore(Double.MAX_VALUE); // Lower score means more desirable
-			}
-		}
-		
-		LinkedList<Cell> cellsToBeScored = new LinkedList<Cell>();
-		HashSet<Cell> cellsScored = new HashSet<Cell>();
-		ArrayList<Cell> neighbors = new ArrayList<Cell>();
-		
-		for(Cell t : targets) {
-			cellsToBeScored.add(t);
-			while(!cellsToBeScored.isEmpty()) {
-				Cell c = cellsToBeScored.removeFirst();
-				if(c != null && !cellsScored.contains(c)) {
-					cellsScored.add(c);
-					double score = getTraversibleDistance(c,t);
-					
-					if(score < c.getScore()) {
-						// set cell score
-						c.setScore(score);
-					}
-					neighbors = this.getAllTraversableNeighbors(c);
-					cellsToBeScored.addAll(neighbors);
-				}
-			}
-			cellsScored.clear();
-			cellsToBeScored.clear();
-		}
-	}*/
-
 	public void setScoreForCell(int x, int y, double score) {
 		if(indexInBounds(x,y)) {
 			cells[y][x].setScore(score);
@@ -465,23 +427,6 @@ public class CellManager {
 			direction = DIAGONAL;
 		}
 		
-		/*
-		 //method based on assumption that cells are generated left to right, top to bottom
-		 //method assumes that movement is either in N (up), S (down), E (right), or W (left) direction
-		 if(fromCell != null && toCell != null) {
-			if(fromCell.getID() == toCell.getID() - 1){ // toCell is East of fromCell
-				direction = EAST;
-			}
-			else if(fromCell.getID() == toCell.getID() + 1){ // toCell is West of fromCell
-				direction = WEST;
-			}
-			else if(fromCell.getID() < toCell.getID()){ // toCell is South of fromCell
-				direction = SOUTH;
-			}
-			else if(fromCell.getID() > toCell.getID()){ // toCell is North of fromCell
-				direction = NORTH;
-			}
-		}*/
 		return direction;
 	}
 	
