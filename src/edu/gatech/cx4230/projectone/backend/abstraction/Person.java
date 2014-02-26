@@ -51,6 +51,10 @@ public class Person {
 		visitedTargets = new ArrayList<Cell>();
 	}
 	
+	public static void resetCount() {
+		idNextPerson = 0;
+	}
+	
 	/**
 	 * Increase the stress level by a specific percent.
 	 * @param percent

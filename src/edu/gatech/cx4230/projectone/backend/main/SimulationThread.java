@@ -7,6 +7,7 @@ public class SimulationThread extends Thread {
 	private int wait;
 	private int currTimeStep;
 	private String id;
+	public static boolean DEBUG = true;
 
 
 	public SimulationThread(PedestrianSimulation ps, int w, String s) {
@@ -57,11 +58,11 @@ public class SimulationThread extends Thread {
 
 
 	public void quit() {
-		System.out.println("Quitting Thread...");
+		if(DEBUG) System.out.println("Quitting Thread...");
 		
 		// TODO Elaborate on Terminating condition
-		System.out.println("Simulation Terminated. Condition " + PedestrianSimulation.terminatingCondition);
-		System.out.println("Time steps: " + currTimeStep);
+		if(DEBUG) System.out.println("Simulation Terminated. Condition " + PedestrianSimulation.terminatingCondition);
+		if(DEBUG) System.out.println("Time steps: " + currTimeStep);
 		
 		running = false;
 		interrupt();

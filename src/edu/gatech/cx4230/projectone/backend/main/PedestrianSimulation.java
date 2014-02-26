@@ -79,6 +79,7 @@ public class PedestrianSimulation {
 		countPeopleInBuilding = totalPeople;
 		people = new ArrayList<Person>();
 		peopleToMove = new ArrayList<Person>();
+		finishedPeople = new ArrayList<Person>();
 		rng = new JavaRNG(); // TODO Change to our RNG
 
 		// Read in and create the map grid
@@ -139,6 +140,7 @@ public class PedestrianSimulation {
 		PedestrianSimulation.DEBUG = debug;
 		Person.DEBUG = debug;
 		MapGridData.DEBUG = debug;
+		SimulationThread.DEBUG = debug;
 	}
 
 	private void setCellsScoresAlternateMethod() {

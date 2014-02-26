@@ -69,6 +69,10 @@ public class Cell implements Comparable<Cell> {
 		targeted = new ArrayList<Person>();
 	}
 	
+	public static void resetCount() {
+		idNextCell = 0;
+	}
+	
 	public void setProperties(int x, int y, String name, char type, int csvRow) {
 		this.x = x;
 		this.y = y;
