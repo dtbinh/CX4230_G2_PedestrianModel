@@ -51,6 +51,7 @@ public class PedestrianSimulation {
 	public static final int TERM_CON_1 = 1;
 	public static final int TERM_CON_2 = 2;
 	public static int terminatingCondition = TERM_CON_2;
+	public final int endingTimeStep = 1000;
 	public final int boundaryLine = 200;
 
 	// Random Number Generator
@@ -642,9 +643,8 @@ public class PedestrianSimulation {
 	}
 	
 	private boolean terminatingConditionOne() {
-		boolean out = false;
-		out = (countPeopleInBuilding > 0 || people.size() < totalPeople);
-		return out;
+//		out = (countPeopleInBuilding > 0 || people.size() < totalPeople);
+		return (simThread.getCurrTimeStep() < endingTimeStep);
 	}
 	
 	/**
@@ -739,9 +739,29 @@ public class PedestrianSimulation {
 		return simThread;
 	}
 
+	private int getEndSimulationScore() {
+		int out = 0;
+		switch(terminatingCondition) {
+		case TERM_CON_1:
+			int scoreOutOfBuilding = 1;
+			int scoreFinished = 2;
+			
+			out = scoreFinished * finishedPeople.size();
+			out += scoreOutOfBuilding * people.size();
+			break;
+		case TERM_CON_2:
+			out = simThread.getCurrTimeStep();
+			break;
+		}
+		return out;
+	}
+	
 	public EndSimulationResult getEndSimulationResult() {
-		// TODO Auto-generated method stub
-		return null;
+		EndSimulationResult out = null;
+		if(!continueSim()) {
+			out = new EndSimulationResult(terminatingCondition, BUILDING_CAPACITY, getEndSimulationScore());
+		}
+		return out;
 	}
 
 }
