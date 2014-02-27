@@ -1,5 +1,6 @@
 package edu.gatech.cx4230.projectone.backend.map;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class DoorScenarios {
 	}
 
 
-	private List<Cell> scenario1() {
-		List<Cell> out = new ArrayList<Cell>();
+	private List<Point> scenario1() {
+		List<Point> out = new ArrayList<Point>();
 		
 		// Door 1: Single
 		int door1X = BX - 1;
@@ -66,33 +67,29 @@ public class DoorScenarios {
 		int door6H = 1;
 		out.addAll(getCellsInArea(door6X, door6Y, door6W, door6H));
 		
-		for(Cell c : out) {
-			c.setType(Cell.DOOR);
-		}
-		
 		if(DEBUG) System.out.println(ListHelper.listToString(out));
 		return out;
 	}
 	
-	private List<Cell> scenario2() {
-		List<Cell> out = new ArrayList<Cell>();
+	private List<Point> scenario2() {
+		List<Point> out = new ArrayList<Point>();
 		// TODO Create door scenario
 		return out;
 	}
 	
-	private List<Cell> scenario3() {
-		List<Cell> out = new ArrayList<Cell>();
+	private List<Point> scenario3() {
+		List<Point> out = new ArrayList<Point>();
 		// TODO Create door scenario
 		return out;
 	}
 	
-	public List<Cell> getScenarios() {
+	public List<Point> getScenarios() {
 		return getScenario(DOOR_SCENARIO);
 	}
 	
 
-	public List<Cell> getScenario(int s) {
-		List<Cell> out = null;
+	public List<Point> getScenario(int s) {
+		List<Point> out = null;
 
 		switch(s) {
 		case 1:
@@ -108,14 +105,14 @@ public class DoorScenarios {
 		return out;
 	}
 	
-	private List<Cell> getCellsInArea(int x, int y, int width, int height) {
-		List<Cell> out = new ArrayList<Cell>();
+	private List<Point> getCellsInArea(int x, int y, int width, int height) {
+		List<Point> out = new ArrayList<Point>();
 		
 		for(int j = y; j < (y + height); j++) {
 			for(int i = x; i < (x + width); i++) {
 				if(0 <= j && j < cells.length) { // Indexing check
 					if(0 <= i && i < cells[j].length) { // Indexing check
-						out.add(cells[j][i]);
+						out.add(new Point(i, j));
 					} // close i-if
 				} // close j-if
 			} // close i-for
