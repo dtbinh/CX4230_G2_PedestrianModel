@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
+import edu.gatech.cx4230.projectone.backend.abstraction.ExperimentResult;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.abstraction.SimulationScenario;
 import edu.gatech.cx4230.projectone.backend.utilities.StatsHelper;
@@ -26,6 +27,7 @@ public class NoVisualizationMain {
 			System.out.println("Running trial: " + i + " of " + trials + "...");
 			run();
 		}
+		
 	}
 
 	public void run() {
@@ -49,7 +51,25 @@ public class NoVisualizationMain {
 		return results;
 	}
 
-	public void processResults() {
+	public ExperimentResult processResults() {
+		ExperimentResult out = null;
+		if(results != null && !results.isEmpty()) {
+			int trials = results.size();
+			int[] scores = new int[trials];
+
+			for(int i = 0; i < trials; i++) {
+				scores[i] = results.get(i).getScore();
+			}
+
+			double scoreAverage = StatsHelper.findAverage(scores);
+			double scoreSSD = StatsHelper.findStandardDeviation(scores);
+			out = new ExperimentResult(scoreAverage, scoreSSD, scores);
+			
+		}
+		return out;
+	}
+	
+	public void printResults() {
 		if(results != null && !results.isEmpty()) {
 			int trials = results.size();
 			int[] scores = new int[trials];
@@ -71,6 +91,6 @@ public class NoVisualizationMain {
 	public static void main(String[] args) {
 		SimulationScenario scen = new SimulationScenario(1500, false, PedestrianSimulation.TERM_CON_1, 200, 1000, null, 3);
 		NoVisualizationMain experiment = new NoVisualizationMain(scen);
-		experiment.processResults();
+		experiment.printResults();
 	}
 }
