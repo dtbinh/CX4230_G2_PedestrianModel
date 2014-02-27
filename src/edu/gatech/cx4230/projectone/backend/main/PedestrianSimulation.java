@@ -755,20 +755,28 @@ public class PedestrianSimulation {
 	}
 
 	private int getEndSimulationScore() {
-		int out = 0;
+		double out = 0;
+		
 		switch(terminatingCondition) {
 		case TERM_CON_1:
-			int scoreOutOfBuilding = 1;
-			int scoreFinished = 2;
+			int scoreFinished = 100;
 			
 			out = scoreFinished * finishedPeople.size();
-			out += scoreOutOfBuilding * people.size();
+			
+			for(Person p: people) {
+				Path path = p.getNextTargets();
+				Cell finalDest = path.getList().get(path.getList().size() - 1).getDestination();
+				Cell first = p.getMyDoor();
+				double totalDist = first.getManhattanDistance(finalDest);
+				double myDist = p.getLocation().getManhattanDistance(finalDest);
+				out += scoreFinished * (1 - myDist / totalDist);
+			}
 			break;
 		case TERM_CON_2:
 			out = simThread.getCurrTimeStep();
 			break;
 		}
-		return out;
+		return (int) out;
 	}
 	
 	public EndSimulationResult getEndSimulationResult() {
