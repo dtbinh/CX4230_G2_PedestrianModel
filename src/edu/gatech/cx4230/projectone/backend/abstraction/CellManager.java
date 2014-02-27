@@ -4,8 +4,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 
 import edu.gatech.cx4230.projectone.backend.scoring.Edge;
@@ -164,6 +162,25 @@ public class CellManager {
 
 		return out;
 	}
+	
+	public List<Cell> getCellsInArea(int x, int y, int width, int height) {
+		List<Cell> out = new ArrayList<Cell>();
+
+		for(int j = y; j < (y + height); j++) {
+			for(int i = x; i < (x + width); i++) {
+				if(0 <= j && j < cells.length) { // Indexing check
+					if(0 <= i && i < cells[j].length) { // Indexing check
+						out.add(cells[j][i]);
+					} // close i-if
+				} // close j-if
+			} // close i-for
+		} // close j-for
+		return out;
+	} // close getCellsInArea()
+	
+	
+	
+	
 	
 	public List<Cell> getCardinalTraversableNeighbors(Cell here) {
 		List<Cell> out = new ArrayList<Cell>();
