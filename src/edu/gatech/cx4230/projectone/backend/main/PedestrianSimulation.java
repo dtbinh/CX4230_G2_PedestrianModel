@@ -16,6 +16,7 @@ import edu.gatech.cx4230.projectone.backend.map.MapGridData;
 import edu.gatech.cx4230.projectone.backend.random.AbstractRNG;
 import edu.gatech.cx4230.projectone.backend.random.CustomRNG;
 import edu.gatech.cx4230.projectone.backend.scoring.DjikstraOperator;
+import edu.gatech.cx4230.projectone.backend.scoring.Edge;
 import edu.gatech.cx4230.projectone.backend.scoring.HadlockOperator;
 import edu.gatech.cx4230.projectone.backend.scoring.Path;
 import edu.gatech.cx4230.projectone.backend.scoring.PathOrganizer;
@@ -776,12 +777,14 @@ public class PedestrianSimulation {
 			out += scoreOutOfBuilding * people.size();
 			
 			for(Person p: people) {
-				Path path = p.getNextTargets();
-				Cell finalDest = path.getList().get(path.getList().size() - 1).getDestination();
-				Cell first = p.getMyDoor();
-				double totalDist = first.getManhattanDistance(finalDest);
-				double myDist = p.getLocation().getManhattanDistance(finalDest);
-				out += scoreFinished * (1 - myDist / totalDist);
+				List<Edge> edges = p.getNextTargets().getList();
+				if(edges != null && !edges.isEmpty()) {
+					Cell finalDest = edges.get(edges.size() - 1).getDestination();
+					Cell first = p.getMyDoor();
+					double totalDist = first.getManhattanDistance(finalDest);
+					double myDist = p.getLocation().getManhattanDistance(finalDest);
+					out += scoreFinished * (1 - myDist / totalDist);
+				} // close if
 			}
 			break;
 		case TERM_CON_2:
