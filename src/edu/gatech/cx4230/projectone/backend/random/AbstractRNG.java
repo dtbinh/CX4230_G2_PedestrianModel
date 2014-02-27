@@ -35,6 +35,8 @@ public abstract class AbstractRNG {
 	 */
 	public abstract int nextInt(int n);
 	
+	public abstract double nextInNormal(double mean, double sd);
+	
 	/**
 	 * Generates the next double in the sequence with a range [min, max)
 	 * @param min

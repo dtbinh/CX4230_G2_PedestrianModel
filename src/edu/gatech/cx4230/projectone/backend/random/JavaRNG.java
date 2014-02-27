@@ -49,4 +49,10 @@ public class JavaRNG extends AbstractRNG {
 		return rand.nextInt(n);
 	}
 
+	@Override
+	public double nextInNormal(double mean, double sd) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
