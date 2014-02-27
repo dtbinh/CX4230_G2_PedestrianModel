@@ -1,7 +1,7 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
+import java.awt.Point;
 import java.util.List;
-import java.util.Locale;
 
 public class SimulationScenario {
 	private int peopleInBuilding;
@@ -9,15 +9,21 @@ public class SimulationScenario {
 	private int terminiatingCondition;
 	private int boundaryLine;
 	private int endingTimeStep;
-	private List<Locale> doors;
+	private int trials;
+	private List<Point> doors;
 	
-	public SimulationScenario(int peeps, boolean d, int termCon, int bound, int ending, List<Locale>doors) {
+	public SimulationScenario(int peeps, boolean d, int termCon, int bound, int ending, List<Point>doors) {
 		this.peopleInBuilding = peeps;
 		this.debug = d;
 		this.terminiatingCondition = termCon;
 		this.boundaryLine = bound;
 		this.endingTimeStep = ending;
 		this.doors = doors;
+	}
+	
+	public SimulationScenario(int peeps, boolean d, int termCon, int bound, int ending, List<Point>doors, int trials) {
+		this(peeps, d, termCon, bound, ending, doors);
+		this.trials = trials;
 	}
 	
 	/**
@@ -84,15 +90,29 @@ public class SimulationScenario {
 	/**
 	 * @return the doors
 	 */
-	public List<Locale> getDoors() {
+	public List<Point> getDoors() {
 		return doors;
 	}
 
 	/**
 	 * @param doors the doors to set
 	 */
-	public void setDoors(List<Locale> doors) {
+	public void setDoors(List<Point> doors) {
 		this.doors = doors;
+	}
+
+	/**
+	 * @return the trials
+	 */
+	public int getTrials() {
+		return trials;
+	}
+
+	/**
+	 * @param trials the trials to set
+	 */
+	public void setTrials(int trials) {
+		this.trials = trials;
 	}
 
 }
