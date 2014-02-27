@@ -380,7 +380,7 @@ public class PedestrianSimulation {
 			
 		// For the people still waiting to move:
 		for(Person p: peopleToMove) {
-			p.increaseStress(0.5);
+			p.increaseStress(Person.WAIT_INCREASE_STRESS);
 		}
 					
 		peopleToMove.clear();
@@ -396,7 +396,7 @@ public class PedestrianSimulation {
 		int newX = nextCell.getX();
 		int newY = nextCell.getY();
 		p.move(currStep, nextCell);
-		p.decreaseStress(0.05);
+		p.decreaseStress(Person.MOVE_DECREASE_STRESS);
 		cm.movePerson(p, oldX, oldY, newX, newY);
 		
 		if(p.isFinished()) {
