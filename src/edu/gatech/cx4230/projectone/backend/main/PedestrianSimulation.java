@@ -1,5 +1,6 @@
 package edu.gatech.cx4230.projectone.backend.main;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,10 +10,11 @@ import java.util.List;
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.CellManager;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
+import edu.gatech.cx4230.projectone.backend.abstraction.SimulationScenario;
 import edu.gatech.cx4230.projectone.backend.map.DoorScenarios;
 import edu.gatech.cx4230.projectone.backend.map.MapGridData;
 import edu.gatech.cx4230.projectone.backend.random.AbstractRNG;
-import edu.gatech.cx4230.projectone.backend.random.JavaRNG;
+import edu.gatech.cx4230.projectone.backend.random.CustomRNG;
 import edu.gatech.cx4230.projectone.backend.scoring.DjikstraOperator;
 import edu.gatech.cx4230.projectone.backend.scoring.HadlockOperator;
 import edu.gatech.cx4230.projectone.backend.scoring.Path;
@@ -49,9 +51,9 @@ public class PedestrianSimulation {
 	public static final int DOOR_SCENARIO = 1;
 	public static final int TERM_CON_1 = 1;
 	public static final int TERM_CON_2 = 2;
-	public static int terminatingCondition = TERM_CON_1;
-	public final int endingTimeStep = 500;
-	public final int boundaryLine = 200;
+	private int terminatingCondition = TERM_CON_1;
+	private int endingTimeStep = 500;
+	private int boundaryLine = 200;
 
 	// Random Number Generator
 	private AbstractRNG rng;
@@ -72,21 +74,32 @@ public class PedestrianSimulation {
 	private boolean useVisualization;
 
 
-	public PedestrianSimulation(VisualizationMain vis, boolean visBol) {
-		this.useVisualization = visBol;
+	public PedestrianSimulation(VisualizationMain vis, SimulationScenario scen) {
+		this.useVisualization = vis != null;
+		
+		// Get data from SimulationScenario
+		boolean debug = scen.isDebug();
+		PedestrianSimulation.DEBUG = debug;
+		Person.DEBUG = debug;
+		MapGridData.DEBUG = debug;
+		SimulationThread.DEBUG = debug;
+		this.terminatingCondition = scen.getTerminiatingCondition();
+		this.boundaryLine = scen.getBoundaryLine();
+		this.endingTimeStep = scen.getEndingTimeStep();
+		List<Point> doorPoints = scen.getDoors();
 
-		totalPeople = BUILDING_CAPACITY; // this may be variable for each simulation, with BUILDING_CAPACITY as the max
+		totalPeople = scen.getPeopleInBuilding(); // this may be variable for each simulation, with BUILDING_CAPACITY as the max
 		countPeopleInBuilding = totalPeople;
 		people = new ArrayList<Person>();
 		peopleToMove = new ArrayList<Person>();
 		finishedPeople = new ArrayList<Person>();
-		rng = new JavaRNG(); // TODO Change to our RNG
+		rng = new CustomRNG();
 
 		// Read in and create the map grid
 		MapGridData mgd = new MapGridData();
 		cm = mgd.getCellManager();
 		
-		if(useVisualization && vis != null) {
+		if(useVisualization) {
 			vis.setMarkers(mgd.getCellMarkers());
 			vis.setCellsHeight(cm.getCellsHeight());
 			vis.setCellsWidth(cm.getCellsWidth());
@@ -108,9 +121,11 @@ public class PedestrianSimulation {
 			}
 		}
 
-
-		DoorScenarios ds = new DoorScenarios(cm.getCells());
-		doors = ds.getScenario(DOOR_SCENARIO);
+		if(doorPoints == null) {
+			DoorScenarios ds = new DoorScenarios(cm.getCells());
+			doorPoints = ds.getScenarios();
+		}
+		doors = cm.getCellsForPoints(doorPoints);
 		cm.setCells(doors);
 		hadlock = new HadlockOperator(cm);
 		
@@ -131,16 +146,8 @@ public class PedestrianSimulation {
 		simThread.start();
 	} // close constructor
 	
-	public PedestrianSimulation() {
-		this(null, false);
-	}
-	
-	public PedestrianSimulation(VisualizationMain vis, boolean visBol, boolean debug) {
-		this(vis, visBol);
-		PedestrianSimulation.DEBUG = debug;
-		Person.DEBUG = debug;
-		MapGridData.DEBUG = debug;
-		SimulationThread.DEBUG = debug;
+	public PedestrianSimulation(SimulationScenario scen) {
+		this(null, scen);
 	}
 
 	private void setCellsScoresAlternateMethod() {
@@ -551,19 +558,19 @@ public class PedestrianSimulation {
 		Cell[] swayCells = new Cell[2];
 		
 		// find "sway" cells 
-		if(direction == cm.NORTH) {
+		if(direction == CellManager.NORTH) {
 			 swayCells[0] = cm.getNeighborTopRight(currCell);
 			 swayCells[1] = cm.getNeighborTopLeft(currCell);
 		}
-		else if(direction == cm.SOUTH) {
+		else if(direction == CellManager.SOUTH) {
 			 swayCells[0] = cm.getNeighborBottomRight(currCell);
 			 swayCells[1] = cm.getNeighborBottomLeft(currCell);
 		}
-		else if(direction == cm.EAST) {
+		else if(direction == CellManager.EAST) {
 			 swayCells[0] = cm.getNeighborTopRight(currCell);
 			 swayCells[1] = cm.getNeighborBottomRight(currCell);
 		}				
-		else if(direction == cm.WEST) {
+		else if(direction == CellManager.WEST) {
 			 swayCells[0] = cm.getNeighborTopLeft(currCell);
 			 swayCells[1] = cm.getNeighborBottomLeft(currCell);
 		}
@@ -787,6 +794,20 @@ public class PedestrianSimulation {
 			out = new EndSimulationResult(terminatingCondition, BUILDING_CAPACITY, getEndSimulationScore());
 		}
 		return out;
+	}
+
+	/**
+	 * @return the terminatingCondition
+	 */
+	public int getTerminatingCondition() {
+		return terminatingCondition;
+	}
+
+	/**
+	 * @param terminatingCondition the terminatingCondition to set
+	 */
+	public void setTerminatingCondition(int terminatingCondition) {
+		this.terminatingCondition = terminatingCondition;
 	}
 
 }

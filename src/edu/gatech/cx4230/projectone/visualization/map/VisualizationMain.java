@@ -12,6 +12,7 @@ import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
+import edu.gatech.cx4230.projectone.backend.abstraction.SimulationScenario;
 import edu.gatech.cx4230.projectone.backend.main.PedestrianSimulation;
 import edu.gatech.cx4230.projectone.visualization.abstraction.CustomTooltip;
 import edu.gatech.cx4230.projectone.visualization.abstraction.DoorMarker;
@@ -58,7 +59,9 @@ public class VisualizationMain extends PApplet {
 		cTooltip = new CustomTooltip("Cell: ()", 20, 20, 250, 120);
 
 		timeStep = 0;
-		ps = new PedestrianSimulation(this, true);
+		
+		SimulationScenario scen = new SimulationScenario(1500, false, PedestrianSimulation.TERM_CON_1, 200, 1000, null);
+		ps = new PedestrianSimulation(this, scen);
 		
 		updateDoorMarkers();
 		

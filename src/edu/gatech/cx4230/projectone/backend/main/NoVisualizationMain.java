@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
+import edu.gatech.cx4230.projectone.backend.abstraction.SimulationScenario;
 import edu.gatech.cx4230.projectone.backend.utilities.StatsHelper;
 
 /**
@@ -14,8 +15,11 @@ import edu.gatech.cx4230.projectone.backend.utilities.StatsHelper;
  */
 public class NoVisualizationMain {
 	private List<EndSimulationResult> results;
+	private SimulationScenario scenario;
 
-	public NoVisualizationMain(int trials) {
+	public NoVisualizationMain(SimulationScenario scen) {
+		this.scenario = scen;
+		int trials = scen.getTrials();
 		results = new ArrayList<EndSimulationResult>();
 
 		for(int i = 1; i <= trials; i++) {
@@ -27,7 +31,7 @@ public class NoVisualizationMain {
 	public void run() {
 		Person.resetCount();
 		Cell.resetCount();
-		PedestrianSimulation ps = new PedestrianSimulation(null, false, false);
+		PedestrianSimulation ps = new PedestrianSimulation(null, scenario);
 
 		while(ps.continueSim()) {
 			try {
@@ -65,8 +69,8 @@ public class NoVisualizationMain {
 
 
 	public static void main(String[] args) {
-		int trials = 3;
-		NoVisualizationMain experiment = new NoVisualizationMain(trials);
+		SimulationScenario scen = new SimulationScenario(1500, false, PedestrianSimulation.TERM_CON_1, 200, 1000, null, 3);
+		NoVisualizationMain experiment = new NoVisualizationMain(scen);
 		experiment.processResults();
 	}
 }
