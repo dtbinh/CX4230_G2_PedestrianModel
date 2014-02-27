@@ -201,13 +201,15 @@ public class PedestrianSimulation {
 	 */
 	public Person spawnPerson() {
 		Person p = null;
-		// TODO Improve this method
+		double meanSpeed = 4.0;
+		double standardDev = 0.5;
+
 		List<Cell> openDoors = getAvailableDoors();
 		if(openDoors.size() > 0) {
 			int doorI = rng.nextInt(openDoors.size());
 			Cell door = openDoors.get(doorI);
 			//int[] speeds = rng.nextIntsArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
-			int speed = (int) Math.round(rng.nextInNormal(4, .5));
+			int speed = (int) Math.round(rng.nextInNormal(meanSpeed, standardDev));
 			int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
 			p = new Person(door, speed, Person.MIN_SPEED, Person.MAX_SPEED, stress, simThread.getCurrTimeStep());
 
