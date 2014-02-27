@@ -24,7 +24,7 @@ import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 public class PedestrianSimulation {
 
-	public static final int BUILDING_CAPACITY = 1;
+	public static final int BUILDING_CAPACITY = 100;
 	
 	private int totalPeople;
 	private int countPeopleInBuilding;
@@ -760,8 +760,10 @@ public class PedestrianSimulation {
 		switch(terminatingCondition) {
 		case TERM_CON_1:
 			int scoreFinished = 100;
+			int scoreOutOfBuilding = 25;
 			
-			out = scoreFinished * finishedPeople.size();
+			out += scoreFinished * finishedPeople.size();
+			out += scoreOutOfBuilding * people.size();
 			
 			for(Person p: people) {
 				Path path = p.getNextTargets();
