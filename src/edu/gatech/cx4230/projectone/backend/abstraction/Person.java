@@ -13,6 +13,8 @@ public class Person {
 	public static final int MIN_STRESS = 0;
 	public static final int MAX_SPEED = 2; // move every x time step
 	public static final int MIN_SPEED = 6; // move every x time steps
+	public static final double MEAN_SPEED = 4.0;
+	public static final double SPEED_ST_DEV = 0.5;
 	public static final double WAIT_INCREASE_STRESS = 0.05;
 	public static final int PANIC_THRESHOLD = 500;
 
@@ -51,6 +53,10 @@ public class Person {
 		stressLevel = startStress;
 		timeLastMove = startTime;
 		visitedTargets = new ArrayList<Cell>();
+	}
+	
+	public Person(Cell startCell, int startSpeed, int startStress, int startTime) {
+		this(startCell, startSpeed, MIN_SPEED, MAX_SPEED, startStress, startTime);
 	}
 	
 	public static void resetCount() {
