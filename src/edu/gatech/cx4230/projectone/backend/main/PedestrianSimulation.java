@@ -24,7 +24,7 @@ import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 public class PedestrianSimulation {
 
-	public static final int BUILDING_CAPACITY = 150;
+	public static final int BUILDING_CAPACITY = 1;
 	
 	private int totalPeople;
 	private int countPeopleInBuilding;
@@ -49,8 +49,8 @@ public class PedestrianSimulation {
 	public static final int DOOR_SCENARIO = 1;
 	public static final int TERM_CON_1 = 1;
 	public static final int TERM_CON_2 = 2;
-	public static int terminatingCondition = TERM_CON_2;
-	public final int endingTimeStep = 1000;
+	public static int terminatingCondition = TERM_CON_1;
+	public final int endingTimeStep = 500;
 	public final int boundaryLine = 200;
 
 	// Random Number Generator
@@ -67,7 +67,7 @@ public class PedestrianSimulation {
 	private DjikstraOperator dOp;
 	public static final boolean oldImplementation = false;
 
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 
 	private boolean useVisualization;
 
@@ -208,7 +208,6 @@ public class PedestrianSimulation {
 
 			cm.addPerson(p);
 			countPeopleInBuilding--;
-			if(DEBUG) System.out.println("Person added: " + p.toString() + "\n");
 		}
 		return p;
 	}
@@ -650,6 +649,10 @@ public class PedestrianSimulation {
 		return out;
 	}
 	
+	/**
+	 * 
+	 * @return True if the simulation should continue
+	 */
 	private boolean terminatingConditionOne() {
 //		out = (countPeopleInBuilding > 0 || people.size() < totalPeople);
 		return (simThread.getCurrTimeStep() < endingTimeStep);

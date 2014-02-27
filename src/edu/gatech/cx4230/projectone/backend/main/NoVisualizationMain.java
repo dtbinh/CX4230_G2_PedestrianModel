@@ -18,7 +18,7 @@ public class NoVisualizationMain {
 	public NoVisualizationMain(int trials) {
 		results = new ArrayList<EndSimulationResult>();
 
-		for(int i = 0; i < trials; i++) {
+		for(int i = 1; i <= trials; i++) {
 			System.out.println("Running trial: " + i + " of " + trials + "...");
 			run();
 		}

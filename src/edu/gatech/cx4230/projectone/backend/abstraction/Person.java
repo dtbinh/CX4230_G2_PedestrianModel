@@ -263,7 +263,6 @@ public class Person {
 		this.nextTargets = nt;
 		if(nt != null) {
 			setNextTarget(nextTargets.removeSource());
-			if(DEBUG) System.out.println("Person(Ln 215): Next Target: " + nextTarget.toString());
 		} else {
 			System.err.println("setNextTargets path is null");
 		}
