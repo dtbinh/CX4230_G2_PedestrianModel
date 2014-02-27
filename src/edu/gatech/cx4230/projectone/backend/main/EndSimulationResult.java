@@ -4,6 +4,7 @@ public class EndSimulationResult {
 	private int termCondition;
 	private int peopleCount;
 	private int timeSteps;
+	private long time;
 	private int score;
 	
 	public EndSimulationResult(int termCondition, int peopleCount, int x) {
@@ -18,6 +19,11 @@ public class EndSimulationResult {
 			this.timeSteps = x;
 			break;
 		}
+	}
+	
+	public EndSimulationResult(int termCondition, int peopleCount, int x, long t) {
+		this(termCondition, peopleCount, x);
+		this.time = t;
 	}
 	
 	public int getValue() {
@@ -43,6 +49,7 @@ public class EndSimulationResult {
 			out += timeSteps;
 			break;
 		}
+		out += " in " + time + " ms";
 		return out;
 	}
 
@@ -100,6 +107,20 @@ public class EndSimulationResult {
 	 */
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	/**
+	 * @return the time
+	 */
+	public long getTime() {
+		return time;
+	}
+
+	/**
+	 * @param time the time to set
+	 */
+	public void setTime(long time) {
+		this.time = time;
 	}
 
 }

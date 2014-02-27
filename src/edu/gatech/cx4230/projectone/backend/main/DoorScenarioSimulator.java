@@ -14,11 +14,11 @@ public class DoorScenarioSimulator {
 	private static final int BX = 120, BY = 319, BW = 257, BH = 81;
 	
 	// Simulation Inputs
-	private int peopleToUse = 100;
+	private int peopleToUse = 1500;
 	private boolean debug = false;
 	private int termCon = PedestrianSimulation.TERM_CON_1;
 	private int boundary = 200;
-	private int endingTimeSteps = 500;
+	private int endingTimeSteps = 100;
 	private List<Point> doorPoints;
 	private SimulationScenario scen;
 	private int doorTrials = 3;
@@ -42,6 +42,7 @@ public class DoorScenarioSimulator {
 		
 		NoVisualizationMain experiment = new NoVisualizationMain(scen);
 		ExperimentResult result = experiment.processResults();
+		System.out.println(result);
 	}
 	
 	

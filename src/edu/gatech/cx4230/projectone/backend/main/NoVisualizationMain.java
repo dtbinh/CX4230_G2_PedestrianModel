@@ -17,22 +17,30 @@ import edu.gatech.cx4230.projectone.backend.utilities.StatsHelper;
 public class NoVisualizationMain {
 	private List<EndSimulationResult> results;
 	private SimulationScenario scenario;
+	private long start, stop;
 
 	public NoVisualizationMain(SimulationScenario scen) {
 		this.scenario = scen;
 		int trials = scen.getTrials();
 		results = new ArrayList<EndSimulationResult>();
 
+		start = System.currentTimeMillis();
+		long t = start;
 		for(int i = 1; i <= trials; i++) {
-			System.out.println("Running trial: " + i + " of " + trials + "...");
+			System.out.print("Running trial: " + i + " of " + trials + "...");
 			run();
+			System.out.println(System.currentTimeMillis() - t + " ms");
+			t = System.currentTimeMillis();
 		}
+		stop = System.currentTimeMillis();
+		
 		
 	}
 
 	public void run() {
 		Person.resetCount();
 		Cell.resetCount();
+		long start = System.currentTimeMillis();
 		PedestrianSimulation ps = new PedestrianSimulation(null, scenario);
 
 		while(ps.continueSim()) {
@@ -43,7 +51,10 @@ public class NoVisualizationMain {
 				e.printStackTrace();
 			}
 		}
-		results.add(ps.getEndSimulationResult());
+		long stop = System.currentTimeMillis();
+		EndSimulationResult rs = ps.getEndSimulationResult();
+		rs.setTime(stop - start);
+		results.add(rs);
 
 	}
 
@@ -56,14 +67,17 @@ public class NoVisualizationMain {
 		if(results != null && !results.isEmpty()) {
 			int trials = results.size();
 			int[] scores = new int[trials];
+			long[] times = new long[trials];
 
 			for(int i = 0; i < trials; i++) {
 				scores[i] = results.get(i).getScore();
+				times[i] = results.get(i).getTime();
 			}
 
 			double scoreAverage = StatsHelper.findAverage(scores);
 			double scoreSSD = StatsHelper.findStandardDeviation(scores);
-			out = new ExperimentResult(scoreAverage, scoreSSD, scores);
+			long time = stop - start;
+			out = new ExperimentResult(scoreAverage, scoreSSD, scores, time, times);
 			
 		}
 		return out;
