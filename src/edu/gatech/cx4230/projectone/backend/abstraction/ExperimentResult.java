@@ -10,6 +10,10 @@ public class ExperimentResult {
 		this.standardDeviation = stDev;
 		this.scores = scores;
 	}
+	
+	public String toString() {
+		return "Scores Average: " + average + " St Dev: " + standardDeviation;
+	}
 
 	/**
 	 * @return the average
