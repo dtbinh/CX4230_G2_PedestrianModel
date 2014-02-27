@@ -27,6 +27,7 @@ public class Person {
 	private int timeLastMove;
 	private List<Cell> visitedTargets;
 	private Cell nextTarget;
+	private Cell myDoor;
 	private Path nextTargets;
 	private boolean finished = false;
 	public static boolean DEBUG = true;
@@ -43,6 +44,7 @@ public class Person {
 	public Person(Cell startCell, int startSpeed, int minS, int maxS, int startStress, int startTime) {
 		id = idNextPerson++;
 		location = startCell;
+		myDoor = startCell;
 		currSpeed = startSpeed;
 		minSpeed = minS;
 		maxSpeed = maxS;
@@ -266,5 +268,19 @@ public class Person {
 		} else {
 			System.err.println("setNextTargets path is null");
 		}
+	}
+
+	/**
+	 * @return the myDoor
+	 */
+	public Cell getMyDoor() {
+		return myDoor;
+	}
+
+	/**
+	 * @param myDoor the myDoor to set
+	 */
+	public void setMyDoor(Cell myDoor) {
+		this.myDoor = myDoor;
 	}
 }
