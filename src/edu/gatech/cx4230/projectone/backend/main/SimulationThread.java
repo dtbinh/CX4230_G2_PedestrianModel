@@ -61,7 +61,7 @@ public class SimulationThread extends Thread {
 		if(DEBUG) System.out.println("Quitting Thread...");
 		
 		// TODO Elaborate on Terminating condition
-		if(DEBUG) System.out.println("Simulation Terminated. Condition " + PedestrianSimulation.terminatingCondition);
+		if(DEBUG) System.out.println("Simulation Terminated. Condition " + ps.getTerminatingCondition());
 		if(DEBUG) System.out.println("Time steps: " + currTimeStep);
 		
 		running = false;
