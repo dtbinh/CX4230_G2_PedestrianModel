@@ -178,9 +178,18 @@ public class CellManager {
 		return out;
 	} // close getCellsInArea()
 	
-	
-	
-	
+	public List<Cell> getCellsForPoints(List<Point> points) {
+		List<Cell> out = new ArrayList<Cell>();
+		
+		for(Point p: points) {
+			int x = p.x;
+			int y = p.y;
+			if(indexInBounds(x,y)) {
+				out.add(cells[y][x]);
+			}
+		}	
+		return out;
+	}
 	
 	public List<Cell> getCardinalTraversableNeighbors(Cell here) {
 		List<Cell> out = new ArrayList<Cell>();
