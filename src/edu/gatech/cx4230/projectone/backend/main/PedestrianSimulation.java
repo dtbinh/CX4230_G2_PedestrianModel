@@ -423,6 +423,10 @@ public class PedestrianSimulation {
 		}
 	}
 
+	/**
+	 * calculates a random next move for Person p
+	 * @param p
+	 */
 	private void calculatePanicMove(Person p) {
 		Cell currCell = p.getLocation();
 		Cell nextCell = currCell;
@@ -435,6 +439,11 @@ public class PedestrianSimulation {
 		p.setNextLocation(nextCell);
 	}
 
+	/**
+	 * calculates Person p's next move
+	 * @param p
+	 * @return
+	 */
 	public Person calculateNextMove(Person p) {
 		// determine Person's most desirable next move
 		Cell currCell = p.getLocation();
@@ -444,6 +453,8 @@ public class PedestrianSimulation {
 				
 				Cell nextTarget = p.getNextTarget();
 				if(nextTarget != null) {
+					// find the direction to the next target 
+					// and find an available next cell in that general direction
 					int direction = cm.getMovementDirection(currCell, nextTarget);
 					nextCell = findCellInDirection(currCell, direction);
 					
@@ -470,7 +481,7 @@ public class PedestrianSimulation {
 				
 				
 				/*
-				// TODO Calculate path to nextTarget using Hadlock
+				// Calculate path to nextTarget using Hadlock
 				hadlock.setCm(cm);
 				if (nextTarget == null) {
 					if (DEBUG)
@@ -564,6 +575,7 @@ public class PedestrianSimulation {
 			
 			else if(oldImplementation) {
 				// Old Implementation
+				// uses distance from sink target score method for setting cell's score property
 				//ArrayList<Cell> neighbors = cm.getNeighborAll(currCell);
 				ArrayList<Cell> neighbors = cm.getAllTraversableNeighbors(currCell);
 				if(neighbors.size() > 0) {
@@ -592,6 +604,15 @@ public class PedestrianSimulation {
 		return p;
 	} // close calculateNextMove()
 
+	/**
+	 * looks at the cell in direction from currCell
+	 * if that cell is unavailable, attempts to find a cell in the general direction
+	 * returns either available cell that was found, or currCell if none is found
+	 * 
+	 * @param currCell
+	 * @param direction
+	 * @return
+	 */
 	private Cell findCellInDirection(Cell currCell, int direction) {
 		Cell nextCell = null;
 		ArrayList<Cell> neighbors = cm.getAllTraversableNeighbors(currCell);
