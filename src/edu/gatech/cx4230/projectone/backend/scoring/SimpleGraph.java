@@ -67,7 +67,7 @@ public class SimpleGraph {
 
 
 		// FIVE & FIVE - South
-		Cell cFFSW = cm.getCell(369, 214);
+		Cell cFFSW = cm.getCell(369, 223);
 		Cell cFFSE = cm.getCell(410, 214);
 
 		// - East
