@@ -373,15 +373,18 @@ public class PedestrianSimulation {
 				} // close else
 			} // close Person for
 			
-			// calculate alternative moves for people who had conflicts
-			for(Person p : peopleInConflict) { // people that couldn't move because of conflict
-				calculateAlternativeMove(p, p.getNextLocation());
+			if (i == 0) {
+				// calculate alternative moves for people who had conflicts
+				for (Person p : peopleInConflict) { // people that couldn't move because of conflict
+					calculateAlternativeMove(p, p.getNextLocation());
+				}
+				peopleToMove = peopleInConflict;
+				peopleInConflict.clear();
 			}
-			peopleToMove = peopleInConflict;
 		}
 			
 		// For the people still waiting to move:
-		for(Person p: peopleToMove) {
+		for(Person p: peopleInConflict) {
 			p.increaseStress(Person.WAIT_INCREASE_STRESS);
 		}
 					
