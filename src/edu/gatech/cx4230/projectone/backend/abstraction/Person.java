@@ -115,6 +115,8 @@ public class Person {
 			finished  = true;
 			location.setPerson(null);
 			location = null;
+			nextLocation = null;
+			nextTarget = null;
 		}
 	}
 	

@@ -419,6 +419,7 @@ public class PedestrianSimulation {
 		if(p.isFinished()) {
 			people.remove(p);
 			finishedPeople.add(p);
+			nextCell.setPerson(null);
 		}
 	}
 
