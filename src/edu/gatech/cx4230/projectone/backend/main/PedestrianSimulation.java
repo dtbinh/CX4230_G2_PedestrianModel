@@ -67,7 +67,7 @@ public class PedestrianSimulation {
 	private PathOrganizer pathOrganizer;
 	private HadlockOperator hadlock;
 	private DjikstraOperator dOp;
-	public static final boolean oldImplementation = true;
+	public static final boolean oldImplementation = false;
 
 	public static boolean DEBUG = false;
 
@@ -209,7 +209,7 @@ public class PedestrianSimulation {
 			//int[] speeds = rng.nextIntsArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
 			int speed = (int) Math.round(rng.nextInNormal(Person.MEAN_SPEED, Person.SPEED_ST_DEV));
 			//int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
-			int stress = rng.nextIntInRange(100,400);
+			int stress = (int) Math.round(rng.nextInNormal(400,150));
 			p = new Person(door, speed, stress, simThread.getCurrTimeStep());
 
 			p = findNextTargetPathForPerson(p);
@@ -437,10 +437,39 @@ public class PedestrianSimulation {
 	public Person calculateNextMove(Person p) {
 		// determine Person's most desirable next move
 		Cell currCell = p.getLocation();
+		Cell nextCell = null;
 		if(currCell != null) {
 			if (!oldImplementation) {
-				// TODO Calculate path to nextTarget using Hadlock
+				
 				Cell nextTarget = p.getNextTarget();
+				if(nextTarget != null) {
+					int direction = cm.getMovementDirection(currCell, nextTarget);
+					nextCell = findCellInDirection(currCell, direction);
+					
+					if(!nextCell.isTraversable() || nextCell.isOccupied()){
+						nextCell = currCell;
+					}
+					else if(nextCell.isTraversable() && nextCell.isOccupied()) {
+						calculateAlternativeMove(currCell.getPerson(), nextCell);
+					}
+					else {					
+						if(nextCell != currCell) {
+							nextCell.addToTargeted(p);
+						}
+						p.setNextLocation(nextCell);
+					}
+				}
+				else {
+					if (DEBUG)
+						System.out
+								.println("Person's Next Target is null for "
+										+ p);
+				}
+				
+				
+				
+				/*
+				// TODO Calculate path to nextTarget using Hadlock
 				hadlock.setCm(cm);
 				if (nextTarget == null) {
 					if (DEBUG)
@@ -529,13 +558,13 @@ public class PedestrianSimulation {
 											+ p);
 					}
 				} // close else
+*/			
 			}// close oldImplementation if
 			
 			else if(oldImplementation) {
 				// Old Implementation
 				//ArrayList<Cell> neighbors = cm.getNeighborAll(currCell);
 				ArrayList<Cell> neighbors = cm.getAllTraversableNeighbors(currCell);
-				Cell nextCell = null;
 				if(neighbors.size() > 0) {
 					int i = getIndexOfFirstTraversable(neighbors);
 					if(0 <= i && i < neighbors.size()) {
@@ -562,6 +591,210 @@ public class PedestrianSimulation {
 		return p;
 	} // close calculateNextMove()
 
+	private Cell findCellInDirection(Cell currCell, int direction) {
+		Cell nextCell = null;
+		ArrayList<Cell> neighbors = cm.getAllTraversableNeighbors(currCell);
+		
+		if(direction == CellManager.NORTH) {
+			nextCell = cm.getNeighborTop(currCell);
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottom(currCell);
+			}
+		}
+		else if(direction == CellManager.SOUTH) {
+			nextCell = cm.getNeighborBottom(currCell);
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTop(currCell);
+			}
+		}
+		else if(direction == CellManager.EAST) {
+			nextCell = cm.getNeighborRight(currCell);
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTop(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottom(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborLeft(currCell);
+			}
+		}
+		else if(direction == CellManager.WEST) {
+			nextCell = cm.getNeighborLeft(currCell);
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTop(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottom(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborRight(currCell);
+			}
+		}
+		else if(direction == CellManager.NORTH_EAST) {
+			nextCell = cm.getNeighborTopRight(currCell);
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTop(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottom(currCell);
+			}
+		}
+		else if(direction == CellManager.NORTH_WEST) {
+			nextCell = cm.getNeighborTopLeft(currCell);
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTop(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottom(currCell);
+			}
+		}
+		else if(direction == CellManager.SOUTH_EAST) {
+			nextCell = cm.getNeighborBottomRight(currCell);
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottom(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTop(currCell);
+			}
+		}
+		else if(direction == CellManager.SOUTH_WEST) {
+			nextCell = cm.getNeighborBottomLeft(currCell);
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottom(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopLeft(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborBottomRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTopRight(currCell);
+			}
+			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+				nextCell = cm.getNeighborTop(currCell);
+			}
+		}
+		else {
+			nextCell = currCell;
+		}
+		
+		return nextCell;
+	}
+	
+	
 	/**
 	 * calculateAlternativeMove finds a "sway" cell (to the left or right of the desired cell) if it is available.
 	 * this method assumes that the desired movement was in the N,S,E, or W direction,
@@ -571,46 +804,67 @@ public class PedestrianSimulation {
 	 * @param nextCell the preferred nextCell that is unavailable due to conflict
 	 */
 	private void calculateAlternativeMove(Person p, Cell nextCell) {
-		Cell currCell = p.getLocation();
-		Cell alternateNextCell = currCell;
-		int direction = cm.getMovementDirection(currCell, nextCell);
-		Cell[] swayCells = new Cell[2];
-		
-		// find "sway" cells 
-		if(direction == CellManager.NORTH) {
-			 swayCells[0] = cm.getNeighborTopRight(currCell);
-			 swayCells[1] = cm.getNeighborTopLeft(currCell);
-		}
-		else if(direction == CellManager.SOUTH) {
-			 swayCells[0] = cm.getNeighborBottomRight(currCell);
-			 swayCells[1] = cm.getNeighborBottomLeft(currCell);
-		}
-		else if(direction == CellManager.EAST) {
-			 swayCells[0] = cm.getNeighborTopRight(currCell);
-			 swayCells[1] = cm.getNeighborBottomRight(currCell);
-		}				
-		else if(direction == CellManager.WEST) {
-			 swayCells[0] = cm.getNeighborTopLeft(currCell);
-			 swayCells[1] = cm.getNeighborBottomLeft(currCell);
+		if(p != null) {
+			Cell currCell = p.getLocation();
+			Cell alternateNextCell = currCell;
+			int direction = cm.getMovementDirection(currCell, nextCell);
+			Cell[] swayCells = new Cell[2];
+			
+			// find "sway" cells 
+			if(direction == CellManager.NORTH) {
+				 swayCells[0] = cm.getNeighborTopRight(currCell);
+				 swayCells[1] = cm.getNeighborTopLeft(currCell);
+			}
+			else if(direction == CellManager.SOUTH) {
+				 swayCells[0] = cm.getNeighborBottomRight(currCell);
+				 swayCells[1] = cm.getNeighborBottomLeft(currCell);
+			}
+			else if(direction == CellManager.EAST) {
+				 swayCells[0] = cm.getNeighborTopRight(currCell);
+				 swayCells[1] = cm.getNeighborBottomRight(currCell);
+			}				
+			else if(direction == CellManager.WEST) {
+				 swayCells[0] = cm.getNeighborTopLeft(currCell);
+				 swayCells[1] = cm.getNeighborBottomLeft(currCell);
+			}
+			if(direction == CellManager.NORTH_EAST) {
+				 swayCells[0] = cm.getNeighborTop(currCell);
+				 swayCells[1] = cm.getNeighborRight(currCell);
+			}
+			else if(direction == CellManager.NORTH_WEST) {
+				 swayCells[0] = cm.getNeighborTop(currCell);
+				 swayCells[1] = cm.getNeighborLeft(currCell);
+			}
+			else if(direction == CellManager.SOUTH_EAST) {
+				 swayCells[0] = cm.getNeighborBottom(currCell);
+				 swayCells[1] = cm.getNeighborRight(currCell);
+			}				
+			else if(direction == CellManager.SOUTH_WEST) {
+				 swayCells[0] = cm.getNeighborBottom(currCell);
+				 swayCells[1] = cm.getNeighborLeft(currCell);
+			}
+			else {
+				 swayCells[0] = currCell;
+				 swayCells[1] = currCell;
+			}
+			
+			// choose which way to "sway" based on which cell gets person closer to next target
+			if(!swayCells[0].isOccupied() && 
+					(swayCells[0].getDistanceToCell(p.getNextTarget()) < 
+					swayCells[1].getDistanceToCell(p.getNextTarget()))) {
+				alternateNextCell = swayCells[0];
+			}
+			else if (!swayCells[1].isOccupied()){
+				alternateNextCell = swayCells[1];
+			}
+			
+			p.setNextLocation(alternateNextCell);
+			if(!alternateNextCell.equals(currCell)) {
+				alternateNextCell.addToTargeted(p);
+			}
 		}
 		else {
-			 swayCells[0] = currCell;
-			 swayCells[1] = currCell;
-		}
-		
-		// choose which way to "sway" based on which cell gets person closer to next target
-		if(!swayCells[0].isOccupied() && 
-				(swayCells[0].getDistanceToCell(p.getNextTarget()) < 
-				swayCells[1].getDistanceToCell(p.getNextTarget()))) {
-			alternateNextCell = swayCells[0];
-		}
-		else if (!swayCells[1].isOccupied()){
-			alternateNextCell = swayCells[1];
-		}
-		
-		p.setNextLocation(alternateNextCell);
-		if(!alternateNextCell.equals(currCell)) {
-			alternateNextCell.addToTargeted(p);
+			System.out.println("person null");
 		}
 	}
 	

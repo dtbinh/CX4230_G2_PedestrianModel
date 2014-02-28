@@ -23,7 +23,10 @@ public class CellManager {
 	public static final int SOUTH = 1;
 	public static final int EAST = 2;
 	public static final int WEST = 3;
-	public static final int DIAGONAL = 4;
+	public static final int NORTH_EAST = 4;
+	public static final int NORTH_WEST = 5;
+	public static final int SOUTH_EAST = 6;
+	public static final int SOUTH_WEST = 7;
 	
 
 	public CellManager(Cell[][] cells) {
@@ -434,23 +437,43 @@ public class CellManager {
 		int newX = toCell.getX();
 		int newY = toCell.getY();
 		
+		int dX = newX - oldX;
+		int dY = newY - oldY;
+		
 		if(oldX == newX && oldY == newY) {
 			direction = NONE;
 		}
-		else if(oldX == newX && oldY < newY) {
-			direction = SOUTH;
+		else if(dX > 0 && dY < 0) {
+			// target is some degree NE
+			direction = NORTH_EAST;
 		}
-		else if(oldX == newX && oldY > newY) {
+		else if(dX > 0 && dY > 0) {
+			// target is some degree SE
+			direction = SOUTH_EAST;
+		}
+		else if(dX < 0 && dY < 0) {
+			// target is some degree NW
+			direction = NORTH_WEST;
+		}
+		else if(dX < 0 && dY > 0) {
+			// target is some degree SW
+			direction = SOUTH_WEST;
+		}
+		else if(dX == 0 && dY < 0) {
+			// target is N 
 			direction = NORTH;
 		}
-		else if(oldX < newX && oldY == newY) {
+		else if(dX == 0 && dY > 0) {
+			// target is S 
+			direction = SOUTH;
+		}
+		else if(dX > 0 && dY == 0) {
+			// target is E 
 			direction = EAST;
 		}
-		else if(oldX > newX && oldY == newY) {
+		else if(dX < 0 && dY == 0) {
+			// target is W
 			direction = WEST;
-		}
-		else {
-			direction = DIAGONAL;
 		}
 		
 		return direction;
