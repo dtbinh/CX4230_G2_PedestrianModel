@@ -67,7 +67,7 @@ public class PedestrianSimulation {
 	private PathOrganizer pathOrganizer;
 	private HadlockOperator hadlock;
 	private DjikstraOperator dOp;
-	public static final boolean oldImplementation = false;
+	public static final boolean oldImplementation = true;
 
 	public static boolean DEBUG = false;
 
@@ -310,6 +310,9 @@ public class PedestrianSimulation {
 	 */
 	public void movePeople() {
 		int currStep = simThread.getCurrTimeStep();
+		
+		ArrayList<Person> peopleReadyToMove = new ArrayList<Person>();
+		
 		// iterate over all people currently in the simulation
 		//for(Person p : people) {
 		for(Iterator<Person> it = people.iterator(); it.hasNext();) {
@@ -324,14 +327,14 @@ public class PedestrianSimulation {
 					calculateNextMove(p);
 				}
 				//p = calculateNextMove(p);
-				peopleToMove.add(p);
+				peopleReadyToMove.add(p);
 			}
 		}
 		
 		ArrayList<Person> peopleInConflict = new ArrayList<Person>();
 		
 		for(int i = 0; i < 2; i++) { // max 2 attempts for a person to move in this time step
-			for(Iterator<Person> it = peopleToMove.iterator(); it.hasNext();) {
+			for(Iterator<Person> it = peopleReadyToMove.iterator(); it.hasNext();) {
 				Person p = it.next();
 				// handle movement of people, potential collisions with other people, etc
 				Cell nextCell = p.getNextLocation();
@@ -343,6 +346,7 @@ public class PedestrianSimulation {
 					
 					if(nextCell.getTargeted().size() == 1) { // if no conflicts
 						movePerson(p, nextCell, currStep);
+						//peopleToMove.add(p);
 						it.remove();
 					}
 					else { // Multiple people want same Cell
@@ -362,9 +366,9 @@ public class PedestrianSimulation {
 	
 							// Update the CellManager
 							movePerson(winner, nextCell, currStep);
+							//peopleToMove.add(winner);
 							
-							peopleToMove.remove(targeted); // this assumes "losers" will wait until next time step
-							//peopleToMove.remove(winner);
+							peopleReadyToMove.remove(targeted); // this assumes "losers" will wait until next time step
 							targeted.remove(winner);
 							peopleInConflict.addAll(targeted);
 							//it.remove();
@@ -378,7 +382,7 @@ public class PedestrianSimulation {
 				for (Person p : peopleInConflict) { // people that couldn't move because of conflict
 					calculateAlternativeMove(p, p.getNextLocation());
 				}
-				peopleToMove = peopleInConflict;
+				peopleReadyToMove = peopleInConflict;
 				peopleInConflict.clear();
 			}
 		}
@@ -387,9 +391,17 @@ public class PedestrianSimulation {
 		for(Person p: peopleInConflict) {
 			p.increaseStress(Person.WAIT_INCREASE_STRESS);
 		}
+		
+		// move people
+		for(Person p : peopleToMove) {
+			Cell nextCell = p.getNextLocation();
+			//nextCell = cm.getCell(nextCell.getX(), nextCell.getY());
+			movePerson(p, nextCell, currStep);
+		}
 					
-		peopleToMove.clear();
+		peopleReadyToMove.clear();
 		peopleInConflict.clear();
+		peopleToMove.clear();
 
 		peopleAvailable = true;
 	} // close movePeople()
@@ -414,7 +426,7 @@ public class PedestrianSimulation {
 		Cell currCell = p.getLocation();
 		Cell nextCell = currCell;
 		ArrayList<Cell> neighbors = cm.getAllTraversableNeighbors(currCell);
-		int choice = rng.nextInt(9);
+		int choice = rng.nextInt(neighbors.size()+1);
 		if(choice < neighbors.size()) {
 			nextCell = neighbors.get(choice);
 			nextCell.addToTargeted(p);
