@@ -3,6 +3,7 @@ package edu.gatech.cx4230.projectone.backend.abstraction;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.gatech.cx4230.projectone.backend.scoring.Edge;
 import edu.gatech.cx4230.projectone.backend.scoring.Path;
 
 
@@ -31,6 +32,7 @@ public class Person {
 	private List<Cell> visitedTargets;
 	private Cell nextTarget;
 	private Cell myDoor;
+	private Cell myFinalDestination;
 	private Path nextTargets;
 	private boolean finished = false;
 	public static boolean DEBUG = true;
@@ -277,6 +279,14 @@ public class Person {
 		this.nextTargets = nt;
 		if(nt != null) {
 			setNextTarget(nextTargets.removeSource());
+			List<Edge> edges = nt.getList();
+			if(edges != null && !edges.isEmpty()) {
+				Edge e = edges.get(edges.size() - 1);
+				if(e != null) {
+					Cell d = e.getDestination();
+					if(d != null) myFinalDestination = d;
+				}
+			}
 		} else {
 			System.err.println("setNextTargets path is null");
 		}
@@ -294,5 +304,19 @@ public class Person {
 	 */
 	public void setMyDoor(Cell myDoor) {
 		this.myDoor = myDoor;
+	}
+
+	/**
+	 * @return the myFinalDestination
+	 */
+	public Cell getMyFinalDestination() {
+		return myFinalDestination;
+	}
+
+	/**
+	 * @param myFinalDestination the myFinalDestination to set
+	 */
+	public void setMyFinalDestination(Cell myFinalDestination) {
+		this.myFinalDestination = myFinalDestination;
 	}
 }

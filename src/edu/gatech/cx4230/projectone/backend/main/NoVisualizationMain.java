@@ -56,6 +56,7 @@ public class NoVisualizationMain {
 		EndSimulationResult rs = ps.getEndSimulationResult();
 		Logger.log((rs.getPeopleFinished() + rs.getPeopleStillInSim()) + " people created \t");
 		Logger.log("Score: " + rs.getScore() + "\t");
+		Logger.log("Timesteps: " + rs.getTimeSteps() + "\t");
 		rs.setTime(stop - start);
 		results.add(rs);
 

@@ -29,7 +29,7 @@ public class Logger {
 	
 	public static void log(String partial) {
 		if(partial != null) {
-			partialLine = partial;
+			partialLine += partial;
 			System.out.print(partial);
 		}
 	}
@@ -38,7 +38,7 @@ public class Logger {
 		lines.clear();
 	}
 	
-	public static void save(String filename) {
+	public static void save(String filename, boolean clear) {
 		String workingDirectory = System.getProperty("user.dir");
 		int index = workingDirectory.indexOf("CX4230_G2_PedestrianModel");
 		String localPath = workingDirectory.substring(0,index);
@@ -60,7 +60,7 @@ public class Logger {
 			e.printStackTrace();
 		}
 		System.out.println("Log saved");
-		clear();
+		if(clear) clear();
 	}
 
 }

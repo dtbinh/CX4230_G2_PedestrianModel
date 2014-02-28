@@ -20,8 +20,8 @@ public class DoorScenarioSimulator {
 
 	// Simulation Inputs
 	private int peopleToUse = 1500;
-	private int endingTimeSteps = 1000;
-	private int doorTrials = 15; // Trials of each Door Arrangement
+	private int endingTimeSteps = 200;
+	private int doorTrials = 3; // Trials of each Door Arrangement
 	private boolean debug = false;
 	private int termCon = PedestrianSimulation.TERM_CON_1;
 	private int boundary = 200;
@@ -72,7 +72,7 @@ public class DoorScenarioSimulator {
 		for(int i = 0; i < trialDoors.size(); i++) {
 			Door d = trialDoors.get(i);
 
-			Logger.logLine("Door Trial " + d.getId());
+			Logger.logLine("Type" + d.getType() + " Door Trial " + d.getId() + " of " + trialDoors.size());
 			List<Point> doorPoints = d.getPoints();
 
 			if(setDoors != null && !setDoors.isEmpty()) {
@@ -255,9 +255,12 @@ public class DoorScenarioSimulator {
 	}
 
 	public static void main(String[] args) {
+		try {
 		DoorScenarioSimulator dss = new DoorScenarioSimulator();
 		Door quadLocation = dss.determineQuadDoorLocation();
+		Logger.logLine("Quad: " + quadLocation.toString());
 		Door doubleLocation = dss.determineDoubleDoorLocation(quadLocation);
+		Logger.logLine("Double: " + doubleLocation.toString());
 
 		List<Door> setDoors = new ArrayList<Door>();
 		setDoors.add(quadLocation);
@@ -266,6 +269,7 @@ public class DoorScenarioSimulator {
 		int singleDoorCount = 4;
 		for(int i = 0; i < singleDoorCount; i++) {
 			Door single = dss.determineSingleDoorLocation(setDoors);
+			Logger.logLine("Single: " + i + " is " + single.toString());
 			setDoors.add(single);
 		}
 
@@ -275,8 +279,11 @@ public class DoorScenarioSimulator {
 			Logger.logLine(d.toString());
 		}
 		
-		
-		Logger.save("DoorSimulator" + DateTimeHelper.getDateTime());
+		} catch(Exception e) {
+			Logger.save("DoorSimulator" + DateTimeHelper.getDateTime() + " -ERROR", false);
+			e.printStackTrace();
+		}
+		Logger.save("DoorSimulator" + DateTimeHelper.getDateTime(), true);
 	} // close Main
 
 }
