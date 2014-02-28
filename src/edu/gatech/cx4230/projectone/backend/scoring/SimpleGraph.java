@@ -71,7 +71,7 @@ public class SimpleGraph {
 		Cell cFFSE = cm.getCell(410, 214);
 
 		// - East
-		Cell cFFES = cm.getCell(421, 207);
+		Cell cFFES = cm.getCell(421, 207);//
 		Cell cFFEN = cm.getCell(421, 183);
 
 		// - North

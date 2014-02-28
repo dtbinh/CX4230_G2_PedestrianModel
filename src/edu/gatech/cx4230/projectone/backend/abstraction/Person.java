@@ -113,6 +113,8 @@ public class Person {
 		} else {
 			if(DEBUG) System.out.println(this.toString() + ": No NEXT Target");
 			finished  = true;
+			location.setPerson(null);
+			location = null;
 		}
 	}
 	

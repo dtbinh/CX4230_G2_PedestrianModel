@@ -60,7 +60,7 @@ public class VisualizationMain extends PApplet {
 
 		timeStep = 0;
 		
-		SimulationScenario scen = new SimulationScenario(1500, false, PedestrianSimulation.TERM_CON_1, 200, 1000, null, 1);
+		SimulationScenario scen = new SimulationScenario(1500, false, PedestrianSimulation.TERM_CON_1, 200, 6000, null, 1);
 		ps = new PedestrianSimulation(this, scen);
 		
 		updateDoorMarkers();
