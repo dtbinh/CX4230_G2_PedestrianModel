@@ -15,8 +15,8 @@ public class Person {
 	public static final int MIN_SPEED = 6; // move every x time steps
 	public static final double MEAN_SPEED = 4.0;
 	public static final double SPEED_ST_DEV = 0.5;
-	public static final double WAIT_INCREASE_STRESS = 0.05;
-	public static final double MOVE_DECREASE_STRESS = 0.05;
+	public static final double WAIT_INCREASE_STRESS = 0.10;
+	public static final double MOVE_DECREASE_STRESS = 0.10;
 	public static final int PANIC_THRESHOLD = 500;
 
 	
