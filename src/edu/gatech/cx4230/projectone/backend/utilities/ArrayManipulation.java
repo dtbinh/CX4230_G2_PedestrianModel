@@ -44,6 +44,54 @@ public class ArrayManipulation {
 		return out;
 	}
 	
+	public static int findIndexMin(double[] array) {
+		int ind = 0;
+		double val = array[0];
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] < val) {
+				val = array[i];
+				ind = i;
+			}
+		}
+		return ind;
+	}
+	
+	public static int findIndexMax(double[] array) {
+		int ind = 0;
+		double val = array[0];
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] > val) {
+				val = array[i];
+				ind = i;
+			}
+		}
+		return ind;
+	}
+	
+	public static int findIndexMin(int[] array) {
+		int ind = 0;
+		int val = array[0];
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] < val) {
+				val = array[i];
+				ind = i;
+			}
+		}
+		return ind;
+	}
+	
+	public static int findIndexMax(int[] array) {
+		int ind = 0;
+		int val = array[0];
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] > val) {
+				val = array[i];
+				ind = i;
+			}
+		}
+		return ind;
+	}
+	
 	/**
 	 * Takes in a 3D array and consolidates array into a 2D array by
 	 * merging along the 3rd dimension
