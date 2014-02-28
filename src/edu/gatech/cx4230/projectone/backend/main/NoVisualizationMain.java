@@ -32,7 +32,6 @@ public class NoVisualizationMain {
 			run();
 			Logger.logLine(" in " + (System.currentTimeMillis() - t) + " ms");
 			t = System.currentTimeMillis();
-			Logger.logLine("");
 		}
 		stop = System.currentTimeMillis();
 		
@@ -56,6 +55,7 @@ public class NoVisualizationMain {
 		long stop = System.currentTimeMillis();
 		EndSimulationResult rs = ps.getEndSimulationResult();
 		Logger.log((rs.getPeopleFinished() + rs.getPeopleStillInSim()) + " people created \t");
+		Logger.log("Score: " + rs.getScore() + "\t");
 		rs.setTime(stop - start);
 		results.add(rs);
 
