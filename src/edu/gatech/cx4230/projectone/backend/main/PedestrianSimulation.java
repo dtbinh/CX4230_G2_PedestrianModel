@@ -209,7 +209,8 @@ public class PedestrianSimulation {
 			Cell door = openDoors.get(doorI);
 			//int[] speeds = rng.nextIntsArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
 			int speed = (int) Math.round(rng.nextInNormal(Person.MEAN_SPEED, Person.SPEED_ST_DEV));
-			int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
+			//int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
+			int stress = 100;
 			p = new Person(door, speed, stress, simThread.getCurrTimeStep());
 
 			p = findNextTargetPathForPerson(p);
@@ -315,8 +316,10 @@ public class PedestrianSimulation {
 		for(Iterator<Person> it = people.iterator(); it.hasNext();) {
 			Person p = it.next();
 			if(p.isMoveable(currStep)) {
-				if(p.getStressLevel() >= Person.PANIC_THRESHOLD) {
+				int panic = rng.nextInt(Person.MAX_STRESS);
+				if(p.getStressLevel() > panic) {
 					calculatePanicMove(p);
+					p.increaseStress(Person.WAIT_INCREASE_STRESS);
 				}
 				else {
 					calculateNextMove(p);
