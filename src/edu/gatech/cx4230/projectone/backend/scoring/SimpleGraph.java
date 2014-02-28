@@ -61,7 +61,7 @@ public class SimpleGraph {
 		sources.add(cAWS);
 
 		// - East
-		Cell cAEN = cm.getCell(372, 294);
+		Cell cAEN = cm.getCell(372, 290);
 		Cell cAES = cm.getCell(372, 312);
 		sources.add(cAES);
 
@@ -71,7 +71,7 @@ public class SimpleGraph {
 		Cell cFFSE = cm.getCell(410, 214);
 
 		// - East
-		Cell cFFES = cm.getCell(421, 203);
+		Cell cFFES = cm.getCell(421, 207);
 		Cell cFFEN = cm.getCell(421, 183);
 
 		// - North
