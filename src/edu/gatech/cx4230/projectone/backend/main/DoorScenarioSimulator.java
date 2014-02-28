@@ -8,6 +8,7 @@ import edu.gatech.cx4230.projectone.backend.abstraction.Door;
 import edu.gatech.cx4230.projectone.backend.abstraction.ExperimentResult;
 import edu.gatech.cx4230.projectone.backend.abstraction.SimulationScenario;
 import edu.gatech.cx4230.projectone.backend.utilities.ArrayManipulation;
+import edu.gatech.cx4230.projectone.backend.utilities.DateTimeHelper;
 import edu.gatech.cx4230.projectone.backend.utilities.Logger;
 
 public class DoorScenarioSimulator {
@@ -28,7 +29,12 @@ public class DoorScenarioSimulator {
 	
 
 	public DoorScenarioSimulator() {
-
+		Logger.logLine("Determining Door Positions");
+		Logger.logLine(DateTimeHelper.getDateTime());
+		Logger.logLine("PeopleToUse: " + peopleToUse);
+		Logger.logLine("EndingTimeSteps: " + endingTimeSteps);
+		Logger.logLine("Trials of each door: " + doorTrials);
+		Logger.logLine("\n");
 	}
 
 	public Door determineQuadDoorLocation() {
@@ -268,6 +274,9 @@ public class DoorScenarioSimulator {
 		for(Door d: setDoors) {
 			Logger.logLine(d.toString());
 		}
+		
+		
+		Logger.save("DoorSimulator" + DateTimeHelper.getDateTime());
 	} // close Main
 
 }
