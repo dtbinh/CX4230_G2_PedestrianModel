@@ -17,12 +17,13 @@ public class Logger {
 	
 	public static void logLine(String line) {
 		if(line != null) {
+			if(PRINT) System.out.println(line);
 			if(partialLine != null && !partialLine.isEmpty()) {
 				line += partialLine;
 				partialLine = null;
 			}
-			lines.add(line);
-			if(PRINT) System.out.println(line);
+			lines.add(line + "\n");
+			
 		}
 	}
 	
@@ -41,13 +42,13 @@ public class Logger {
 		String workingDirectory = System.getProperty("user.dir");
 		int index = workingDirectory.indexOf("CX4230_G2_PedestrianModel");
 		String localPath = workingDirectory.substring(0,index);
-		String out = localPath + "CX4230_G2_PedestrianModel/Output"  + filename;
+		String out = localPath + "CX4230_G2_PedestrianModel/Output/"  + filename;
 		
 		if(!out.endsWith(".txt")) {
 			out = out + ".txt";
 		}
 		try {
-		FileWriter fw = new FileWriter(filename);
+		FileWriter fw = new FileWriter(out);
 		for(String line: lines) {
 			
 			fw.write(line);
@@ -58,6 +59,8 @@ public class Logger {
 			System.err.println("There was a problem writing Log to txt file");
 			e.printStackTrace();
 		}
+		System.out.println("Log saved");
+		clear();
 	}
 
 }
