@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  */
 public class ArrayManipulation {
-	
+
 	/**
 	 * Finds the minimum value from a 2D array
 	 * @param array The array to find the minimum value of
@@ -18,7 +18,7 @@ public class ArrayManipulation {
 	 */
 	public static double findMinIn2D(double[][] array) {
 		double out = array[0][0];
-		
+
 		for(int i = 0; i < array.length; i++) {
 			for(int j = 0; j < array[i].length; j++) {
 				if(out > array[i][j]) out = array[i][j];
@@ -26,7 +26,7 @@ public class ArrayManipulation {
 		}	
 		return out;
 	}
-	
+
 	/**
 	 * Finds the maximum value from a 2D array
 	 * @param array The array to find the maximum value of
@@ -34,64 +34,73 @@ public class ArrayManipulation {
 	 */
 	public static double findMaxIn2D(double[][] array) {
 		double out = array[0][0];
-		
+
 		for(int i = 0; i < array.length; i++) {
 			for(int j = 0; j < array[i].length; j++) {
 				if(out < array[i][j]) out = array[i][j];
 			}
 		}
-		
+
 		return out;
 	}
-	
+
 	public static int findIndexMin(double[] array) {
-		int ind = 0;
-		double val = array[0];
-		for(int i = 0; i < array.length; i++) {
-			if(array[i] < val) {
-				val = array[i];
-				ind = i;
+		int ind = -1;
+		if(array != null && array.length > 0) {
+			double val = array[0];
+			for(int i = 0; i < array.length; i++) {
+				if(array[i] < val) {
+					val = array[i];
+					ind = i;
+				}
 			}
 		}
 		return ind;
 	}
-	
+
 	public static int findIndexMax(double[] array) {
-		int ind = 0;
-		double val = array[0];
-		for(int i = 0; i < array.length; i++) {
-			if(array[i] > val) {
-				val = array[i];
-				ind = i;
+		int ind = -1;
+		if(array != null && array.length > 0) {
+			ind = 0;
+			double val = array[ind];
+			for(int i = 0; i < array.length; i++) {
+				if(array[i] > val) {
+					val = array[i];
+					ind = i;
+				}
 			}
 		}
 		return ind;
 	}
-	
+
 	public static int findIndexMin(int[] array) {
-		int ind = 0;
-		int val = array[0];
-		for(int i = 0; i < array.length; i++) {
-			if(array[i] < val) {
-				val = array[i];
-				ind = i;
+		int ind = -1;
+		if(array != null && array.length > 0) {
+			int val = array[0];
+			for(int i = 0; i < array.length; i++) {
+				if(array[i] < val) {
+					val = array[i];
+					ind = i;
+				}
 			}
 		}
 		return ind;
 	}
-	
+
 	public static int findIndexMax(int[] array) {
-		int ind = 0;
-		int val = array[0];
-		for(int i = 0; i < array.length; i++) {
-			if(array[i] > val) {
-				val = array[i];
-				ind = i;
+		int ind = -1;
+		if(array != null && array.length > 0) {
+			int val = array[0];
+			for(int i = 0; i < array.length; i++) {
+				if(array[i] > val) {
+					val = array[i];
+					ind = i;
+				}
 			}
 		}
 		return ind;
 	}
-	
+
 	/**
 	 * Takes in a 3D array and consolidates array into a 2D array by
 	 * merging along the 3rd dimension
@@ -100,22 +109,22 @@ public class ArrayManipulation {
 	 */
 	public static boolean[][] consolidateBoolArray(boolean[][][] array) {
 		boolean[][] out = new boolean[array.length][];
-		
+
 		for(int i = 0; i < array.length; i++) {
 			out[i] = new boolean[array[i].length];
-			
+
 			for(int j = 0; j < array[i].length; j++) {
 				out[i][j] = false;
-				
+
 				for(int k = 0; k < array[i][j].length; k++) {
 					if(array[i][j][k]) out[i][j] = true;
 				}
 			}
 		}
-		
+
 		return out;
 	}
-	
+
 	/**
 	 * Takes in an ArrayList of 2D booleans and consolidates array into a 2D array by
 	 * merging along the ArrayList
@@ -131,13 +140,13 @@ public class ArrayManipulation {
 				int width = array.get(0)[0].length;
 				int height = array.get(0).length;
 				out = new boolean[height][];
-				
+
 				for(int i = 0; i < height; i++) {
 					out[i] = new boolean[width];
-					
+
 					for(int j = 0; j < width; j++) {
 						out[i][j] = false;
-						
+
 						for(boolean[][] cur: array) {
 							if(cur[i][j]) out[i][j] = true;
 						} // close for
@@ -147,7 +156,7 @@ public class ArrayManipulation {
 		} // close null if
 		return out;
 	} // close function
-	
+
 	/**
 	 * Writes an array to a comma-separated-variable (CSV) file to the directory of this application
 	 * @param array Array to be saved to the file
@@ -162,7 +171,7 @@ public class ArrayManipulation {
 				FileWriter fw = new FileWriter(filename);
 				for(int i = 0; i < array.length; i++) {
 					String line = "";
-					
+
 					for(int j = 0; j < array[i].length; j++) {
 						if(j != 0) line += ", ";
 						line += array[i][j];
@@ -170,7 +179,7 @@ public class ArrayManipulation {
 					line += "\n";
 					fw.write(line);
 				} // close for i
-				
+
 				fw.close();
 			} // close if null
 		} catch (IOException e) {
@@ -178,7 +187,7 @@ public class ArrayManipulation {
 			e.printStackTrace();
 		} // close catch
 	} // close method
-	
+
 	/**
 	 * Writes an array to a comma-separated-variable (CSV) file to the directory of this application
 	 * @param array Array to be saved to the file
@@ -193,7 +202,7 @@ public class ArrayManipulation {
 				FileWriter fw = new FileWriter(filename);
 				for(int i = 0; i < array.length; i++) {
 					String line = "";
-					
+
 					for(int j = 0; j < array[i].length; j++) {
 						if(j != 0) line += ", ";
 						line += array[i][j];
@@ -201,7 +210,7 @@ public class ArrayManipulation {
 					line += "\n";
 					fw.write(line);
 				} // close for i
-				
+
 				fw.close();
 			} // close if null
 		} catch (IOException e) {
@@ -209,7 +218,7 @@ public class ArrayManipulation {
 			e.printStackTrace();
 		} // close catch
 	} // close method
-	
+
 	/**
 	 * Converts a 2D array of booleans to a 2D array of doubles where
 	 * 1 is true and 0 is false
@@ -218,10 +227,10 @@ public class ArrayManipulation {
 	 */
 	public static double[][] convertBoolArrayToDouble(boolean[][] in) {
 		double[][] out = new double[in.length][];
-		
+
 		for(int i = 0; i < in.length; i++) {
 			out[i] = new double[in[i].length];
-			
+
 			for(int j = 0; j < in[i].length; j++) {
 				out[i][j] = 0;
 				if(in[i][j]) out[i][j] = 1;
@@ -229,7 +238,7 @@ public class ArrayManipulation {
 		} // close for
 		return out;
 	}
-	
+
 	/**
 	 * Returns the specific third dimension of the 3D array.
 	 * @param data 3D array of doubles
@@ -238,20 +247,20 @@ public class ArrayManipulation {
 	 */
 	public static double[][] getArrayDim(double[][][] data, int dimension) {
 		double[][] out = new double[data.length][];
-		
+
 		if(0 <= dimension && dimension < data[0][0].length) {
 			for(int i = 0; i < data.length; i++) {
 				out[i] = new double[data[i].length];
-				
+
 				for(int j = 0; j < data[i].length; j++) {
 					out[i][j] = data[i][j][dimension];
 				}
 			}
 		}
-		
+
 		return out;
 	}
-	
+
 	/**
 	 * Returns the specific third dimension of the 3D array.
 	 * @param data 3D array of ints
@@ -260,20 +269,20 @@ public class ArrayManipulation {
 	 */
 	public static int[][] getArrayDim(int[][][] data, int dimension) {
 		int[][] out = new int[data.length][];
-		
+
 		if(0 <= dimension && dimension < data[0][0].length) {
 			for(int i = 0; i < data.length; i++) {
 				out[i] = new int[data[i].length];
-				
+
 				for(int j = 0; j < data[i].length; j++) {
 					out[i][j] = data[i][j][dimension];
 				}
 			}
 		}
-		
+
 		return out;
 	}
-	
+
 	/**
 	 * Prints out a 2D array of doubles to the Console
 	 * @param array 2D array of doubles to be printed
@@ -281,7 +290,7 @@ public class ArrayManipulation {
 	public static void print2DArray(double[][] array) {		
 		int height = array.length;
 		int width = array[0].length;
-		
+
 		for(int i = 0; i < height; i++) {
 			String line = "Line " + i;
 			for(int j = 0; j < width; j++) {
@@ -290,7 +299,7 @@ public class ArrayManipulation {
 			System.out.println(line);
 		}
 	} // close method
-	
+
 	/**
 	 * Prints out a 2D array of ints to the Console
 	 * @param array 2D array of ints to be printed
@@ -298,7 +307,7 @@ public class ArrayManipulation {
 	public static void print2DArray(int[][] array) {
 		int height = array.length;
 		int width = array[0].length;
-		
+
 		for(int i = 0; i < height; i++) {
 			String line = "Line " + i;
 			for(int j = 0; j < width; j++) {
@@ -307,7 +316,7 @@ public class ArrayManipulation {
 			System.out.println(line);
 		}
 	}
-	
+
 	/**
 	 * Prints out a 2D array of Objects to the Console
 	 * @param array 2D array of Objects to be printed
@@ -315,7 +324,7 @@ public class ArrayManipulation {
 	public static void print2DArray(Object[][] array) {
 		int height = array.length;
 		int width = array[0].length;
-		
+
 		for(int i = 0; i < height; i++) {
 			String line = "Line " + i;
 			for(int j = 0; j < width; j++) {
@@ -332,7 +341,7 @@ public class ArrayManipulation {
 	public static void print2DArray(boolean[][] array) {
 		int height = array.length;
 		int width = array[0].length;
-		
+
 		for(int i = 0; i < height; i++) {
 			String line = "Line " + i;
 			for(int j = 0; j < width; j++) {
@@ -340,7 +349,7 @@ public class ArrayManipulation {
 			}
 			System.out.println(line);
 		}
-		
+
 	}
 
 	/**
@@ -351,16 +360,16 @@ public class ArrayManipulation {
 	public static int[][] double2DArraySize(int[][] arrayIn) {
 		int height = arrayIn.length;
 		int width = arrayIn[0].length;
-		
+
 		int[][] arrayOut = new int[2*height][];
-		
+
 		for(int i = 0; i < 2*height; i++) {
 			arrayOut[i] = new int[width*2];
-					
+
 			for(int j = 0; j < 2*width; j++) {
 				int oldHeight = i / 2;
 				int oldWidth = j / 2;
-				
+
 				arrayOut[i][j] = arrayIn[oldHeight][oldWidth];
 			}
 		}
@@ -375,22 +384,22 @@ public class ArrayManipulation {
 	public static double[][] double2DArraySize(double[][] arrayIn) {
 		int height = arrayIn.length;
 		int width = arrayIn[0].length;
-		
+
 		double[][] arrayOut = new double[2*height][];
-		
+
 		for(int i = 0; i < 2*height; i++) {
 			arrayOut[i] = new double[width*2];
-					
+
 			for(int j = 0; j < 2*width; j++) {
 				int oldHeight = i / 2;
 				int oldWidth = j / 2;
-				
+
 				arrayOut[i][j] = arrayIn[oldHeight][oldWidth];
 			}
 		}	
 		return arrayOut;
 	} // close method
-	
+
 	/**
 	 * Reduces the size of a 2D boolean array by half.
 	 * Example:
@@ -400,20 +409,20 @@ public class ArrayManipulation {
 	 */
 	public static boolean[][] half2DArraySize(boolean[][] arrayIn) {
 		boolean[][] arrayOut = new boolean[arrayIn.length/2][];
-		
+
 		int oldHeight = arrayIn.length;
 		int oldWidth = arrayIn[0].length;
-		
+
 		for(int i = 0; i < oldHeight / 2; i++) {
 			arrayOut[i] = new boolean[oldWidth / 2];
-			
+
 			for(int j = 0; j < oldWidth / 2; j++) {
 				arrayOut[i][j] = arrayIn[i * 2][j*2];
 			}
 		}
 		return arrayOut;
 	} // close method
-	
+
 	public static int[][] getSubMatrix(int[][] big, int x, int y, int width, int height) {
 		int w = width;
 		int h = height;
@@ -424,30 +433,30 @@ public class ArrayManipulation {
 			h = big.length - y;
 		}
 		int[][] out = new int[h][];
-		
+
 		for(int j = y; (j-y) < out.length; j++) {
 			out[j - y] = new int[w];
 			for(int i = x; (i-x) < out[j - y].length; i++) {
 				out[j - y][i - x] = big[j][i];
 			}
 		}
-		
+
 		return out;
 	} // close getSubMatrix(...)
-	
+
 	public static int[][] createMatrix(int w, int h) {
 		int[][] out = new int[h][];
-		
+
 		int count = 0;
 		for(int j = 0; j < out.length; j++) {
 			out[j] = new int[w];
-			
+
 			for(int i = 0; i < out[j].length; i++) {
 				out[j][i] = count;
 				count++;
 			}
 		}
-		
+
 		return out;
 	}
 
