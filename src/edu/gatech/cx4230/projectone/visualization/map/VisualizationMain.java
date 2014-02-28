@@ -60,7 +60,7 @@ public class VisualizationMain extends PApplet {
 
 		timeStep = 0;
 		
-		SimulationScenario scen = new SimulationScenario(1500, false, PedestrianSimulation.TERM_CON_1, 200, 1000, null);
+		SimulationScenario scen = new SimulationScenario(1500, false, PedestrianSimulation.TERM_CON_1, 200, 1000, null, 1);
 		ps = new PedestrianSimulation(this, scen);
 		
 		updateDoorMarkers();
@@ -96,7 +96,8 @@ public class VisualizationMain extends PApplet {
 		fill(207, 14, 14);
 		textFont(f);
 		updateTimeStep();
-		text(timeStep, WIDTH - 100, 75);
+		text("Time: " + timeStep, WIDTH - 250, 75);
+		text("People: " + peopleMarkers.size(), WIDTH - 250, 125);
 		cTooltip.draw(this);
 	} // close draw
 	
