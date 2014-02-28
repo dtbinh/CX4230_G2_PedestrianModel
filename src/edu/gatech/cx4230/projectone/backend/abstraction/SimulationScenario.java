@@ -12,17 +12,13 @@ public class SimulationScenario {
 	private int trials;
 	private List<Point> doors;
 	
-	public SimulationScenario(int peeps, boolean d, int termCon, int bound, int ending, List<Point>doors) {
+	public SimulationScenario(int peeps, boolean d, int termCon, int bound, int ending, List<Point>doors, int trials) {
 		this.peopleInBuilding = peeps;
 		this.debug = d;
 		this.terminiatingCondition = termCon;
 		this.boundaryLine = bound;
 		this.endingTimeStep = ending;
 		this.doors = doors;
-	}
-	
-	public SimulationScenario(int peeps, boolean d, int termCon, int bound, int ending, List<Point>doors, int trials) {
-		this(peeps, d, termCon, bound, ending, doors);
 		this.trials = trials;
 	}
 	
