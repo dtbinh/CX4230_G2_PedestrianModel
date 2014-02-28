@@ -209,7 +209,7 @@ public class PedestrianSimulation {
 			//int[] speeds = rng.nextIntsArraySorted(3, Person.MIN_SPEED, Person.MAX_SPEED);
 			int speed = (int) Math.round(rng.nextInNormal(Person.MEAN_SPEED, Person.SPEED_ST_DEV));
 			//int stress = rng.nextIntInRange(Person.MIN_STRESS, Person.MAX_STRESS);
-			int stress = 100;
+			int stress = rng.nextIntInRange(100,400);
 			p = new Person(door, speed, stress, simThread.getCurrTimeStep());
 
 			p = findNextTargetPathForPerson(p);
