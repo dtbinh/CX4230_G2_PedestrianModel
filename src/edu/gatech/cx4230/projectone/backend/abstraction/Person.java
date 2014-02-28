@@ -100,7 +100,8 @@ public class Person {
 	
 	private void setLocation(Cell newLocation) {
 		this.location = newLocation;
-		if(location.equals(nextTarget)) {
+		
+		if(location.equals(nextTarget) || nextTarget.getCm().getNeighborAll(nextTarget).contains(location)) {
 			setToNextTarget();
 		}
 	}

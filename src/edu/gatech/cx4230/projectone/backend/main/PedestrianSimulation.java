@@ -609,7 +609,7 @@ public class PedestrianSimulation {
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborRight(currCell);
 			}
-			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+			/*if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborBottomLeft(currCell);
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
@@ -617,7 +617,7 @@ public class PedestrianSimulation {
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborBottom(currCell);
-			}
+			}*/
 		}
 		else if(direction == CellManager.SOUTH) {
 			nextCell = cm.getNeighborBottom(currCell);
@@ -633,7 +633,7 @@ public class PedestrianSimulation {
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborRight(currCell);
 			}
-			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+			/*if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborTopLeft(currCell);
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
@@ -641,7 +641,7 @@ public class PedestrianSimulation {
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborTop(currCell);
-			}
+			}*/
 		}
 		else if(direction == CellManager.EAST) {
 			nextCell = cm.getNeighborRight(currCell);
@@ -657,7 +657,7 @@ public class PedestrianSimulation {
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborBottom(currCell);
 			}
-			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+			/*if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborTopLeft(currCell);
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
@@ -665,7 +665,7 @@ public class PedestrianSimulation {
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborLeft(currCell);
-			}
+			}*/
 		}
 		else if(direction == CellManager.WEST) {
 			nextCell = cm.getNeighborLeft(currCell);
@@ -681,7 +681,7 @@ public class PedestrianSimulation {
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborBottom(currCell);
 			}
-			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+			/*if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborTopRight(currCell);
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
@@ -689,7 +689,7 @@ public class PedestrianSimulation {
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborRight(currCell);
-			}
+			}*/
 		}
 		else if(direction == CellManager.NORTH_EAST) {
 			nextCell = cm.getNeighborTopRight(currCell);
@@ -705,7 +705,7 @@ public class PedestrianSimulation {
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborBottomRight(currCell);
 			}
-			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+			/*if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborLeft(currCell);
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
@@ -713,7 +713,7 @@ public class PedestrianSimulation {
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborBottom(currCell);
-			}
+			}*/
 		}
 		else if(direction == CellManager.NORTH_WEST) {
 			nextCell = cm.getNeighborTopLeft(currCell);
@@ -729,7 +729,7 @@ public class PedestrianSimulation {
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborBottomLeft(currCell);
 			}
-			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+			/*if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborRight(currCell);
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
@@ -737,7 +737,7 @@ public class PedestrianSimulation {
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborBottom(currCell);
-			}
+			}*/
 		}
 		else if(direction == CellManager.SOUTH_EAST) {
 			nextCell = cm.getNeighborBottomRight(currCell);
@@ -753,7 +753,7 @@ public class PedestrianSimulation {
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborBottomLeft(currCell);
 			}
-			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+			/*if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborLeft(currCell);
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
@@ -761,7 +761,7 @@ public class PedestrianSimulation {
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborTop(currCell);
-			}
+			}*/
 		}
 		else if(direction == CellManager.SOUTH_WEST) {
 			nextCell = cm.getNeighborBottomLeft(currCell);
@@ -777,7 +777,7 @@ public class PedestrianSimulation {
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborBottomRight(currCell);
 			}
-			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
+			/*if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborRight(currCell);
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
@@ -785,7 +785,7 @@ public class PedestrianSimulation {
 			}
 			if(!nextCell.isTraversable() || nextCell.isOccupied()) {
 				nextCell = cm.getNeighborTop(currCell);
-			}
+			}*/
 		}
 		else {
 			nextCell = currCell;
