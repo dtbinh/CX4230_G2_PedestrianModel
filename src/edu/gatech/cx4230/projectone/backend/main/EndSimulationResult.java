@@ -2,13 +2,15 @@ package edu.gatech.cx4230.projectone.backend.main;
 
 public class EndSimulationResult {
 	private int termCondition;
-	private int peopleCount;
+	private int totalPeople, peopleFinished, peopleStillInSim;
 	private int timeSteps;
 	private long time;
 	private int score;
 	
-	public EndSimulationResult(int termCondition, int peopleCount, int x) {
-		this.peopleCount = peopleCount;
+	public EndSimulationResult(int termCondition, int totalPeople, int peopleFinished, int peopleStillInSim, int x) {
+		this.totalPeople = totalPeople;
+		this.peopleFinished = peopleFinished;
+		this.peopleStillInSim = peopleStillInSim;
 		this.termCondition = termCondition;
 		
 		switch(termCondition) {
@@ -19,11 +21,6 @@ public class EndSimulationResult {
 			this.timeSteps = x;
 			break;
 		}
-	}
-	
-	public EndSimulationResult(int termCondition, int peopleCount, int x, long t) {
-		this(termCondition, peopleCount, x);
-		this.time = t;
 	}
 	
 	public int getValue() {
@@ -40,7 +37,7 @@ public class EndSimulationResult {
 	}
 	
 	public String toString() {
-		String out = "TC: " + termCondition + " People: " + peopleCount + " Var: ";
+		String out = "TC: " + termCondition + " People: " + totalPeople + " Var: ";
 		switch(termCondition) {
 		case PedestrianSimulation.TERM_CON_1:
 			out += score;
@@ -65,20 +62,6 @@ public class EndSimulationResult {
 	 */
 	public void setTermCondition(int termCondition) {
 		this.termCondition = termCondition;
-	}
-
-	/**
-	 * @return the peopleCount
-	 */
-	public int getPeopleCount() {
-		return peopleCount;
-	}
-
-	/**
-	 * @param peopleCount the peopleCount to set
-	 */
-	public void setPeopleCount(int peopleCount) {
-		this.peopleCount = peopleCount;
 	}
 
 	/**
@@ -121,6 +104,48 @@ public class EndSimulationResult {
 	 */
 	public void setTime(long time) {
 		this.time = time;
+	}
+
+	/**
+	 * @return the totalPeople
+	 */
+	public int getTotalPeople() {
+		return totalPeople;
+	}
+
+	/**
+	 * @param totalPeople the totalPeople to set
+	 */
+	public void setTotalPeople(int totalPeople) {
+		this.totalPeople = totalPeople;
+	}
+
+	/**
+	 * @return the peopleFinished
+	 */
+	public int getPeopleFinished() {
+		return peopleFinished;
+	}
+
+	/**
+	 * @param peopleFinished the peopleFinished to set
+	 */
+	public void setPeopleFinished(int peopleFinished) {
+		this.peopleFinished = peopleFinished;
+	}
+
+	/**
+	 * @return the peopleStillInSim
+	 */
+	public int getPeopleStillInSim() {
+		return peopleStillInSim;
+	}
+
+	/**
+	 * @param peopleStillInSim the peopleStillInSim to set
+	 */
+	public void setPeopleStillInSim(int peopleStillInSim) {
+		this.peopleStillInSim = peopleStillInSim;
 	}
 
 }

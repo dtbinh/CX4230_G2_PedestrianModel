@@ -1,18 +1,24 @@
 package edu.gatech.cx4230.projectone.backend.abstraction;
 
+import java.util.List;
+
+import edu.gatech.cx4230.projectone.backend.main.EndSimulationResult;
+
 public class ExperimentResult {
 	private double average;
 	private double standardDeviation;
 	private int[] scores;
 	private long time;
 	private long[] times;
+	private List<EndSimulationResult> results;
 	
-	public ExperimentResult(double ave, double stDev, int[] scores, long time, long[] times) {
+	public ExperimentResult(double ave, double stDev, int[] scores, long time, long[] times, List<EndSimulationResult> results) {
 		this.average = ave;
 		this.standardDeviation = stDev;
 		this.scores = scores;
 		this.time = time;
 		this.times = times;
+		this.results = results;
 	}
 	
 	public String toString() {
@@ -87,6 +93,20 @@ public class ExperimentResult {
 	 */
 	public void setTimes(long[] times) {
 		this.times = times;
+	}
+
+	/**
+	 * @return the results
+	 */
+	public List<EndSimulationResult> getResults() {
+		return results;
+	}
+
+	/**
+	 * @param results the results to set
+	 */
+	public void setResults(List<EndSimulationResult> results) {
+		this.results = results;
 	}
 
 }

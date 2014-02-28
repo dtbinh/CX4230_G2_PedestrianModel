@@ -29,8 +29,9 @@ public class NoVisualizationMain {
 		for(int i = 1; i <= trials; i++) {
 			System.out.print("Running trial: " + i + " of " + trials + "...");
 			run();
-			System.out.println(System.currentTimeMillis() - t + " ms");
+			System.out.print(" in " + (System.currentTimeMillis() - t) + " ms");
 			t = System.currentTimeMillis();
+			System.out.println();
 		}
 		stop = System.currentTimeMillis();
 		
@@ -53,6 +54,7 @@ public class NoVisualizationMain {
 		}
 		long stop = System.currentTimeMillis();
 		EndSimulationResult rs = ps.getEndSimulationResult();
+		System.out.print((rs.getPeopleFinished() + rs.getPeopleStillInSim()) + " people created \t");
 		rs.setTime(stop - start);
 		results.add(rs);
 
@@ -77,7 +79,7 @@ public class NoVisualizationMain {
 			double scoreAverage = StatsHelper.findAverage(scores);
 			double scoreSSD = StatsHelper.findStandardDeviation(scores);
 			long time = stop - start;
-			out = new ExperimentResult(scoreAverage, scoreSSD, scores, time, times);
+			out = new ExperimentResult(scoreAverage, scoreSSD, scores, time, times, results);
 			
 		}
 		return out;

@@ -26,8 +26,6 @@ import edu.gatech.cx4230.projectone.visualization.map.VisualizationMain;
 
 
 public class PedestrianSimulation {
-
-	public static final int BUILDING_CAPACITY = 100;
 	
 	private int totalPeople;
 	private int countPeopleInBuilding;
@@ -50,8 +48,9 @@ public class PedestrianSimulation {
 
 	// Simulation scenarios
 	public static final int DOOR_SCENARIO = 1;
-	public static final int TERM_CON_1 = 1;
-	public static final int TERM_CON_2 = 2;
+	public static final int TERM_CON_1 = 1; // Stop after set time steps
+	public static final int TERM_CON_2 = 2; // Stop after people cross above line
+	public static final int TERM_CON_3 = 3; // Stop when building is empty
 	private int terminatingCondition = TERM_CON_1;
 	private int endingTimeStep = 500;
 	private int boundaryLine = 200;
@@ -657,6 +656,8 @@ public class PedestrianSimulation {
 		case TERM_CON_2:
 			out = terminatingConditionTwo();
 			break;
+		case TERM_CON_3:
+			out = terminatingConditionThree();
 		} // close switch
 		return out;
 	}
@@ -687,6 +688,14 @@ public class PedestrianSimulation {
 			}
 		}
 		return out;
+	}
+	
+	/**
+	 * 
+	 * @return True if the simulation should continue
+	 */
+	private boolean terminatingConditionThree() {
+		return (countPeopleInBuilding > 0);
 	}
 
 	/**
@@ -771,6 +780,7 @@ public class PedestrianSimulation {
 		
 		switch(terminatingCondition) {
 		case TERM_CON_1:
+		case TERM_CON_3:
 			int scoreFinished = 100;
 			int scoreOutOfBuilding = 25;
 			
@@ -798,7 +808,7 @@ public class PedestrianSimulation {
 	public EndSimulationResult getEndSimulationResult() {
 		EndSimulationResult out = null;
 		if(!continueSim()) {
-			out = new EndSimulationResult(terminatingCondition, BUILDING_CAPACITY, getEndSimulationScore());
+			out = new EndSimulationResult(terminatingCondition, totalPeople, finishedPeople.size(), people.size(), getEndSimulationScore());
 		}
 		return out;
 	}
