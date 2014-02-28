@@ -16,9 +16,9 @@ public class CustomRNG extends AbstractRNG {
 	 */
 	private double RNG() {
 		long a = System.nanoTime() % 1000000;
-		long b = System.nanoTime() % 2000000;
-		long c = System.nanoTime() % 4000000;
-		long d = System.nanoTime() % 8000000;
+		long b = System.nanoTime() % 2500000;
+		long c = System.nanoTime() % 4300000;
+		long d = System.nanoTime() % 8800000;
 		
 		long t = a ^ (a << 11);
 		a = b;
