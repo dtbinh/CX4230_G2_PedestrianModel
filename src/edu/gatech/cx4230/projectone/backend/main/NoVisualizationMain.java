@@ -7,6 +7,7 @@ import edu.gatech.cx4230.projectone.backend.abstraction.Cell;
 import edu.gatech.cx4230.projectone.backend.abstraction.ExperimentResult;
 import edu.gatech.cx4230.projectone.backend.abstraction.Person;
 import edu.gatech.cx4230.projectone.backend.abstraction.SimulationScenario;
+import edu.gatech.cx4230.projectone.backend.utilities.Logger;
 import edu.gatech.cx4230.projectone.backend.utilities.StatsHelper;
 
 /**
@@ -27,11 +28,11 @@ public class NoVisualizationMain {
 		start = System.currentTimeMillis();
 		long t = start;
 		for(int i = 1; i <= trials; i++) {
-			System.out.print("Running trial: " + i + " of " + trials + "...");
+			Logger.log("Running trial: " + i + " of " + trials + "...");
 			run();
-			System.out.print(" in " + (System.currentTimeMillis() - t) + " ms");
+			Logger.logLine(" in " + (System.currentTimeMillis() - t) + " ms");
 			t = System.currentTimeMillis();
-			System.out.println();
+			Logger.logLine("");
 		}
 		stop = System.currentTimeMillis();
 		
@@ -54,7 +55,7 @@ public class NoVisualizationMain {
 		}
 		long stop = System.currentTimeMillis();
 		EndSimulationResult rs = ps.getEndSimulationResult();
-		System.out.print((rs.getPeopleFinished() + rs.getPeopleStillInSim()) + " people created \t");
+		Logger.log((rs.getPeopleFinished() + rs.getPeopleStillInSim()) + " people created \t");
 		rs.setTime(stop - start);
 		results.add(rs);
 
@@ -97,9 +98,9 @@ public class NoVisualizationMain {
 			double scoreAverage = StatsHelper.findAverage(scores);
 			double scoreSSD = StatsHelper.findStandardDeviation(scores);
 
-			System.out.println("Trials run: " + trials);
-			System.out.println("Average Score: " + scoreAverage);
-			System.out.println("Sample Standard Deviation Score: " + scoreSSD);
+			Logger.logLine("Trials run: " + trials);
+			Logger.logLine("Average Score: " + scoreAverage);
+			Logger.logLine("Sample Standard Deviation Score: " + scoreSSD);
 		}
 	}
 

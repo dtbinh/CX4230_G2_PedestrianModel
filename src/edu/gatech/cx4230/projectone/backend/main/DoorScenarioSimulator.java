@@ -8,6 +8,7 @@ import edu.gatech.cx4230.projectone.backend.abstraction.Door;
 import edu.gatech.cx4230.projectone.backend.abstraction.ExperimentResult;
 import edu.gatech.cx4230.projectone.backend.abstraction.SimulationScenario;
 import edu.gatech.cx4230.projectone.backend.utilities.ArrayManipulation;
+import edu.gatech.cx4230.projectone.backend.utilities.Logger;
 
 public class DoorScenarioSimulator {
 	/**
@@ -17,20 +18,21 @@ public class DoorScenarioSimulator {
 	private static final int BX = 120, BY = 319, BW = 257, BH = 81;
 
 	// Simulation Inputs
-	private int peopleToUse = 10;
+	private int peopleToUse = 1500;
+	private int endingTimeSteps = 1000;
+	private int doorTrials = 30; // Trials of each Door Arrangement
 	private boolean debug = false;
 	private int termCon = PedestrianSimulation.TERM_CON_1;
 	private int boundary = 200;
-	private int endingTimeSteps = 10;
 	private SimulationScenario scen;
-	private int doorTrials = 1; // Trials of each Door Arrangement
+	
 
 	public DoorScenarioSimulator() {
 
 	}
 
 	public Door determineQuadDoorLocation() {
-		System.out.println("Determining Quad Door Location");
+		Logger.logLine("Determining Quad Door Location");
 		List<Door> quadTrials = getQuadTrials();
 		return findWinningCell(quadTrials, null);
 	}
@@ -48,7 +50,7 @@ public class DoorScenarioSimulator {
 	}
 
 	public Door determineDoubleDoorLocation(Door quad) {
-		System.out.println("Determining Double Door Location");
+		Logger.logLine("Determining Double Door Location");
 		List<Door> doubleTrials = getDoubleTrials(quad);
 		List<Door> setDoors = new ArrayList<Door>();
 		setDoors.add(quad);
@@ -64,7 +66,7 @@ public class DoorScenarioSimulator {
 		for(int i = 0; i < trialDoors.size(); i++) {
 			Door d = trialDoors.get(i);
 
-			System.out.println("Door Trial " + d.getId());
+			Logger.logLine("Door Trial " + d.getId());
 			List<Point> doorPoints = d.getPoints();
 
 			if(setDoors != null && !setDoors.isEmpty()) {
@@ -228,7 +230,7 @@ public class DoorScenarioSimulator {
 	}
 
 	public Door determineSingleDoorLocation(List<Door> setDoors) {
-		System.out.println("Determining Single Door Location");
+		Logger.logLine("Determining Single Door Location");
 		List<Door> trialDoors = getSingleTrials(setDoors);
 		return findWinningCell(trialDoors, setDoors);
 	}
@@ -261,10 +263,10 @@ public class DoorScenarioSimulator {
 			setDoors.add(single);
 		}
 
-		System.out.println("\n\n");
-		System.out.println("Door Locations Set to be:");
+		Logger.logLine("\n\n");
+		Logger.logLine("Door Locations Set to be:");
 		for(Door d: setDoors) {
-			System.out.println(d);
+			Logger.logLine(d.toString());
 		}
 	} // close Main
 
