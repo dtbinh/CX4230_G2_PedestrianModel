@@ -21,7 +21,7 @@ public class DoorScenarioSimulator {
 	// Simulation Inputs
 	private int peopleToUse = 1500;
 	private int endingTimeSteps = 1000;
-	private int doorTrials = 30; // Trials of each Door Arrangement
+	private int doorTrials = 15; // Trials of each Door Arrangement
 	private boolean debug = false;
 	private int termCon = PedestrianSimulation.TERM_CON_1;
 	private int boundary = 200;
